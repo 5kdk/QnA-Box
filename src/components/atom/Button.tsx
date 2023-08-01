@@ -16,10 +16,12 @@ export const buttonCss = (props: cssProps) =>
     alignItems: 'center',
     minWidth: props.minWidth || '6rem',
     padding: props.padding || '10px',
-    borderRadius: '10px',
     fontWeight: 'bold',
     color: props.color,
     backgroundColor: props.bgColor,
+    borderRadius: '10px',
+    borderWidth: '2px',
+    borderStyle: 'solid',
     borderColor: props.borderColor || props.bgColor,
   });
 export interface ButtonProps extends cssProps {

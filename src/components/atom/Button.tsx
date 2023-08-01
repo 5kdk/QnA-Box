@@ -2,18 +2,20 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 export interface cssProps {
+  minWidth?: string;
+  padding?: string;
   color: string;
   bgColor: string;
   borderColor?: string;
   icon?: ReactNode;
 }
-const buttonCss = (props: cssProps) =>
+export const buttonCss = (props: cssProps) =>
   css({
     display: 'flex',
-    justifyContent: props.icon ? 'space-between' : 'stretch',
+    justifyContent: props.icon ? 'space-between' : 'center',
     alignItems: 'center',
-    minWidth: '6rem',
-    padding: '10px',
+    minWidth: props.minWidth ? props.minWidth : '6rem',
+    padding: props.padding ? props.padding : '10px',
     borderRadius: '10px',
     fontWeight: 'bold',
     color: props.color,
@@ -24,9 +26,9 @@ export interface ButtonProps extends cssProps {
   text: string;
   onClick: () => void;
 }
-const Button = ({ text, color, bgColor, borderColor, icon, onClick }: ButtonProps) => {
+const Button = ({ minWidth, padding, text, color, bgColor, borderColor, icon, onClick }: ButtonProps) => {
   return (
-    <button css={buttonCss({ color, bgColor, borderColor, icon })} onClick={onClick}>
+    <button css={buttonCss({ minWidth, padding, color, bgColor, borderColor, icon })} onClick={onClick}>
       {icon}
       {text}
     </button>

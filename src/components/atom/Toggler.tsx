@@ -4,8 +4,8 @@ import Flex from './Flex';
 const toggleCss = ({ selected }: { selected: boolean }) =>
   css({
     position: 'relative',
-    width: '41px',
-    height: '19px',
+    width: '40px',
+    height: '20px',
     backgroundColor: selected ? '#FC6D1C' : '#8E8E8E',
     borderRadius: '50px',
     '&:before': {

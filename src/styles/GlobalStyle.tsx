@@ -35,6 +35,29 @@ const style = css`
   li {
     list-style: none;
   }
+
+  button,
+  textarea,
+  input {
+    font-family:
+      'Pretendard',
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      Ubuntu,
+      Cantarell,
+      Noto Sans,
+      sans-serif,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Helvetica,
+      Arial,
+      sans-serif,
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol';
+  }
 `;
 
 const GlobalStyle = () => {

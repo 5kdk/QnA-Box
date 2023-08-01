@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import Flex from './Flex';
 
 const toggleCss = ({ selected }: { selected: boolean }) =>
   css({
@@ -21,12 +22,25 @@ const toggleCss = ({ selected }: { selected: boolean }) =>
     },
   });
 
+const togglerCss = css({
+  gap: '0.5rem',
+  '> p': {
+    letterSpacing: '-0.32px',
+  },
+});
+
 interface TogglerProps {
   selected: boolean;
   setSelected: (b: boolean) => void;
+  text: string;
 }
-const Toggler = ({ selected, setSelected }: TogglerProps) => {
-  return <div css={toggleCss({ selected })} onClick={() => setSelected(!selected)} />;
+const Toggler = ({ selected, setSelected, text }: TogglerProps) => {
+  return (
+    <Flex css={togglerCss}>
+      <div css={toggleCss({ selected })} onClick={() => setSelected(!selected)} />
+      <p>{text}</p>
+    </Flex>
+  );
 };
 
 export default Toggler;

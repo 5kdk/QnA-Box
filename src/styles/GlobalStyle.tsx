@@ -58,6 +58,11 @@ const style = css`
       'Segoe UI Emoji',
       'Segoe UI Symbol';
   }
+
+  button {
+    border: none;
+    background: inherit;
+  }
 `;
 
 const GlobalStyle = () => {

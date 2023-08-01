@@ -11,7 +11,7 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', 'react-hooks', '@typescript-eslint', 'prettier'],
+  plugins: ['react-refresh', 'react', 'react-hooks', '@typescript-eslint', 'prettier', '@tanstack/query'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'react/display-name': 'off',

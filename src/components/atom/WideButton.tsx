@@ -1,22 +1,16 @@
-import { css } from '@emotion/react';
-import { ButtonProps, cssProps } from './Button';
-
-const buttonCss = (props: cssProps) =>
-  css({
-    minWidth: '20rem',
-    padding: '1.2rem',
-    borderRadius: '10px',
-    fontWeight: 'bold',
-    color: props.color,
-    backgroundColor: props.bgColor,
-    borderColor: props.borderColor || props.bgColor,
-  });
+import Button, { ButtonProps } from './Button';
 
 const WideButton = ({ text, color, bgColor, borderColor, onClick }: ButtonProps) => {
   return (
-    <button css={buttonCss({ color, bgColor, borderColor })} onClick={onClick}>
-      {text}
-    </button>
+    <Button
+      minWidth="20rem"
+      padding="1.2rem"
+      text={text}
+      color={color}
+      bgColor={bgColor}
+      borderColor={borderColor}
+      onClick={onClick}
+    />
   );
 };
 

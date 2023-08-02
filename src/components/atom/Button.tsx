@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { css } from '@emotion/react';
+import { buttonCss } from '../../styles/buttonCss';
 
 export interface cssProps {
   minWidth?: string;
@@ -10,21 +10,6 @@ export interface cssProps {
   icon?: ReactNode;
   fontWeight?: number;
 }
-const buttonCss = (props: cssProps) =>
-  css({
-    display: 'flex',
-    justifyContent: props.icon ? 'space-between' : 'center',
-    alignItems: 'center',
-    minWidth: props.minWidth || '6rem',
-    padding: props.padding || '10px',
-    fontWeight: props.fontWeight || 'bold',
-    color: props.color,
-    backgroundColor: props.bgColor,
-    borderRadius: '10px',
-    borderWidth: '2px',
-    borderStyle: 'solid',
-    borderColor: props.borderColor || props.bgColor,
-  });
 export interface ButtonProps extends cssProps {
   text: string;
   onClick: () => void;

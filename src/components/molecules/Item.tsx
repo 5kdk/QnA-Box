@@ -4,6 +4,7 @@ import { SuitHeartFill } from '@emotion-icons/bootstrap';
 import Avartar from '../atom/Avartar';
 import Flex from '../atom/Flex';
 import Edit from '../atom/Edit';
+import Text from '../atom/Text';
 
 const wrapperStyle = css({
   width: '28rem',
@@ -16,11 +17,6 @@ const nameStyle = css({
   fontWeight: 700,
   FontSize: '16px',
   marginBottom: '5px',
-});
-
-const textStyle = css({
-  fontSize: '14px',
-  marginBottom: '10px',
 });
 
 const subTextStyle = css({
@@ -88,7 +84,7 @@ const Item = ({ imgUrl, userName, postTime, text, isLike, like }: QItemProps) =>
             <Edit edit={editPost} remove={removePost} />
           </Flex>
         </Flex>
-        <p css={textStyle}>{text}</p>
+        <Text>{text}</Text>
         <Flex alignItems="center" css={css({ gap: '5px' })}>
           {isLike ? <SuitHeartFill size="14px" color="#FC6D1C" /> : <SuitHeart size="14px" />}
           {like && <span css={subTextStyle}>{`${like} likes`}</span>}

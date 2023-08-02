@@ -66,6 +66,7 @@ const style = css`
   button {
     border: none;
     background: inherit;
+    cursor: pointer;
   }
 `;
 

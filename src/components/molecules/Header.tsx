@@ -52,7 +52,6 @@ const icoStyle = (isopen: boolean) =>
 
 const buttonStyle = css({
   height: '36px',
-  cursor: 'pointer',
 });
 
 const LogoStyle = css({ marginTop: '5px', cursor: 'pointer' });

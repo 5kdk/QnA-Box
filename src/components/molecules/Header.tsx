@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const wrapperStyle = css({
   padding: '10px',
+  backgroundColor: '#fff',
 });
 
 const icoStyle = (isopen: boolean) =>

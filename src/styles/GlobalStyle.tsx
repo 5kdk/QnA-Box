@@ -31,6 +31,10 @@ const style = css`
       'Segoe UI Symbol';
   }
 
+  body {
+    background-color: #e2e8f0;
+  }
+
   ul,
   li {
     list-style: none;

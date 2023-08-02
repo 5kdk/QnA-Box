@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 
 const textStyle = css({
   fontSize: '14px',
-  marginBottom: '10px',
 });
 
 interface TextProps {

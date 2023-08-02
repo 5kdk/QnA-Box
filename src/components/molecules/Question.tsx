@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import Toggler from '../atom/Toggler';
 import Button from '../atom/Button';
 import Flex from '../atom/Flex';
-import Avartar from '../atom/Avartar';
+import Avatar from '../atom/Avatar';
 import loading from '../../assets/images/loading.png';
 
 const questionCss = {
@@ -47,7 +47,7 @@ const Question = () => {
   return (
     <Flex css={questionCss.wrapper} flexDirection="column">
       <label css={questionCss.inputBox}>
-        <Avartar src={loading} size="sm" />
+        <Avatar src={loading} size="sm" />
         <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={e => setQuestion(e.target.value)} />
       </label>
       <Flex justifyContent="space-between" alignItems="center">

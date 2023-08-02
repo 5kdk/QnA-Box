@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { SuitHeart } from '@emotion-icons/bootstrap';
 import { SuitHeartFill } from '@emotion-icons/bootstrap';
-import Avartar from '../atom/Avartar';
+import Avatar from '../atom/Avatar';
 import Flex from '../atom/Flex';
 import Edit from '../atom/Edit';
 import Text from '../atom/Text';
@@ -79,7 +79,7 @@ const Item = ({ title, imgUrl, userName, postTime, text, isLike, like }: QItemPr
 
   return (
     <Flex css={wrapperStyle} justifyContent="space-between">
-      <Avartar size="sm" src={imgUrl} />
+      <Avatar size="sm" src={imgUrl} />
       <Flex flexDirection="column" css={css({ width: '100%' })}>
         <Flex justifyContent="space-between" alignItems="flex-start">
           <Flex flexDirection="column">

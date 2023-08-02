@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { ThreeDots } from 'emotion-icons/bootstrap';
 import { useState } from 'react';
-
 import { Pencil } from '@emotion-icons/bootstrap';
 import { Trash } from '@emotion-icons/bootstrap';
+import useClickOutside from '../../hooks/useClickOutside';
 
 const modalStyle = css({
   position: 'absolute',
@@ -29,6 +29,7 @@ interface EditProps {
 
 const Edit = ({ edit, remove }: EditProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useClickOutside(() => setIsOpen(false));
 
   const handleClickMenuButton = () => {
     setIsOpen(prev => !prev);
@@ -40,7 +41,7 @@ const Edit = ({ edit, remove }: EditProps) => {
         <ThreeDots size="16px" />
       </button>
       {isOpen && (
-        <div css={modalStyle}>
+        <div css={modalStyle} ref={ref}>
           <button css={buttonStyle} onClick={edit}>
             <Pencil size="12px" />
             {' 수정'}

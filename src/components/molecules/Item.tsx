@@ -11,11 +11,12 @@ const wrapperStyle = css({
   minHeight: '100px',
   padding: '12px 24px',
   gap: '15px',
+  border: '1px solid #F0F0F0',
 });
 
 const nameStyle = css({
   fontWeight: 700,
-  FontSize: '16px',
+  FontSize: '14px',
   marginBottom: '5px',
 });
 
@@ -32,8 +33,9 @@ const menuWrapperStyle = css({
 
 interface QItemProps {
   userName: string;
-  postTime: string;
   text: string;
+  title?: string;
+  postTime?: string;
   imgUrl?: string;
   isLike?: boolean;
   like?: number;
@@ -65,7 +67,7 @@ const displayTimeAgo = (postTimestamp: string): string => {
   }
 };
 
-const Item = ({ imgUrl, userName, postTime, text, isLike, like }: QItemProps) => {
+const Item = ({ title, imgUrl, userName, postTime, text, isLike, like }: QItemProps) => {
   const editPost = () => {
     console.log('edit');
   };
@@ -73,12 +75,17 @@ const Item = ({ imgUrl, userName, postTime, text, isLike, like }: QItemProps) =>
     console.log('delete');
   };
 
+  console.log(isLike);
+
   return (
     <Flex css={wrapperStyle} justifyContent="space-between">
       <Avartar size="sm" src={imgUrl} />
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" css={css({ width: '100%' })}>
         <Flex justifyContent="space-between" alignItems="flex-start">
-          <span css={nameStyle}>{userName}</span>
+          <Flex flexDirection="column">
+            {title && <span css={nameStyle}>{title}</span>}
+            <span css={nameStyle}>{userName}</span>
+          </Flex>
           <Flex alignItems="center" css={menuWrapperStyle}>
             {postTime && <span css={subTextStyle}>{displayTimeAgo(postTime)}</span>}
             <Edit edit={editPost} remove={removePost} />
@@ -86,7 +93,7 @@ const Item = ({ imgUrl, userName, postTime, text, isLike, like }: QItemProps) =>
         </Flex>
         <Text>{text}</Text>
         <Flex alignItems="center" css={css({ gap: '5px' })}>
-          {isLike ? <SuitHeartFill size="14px" color="#FC6D1C" /> : <SuitHeart size="14px" />}
+          {isLike && (isLike ? <SuitHeartFill size="14px" color="#FC6D1C" /> : <SuitHeart size="14px" />)}
           {like && <span css={subTextStyle}>{`${like} likes`}</span>}
         </Flex>
       </Flex>

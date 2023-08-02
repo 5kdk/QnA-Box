@@ -32,6 +32,7 @@ const Pagenation = ({ currentPage, maxPage, onClickPageButton }: PagenationProps
         {Array.from({ length: maxPage }, (_, i) => {
           return (
             <button
+              key={i}
               css={[buttonStyle, selectedButtonStyle(currentPage === i + 1)]}
               onClick={() => onClickPageButton(i + 1)}>
               {i + 1}

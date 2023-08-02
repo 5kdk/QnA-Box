@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
+import Appshell from './components/pages/Appshell';
+import Qna from './components/pages/Qna';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +15,13 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <div>hello</div>,
+    element: <Appshell />,
+    children: [
+      {
+        path: 'qna/:id',
+        element: <Qna />,
+      },
+    ],
   },
 ]);
 

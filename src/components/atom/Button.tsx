@@ -8,15 +8,16 @@ export interface cssProps {
   bgColor: string;
   borderColor?: string;
   icon?: ReactNode;
+  fontWeight?: number;
 }
-export const buttonCss = (props: cssProps) =>
+const buttonCss = (props: cssProps) =>
   css({
     display: 'flex',
     justifyContent: props.icon ? 'space-between' : 'center',
     alignItems: 'center',
     minWidth: props.minWidth || '6rem',
     padding: props.padding || '10px',
-    fontWeight: 'bold',
+    fontWeight: props.fontWeight || 'bold',
     color: props.color,
     backgroundColor: props.bgColor,
     borderRadius: '10px',
@@ -28,9 +29,9 @@ export interface ButtonProps extends cssProps {
   text: string;
   onClick: () => void;
 }
-const Button = ({ minWidth, padding, text, color, bgColor, borderColor, icon, onClick }: ButtonProps) => {
+const Button = ({ minWidth, padding, text, color, bgColor, borderColor, fontWeight, icon, onClick }: ButtonProps) => {
   return (
-    <button css={buttonCss({ minWidth, padding, color, bgColor, borderColor, icon })} onClick={onClick}>
+    <button css={buttonCss({ minWidth, padding, color, bgColor, borderColor, fontWeight, icon })} onClick={onClick}>
       {icon}
       {text}
     </button>

@@ -66,7 +66,7 @@ const EditAccount = () => {
 
   const editPswd = () => {
     const { prePswd, newPswd, ckPswd } = pswdForm;
-    if (newPswd !== ckPswd) return;
+    if (prePswd && newPswd && newPswd !== ckPswd) return;
 
     console.log({ prePswd, newPswd });
   };

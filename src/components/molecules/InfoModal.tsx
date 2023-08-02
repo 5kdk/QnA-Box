@@ -8,12 +8,12 @@ const modalCss = {
     top: '0',
     left: '0',
     zIndex: '20',
-    width: '100vw',
+    width: '100%',
     height: '100vh',
     backgroundColor: 'rgba(0,0,0,0.5)',
   }),
-  box: css({
-    width: '100%',
+  infoBox: css({
+    width: '28rem',
     padding: '3rem 1.5rem',
     gap: '2rem',
     backgroundColor: 'white',
@@ -42,7 +42,7 @@ interface ModalProps {
 const InfoModal = ({ title, text, normalBtn, importantBtn }: ModalProps) => {
   return (
     <Flex css={modalCss.modal} justifyContent="center" alignItems="center" onClick={importantBtn.onClick}>
-      <Flex css={modalCss.box} flexDirection="column" alignContent="center" onClick={e => e.stopPropagation()}>
+      <Flex css={modalCss.infoBox} flexDirection="column" alignContent="center" onClick={e => e.stopPropagation()}>
         <Flex css={modalCss.text} flexDirection="column">
           <h3>{title}</h3>
           {text && <p>{text}</p>}

@@ -3,6 +3,7 @@ import { SuitHeart } from '@emotion-icons/bootstrap';
 import { SuitHeartFill } from '@emotion-icons/bootstrap';
 import Avartar from '../atom/Avartar';
 import Flex from '../atom/Flex';
+import Edit from '../atom/Edit';
 
 const wrapperStyle = css({
   width: '28rem',
@@ -69,6 +70,13 @@ const displayTimeAgo = (postTimestamp: string): string => {
 };
 
 const Item = ({ imgUrl, userName, postTime, text, isLike, like }: QItemProps) => {
+  const editPost = () => {
+    console.log('edit');
+  };
+  const removePost = () => {
+    console.log('delete');
+  };
+
   return (
     <Flex css={wrapperStyle} justifyContent="space-between">
       <Avartar size="sm" src={imgUrl} />
@@ -77,6 +85,7 @@ const Item = ({ imgUrl, userName, postTime, text, isLike, like }: QItemProps) =>
           <span css={nameStyle}>{userName}</span>
           <Flex alignItems="center" css={menuWrapperStyle}>
             {postTime && <span css={subTextStyle}>{displayTimeAgo(postTime)}</span>}
+            <Edit edit={editPost} remove={removePost} />
           </Flex>
         </Flex>
         <p css={textStyle}>{text}</p>

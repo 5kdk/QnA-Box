@@ -1,29 +1,7 @@
-import { SearchAlt2 } from '@emotion-icons/boxicons-regular/SearchAlt2';
+import { Search as SearchIcon } from '@emotion-icons/evaicons-solid/';
 import { css } from '@emotion/react';
 import { ChangeEvent } from 'react';
 
-interface SearchType {
-  input: string;
-  handleInput: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-
-const Search = ({ input, handleInput }: SearchType) => {
-  return (
-    <div css={wrapstyle}>
-      <SearchAlt2 css={iconstyle} />
-      <input css={inputstyle} onChange={handleInput} value={input}></input>
-    </div>
-  );
-};
-
-export default Search;
-
-const iconstyle = css`
-  width: 20px;
-  height: 20px;
-  color: #545454;
-  position: absolute;
-`;
 const inputstyle = css`
   line-height: 30px;
   border: none;
@@ -33,3 +11,19 @@ const wrapstyle = css`
   display: flex;
   align-items: center;
 `;
+
+interface SearchType {
+  input: string;
+  handleInput: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Search = ({ input, handleInput }: SearchType) => {
+  return (
+    <div css={wrapstyle}>
+      <SearchIcon size="20px" />
+      <input title="박스 검색창" css={inputstyle} onChange={handleInput} value={input}></input>
+    </div>
+  );
+};
+
+export default Search;

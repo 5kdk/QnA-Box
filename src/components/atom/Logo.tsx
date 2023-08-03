@@ -1,14 +1,15 @@
 import { css } from '@emotion/react';
 import MainLogo from '../../assets/qa-logo.svg';
-import Flex from './Flex';
+import { Flex } from './';
 
-const large = css({
-  width: '93px',
-});
-
-const small = css({
-  width: '36px',
-});
+const LogoCss = {
+  large: css`
+    width: 93px;
+  `,
+  small: css`
+    width: 36px;
+  `,
+};
 
 interface LogoProps {
   size: 'lg' | 'sm';
@@ -17,7 +18,7 @@ interface LogoProps {
 
 const Logo = ({ size, ...rest }: LogoProps) => {
   return (
-    <Flex css={size === 'lg' ? large : small} {...rest}>
+    <Flex css={size === 'lg' ? LogoCss.large : LogoCss.small} {...rest}>
       <img src={MainLogo} alt="로고 이미지" />
     </Flex>
   );

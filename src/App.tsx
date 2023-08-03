@@ -10,6 +10,8 @@ import Account from './components/pages/Account';
 import EditAccount from './components/pages/EditAccount';
 import User from './components/pages/User';
 import Error from './components/pages/Error';
+import Signin from './components/pages/Signin';
+import Signup from './components/pages/Signup';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
     path: '/',
     element: <Appshell />,
     children: [
+      {
+        path: 'signin',
+        element: <Signin />,
+      },
+      {
+        path: 'signup',
+        element: <Signup />,
+      },
       {
         path: 'box',
         element: <BoxList />,

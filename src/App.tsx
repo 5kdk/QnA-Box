@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
 import Appshell from './components/pages/Appshell';
-import Qna from './components/pages/Qna';
+import Box from './components/pages/Box';
 import BoxList from './components/pages/BoxList';
 
 const queryClient = new QueryClient({
@@ -23,8 +23,8 @@ const router = createBrowserRouter([
         element: <BoxList />,
       },
       {
-        path: 'qna/:id',
-        element: <Qna />,
+        path: 'box/:id',
+        element: <Box />,
       },
     ],
   },

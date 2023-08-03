@@ -2,8 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { ChevronLeft } from '@emotion-icons/bootstrap';
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
-import Logo from '../atom/Logo';
+import { Flex, Logo } from '../atom/';
 import sideNavState from '../../jotai/atom/sideNavState';
 
 const HeaderCss = {

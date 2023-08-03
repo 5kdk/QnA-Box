@@ -1,12 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
-import Logo from '../atom/Logo';
-import Flex from '../atom/Flex';
-import Input from '../molecules/Input';
-import WideButton from '../atom/WideButton';
+import { Logo, Flex, WideButton, Note } from '../atom';
+import { Input } from '../molecules';
 import kakaologin from '../../assets/images/kakao_login.png';
-import Note from '../atom/Note';
 
 const SigninCss = {
   container: css`
@@ -29,6 +26,12 @@ const SigninCss = {
     border-radius: 10px;
     margin: 10px 0;
   `,
+  formstyle: css`
+    text-align: right;
+  `,
+  forgetpwstyle: css`
+    margin-bottom: 50px;
+  `,
 };
 
 const Signin = () => {
@@ -47,7 +50,7 @@ const Signin = () => {
   return (
     <Flex css={SigninCss.container} flexDirection="column" alignItems="center">
       <Logo css={SigninCss.logostyle} size="lg" />
-      <form css={{ textAlign: 'right' }}>
+      <form css={SigninCss.formstyle}>
         <Input
           css={SigninCss.inputstyle}
           text="E-mail"
@@ -64,7 +67,7 @@ const Signin = () => {
           input={password}
           handleInput={handlePassword}
         />
-        <Note css={{ marginBottom: '50px' }} text="비밀번호를 잊으셨나요?" fs="0.7rem" onClick={() => {}} />
+        <Note css={SigninCss.forgetpwstyle} text="비밀번호를 잊으셨나요?" fs="0.7rem" onClick={() => {}} />
         <WideButton text="Login" bgColor="#1C56FC" color="white" onClick={() => {}} />
         <button css={SigninCss.kakaobutton}>
           <img src={kakaologin} alt="kakaologin-img" />

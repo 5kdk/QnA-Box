@@ -1,9 +1,6 @@
 import { css, keyframes } from '@emotion/react';
-import UserInfo from './UserInfo';
-import BoxInfo from './BoxInfo';
-import Flex from '../../atom/Flex';
-import Note from '../../atom/Note';
-import WideButton from '../../atom/WideButton';
+import { UserInfo, BoxInfo } from './';
+import { Flex, Note, WideButton } from '../../atom';
 
 const Slide = keyframes`
     from {

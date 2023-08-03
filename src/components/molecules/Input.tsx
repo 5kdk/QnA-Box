@@ -1,6 +1,27 @@
 import { ChangeEvent } from 'react';
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
+import { Flex } from '../atom/';
+
+const InputCss = {
+  textstyle: css`
+    font-weight: 600;
+    color: var(--deep_gray);
+  `,
+  inputstyle: (props?: string) => {
+    return css`
+      margin-top: 10px;
+      width: ${props || '100%'};
+      font-weight: bold;
+      border: none;
+      border-bottom: 2px solid var(--deep_gray);
+      line-height: 25px;
+      font-size: 16px;
+      :focus {
+        outline: none;
+      }
+    `;
+  },
+};
 
 interface InputType {
   text: string;
@@ -13,28 +34,10 @@ interface InputType {
 const Input = ({ text, type, width, input, handleInput, ...rest }: InputType) => {
   return (
     <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-start" {...rest}>
-      <label css={textstyle}>{text}</label>
-      <input css={inputstyle(width)} type={type} onChange={handleInput} value={input}></input>
+      <label css={InputCss.textstyle}>{text}</label>
+      <input css={InputCss.inputstyle(width)} type={type} onChange={handleInput} value={input}></input>
     </Flex>
   );
 };
 
 export default Input;
-
-const textstyle = css`
-  font-weight: 600;
-  color: #595959;
-`;
-const inputstyle = (props?: string) =>
-  css({
-    marginTop: '10px',
-    fontWeight: 'bold',
-    width: props || '100%',
-    border: 'none',
-    borderBottom: '2px solid #595959',
-    lineHeight: '25px',
-    fontSize: '1rem',
-    ':focus': {
-      outline: 'none',
-    },
-  });

@@ -61,14 +61,12 @@ const Filter = () => {
   const handleCurValue = (filter: FilterType) => {
     setCurValue(filter);
   };
+  const handleShow = () => {
+    setIsShow(prev => !prev);
+  };
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      css={FilterCss.boxstyle(isShow)}
-      onClick={() => setIsShow(prev => !prev)}
-      onKeyDown={() => {}}>
+    <div role="button" tabIndex={0} css={FilterCss.boxstyle(isShow)} onClick={handleShow} onKeyDown={() => {}}>
       <label css={FilterCss.labelStyle}>{curValue}</label>
       <div css={FilterCss.selectstyle(isShow)}>
         <button css={FilterCss.optionstyle} onClick={() => handleCurValue('최신순')}>

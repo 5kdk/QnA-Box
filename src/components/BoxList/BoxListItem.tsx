@@ -1,8 +1,5 @@
 import { css } from '@emotion/react';
-import Avatar from '../atom/Avatar';
-import Flex from '../atom/Flex';
-import Edit from '../atom/Edit';
-import Text from '../atom/Text';
+import { Flex, Edit, Text, Avatar } from '../atom';
 
 const BoxListCss = {
   wrapperStyle: css`

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import MainLogo from '../../assets/qa-logo.svg';
-import Flex from './Flex';
+import { Flex } from './';
 
 const LogoCss = {
   large: css`

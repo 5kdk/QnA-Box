@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
+import { Flex } from '../atom';
 
 const PagenationCss = {
   buttonStyle: css`

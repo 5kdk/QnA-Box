@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { PlusSm } from '@emotion-icons/heroicons-solid/';
-import Button from '../atom/Button';
-import Flex from '../atom/Flex';
+import { Button, Flex } from '../atom';
 
 const ButtonStyle = {
   flexStyle: css`

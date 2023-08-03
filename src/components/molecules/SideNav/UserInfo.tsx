@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { IosArrowRight } from '@emotion-icons/fluentui-system-filled/IosArrowRight';
-import Avatar from '../../atom/Avatar';
-import Flex from '../../atom/Flex';
+import { Avatar, Flex } from '../../atom';
 
 const UserInfoCss = {
   container: css`
@@ -19,6 +18,9 @@ const UserInfoCss = {
   flexStyle: css`
     width: 100%;
   `,
+  infoStyle: css`
+    flex-grow: 0.5;
+  `,
 };
 
 interface User {
@@ -32,7 +34,7 @@ const UserInfo = ({ src, name, email }: User) => {
     <Flex css={UserInfoCss.container}>
       <Flex css={UserInfoCss.flexStyle} justifyContent="space-between" alignItems="center">
         <Avatar src={src} size="md" />
-        <Flex css={{ flexGrow: '0.5' }} flexDirection="column">
+        <Flex css={UserInfoCss.infoStyle} flexDirection="column">
           <div css={UserInfoCss.namestyle}>{name}</div>
           <div css={UserInfoCss.emailstyle}>{email}</div>
         </Flex>

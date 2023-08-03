@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
-import Note from '../../atom/Note';
-import Flex from '../../atom/Flex';
+import { Note, Flex } from '../../atom';
 
 const BoxInfoCss = {
   flexstyle: css`

@@ -1,12 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
-import Logo from '../atom/Logo';
-import Flex from '../atom/Flex';
-import Input from '../molecules/Input';
-import WideButton from '../atom/WideButton';
+import { Logo, Flex, WideButton, Note } from '../atom';
+import { Input } from '../molecules';
 import kakaologin from '../../assets/images/kakao_login.png';
-import Note from '../atom/Note';
 
 const SigninCss = {
   container: css`
@@ -28,6 +25,9 @@ const SigninCss = {
     height: 57px;
     border-radius: 10px;
     margin: 10px 0;
+  `,
+  formstyle: css`
+    text-align: right;
   `,
 };
 
@@ -51,7 +51,7 @@ const Signup = () => {
   return (
     <Flex css={SigninCss.container} flexDirection="column" alignItems="center">
       <Logo css={SigninCss.logostyle} size="lg" />
-      <form css={{ textAlign: 'right' }}>
+      <form css={SigninCss.formstyle}>
         <Input
           css={SigninCss.inputstyle}
           text="E-mail"

@@ -1,6 +1,6 @@
+import { useCallback, useState, MouseEvent } from 'react';
 import { css } from '@emotion/react';
 import { ThreeDots } from 'emotion-icons/bootstrap';
-import { useState } from 'react';
 import { Pencil } from '@emotion-icons/bootstrap';
 import { Trash } from '@emotion-icons/bootstrap';
 import useClickOutside from '../../hooks/useClickOutside';
@@ -16,10 +16,14 @@ const modalStyle = css({
 });
 
 const buttonStyle = css({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
   width: '100%',
   textAlign: 'left',
-  fontSize: '12px',
-  padding: '5px 10px',
+  borderRadius: '10px',
+  fontSize: '13px',
+  padding: '5px 15px 5px 10px',
 });
 
 interface EditProps {
@@ -29,14 +33,15 @@ interface EditProps {
 
 const Edit = ({ edit, remove }: EditProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useClickOutside(() => setIsOpen(false));
+  const ref = useClickOutside(useCallback(() => setIsOpen(false), []));
 
-  const handleClickMenuButton = () => {
+  const handleClickMenuButton = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsOpen(prev => !prev);
   };
 
   return (
-    <>
+    <div>
       <button onClick={handleClickMenuButton}>
         <ThreeDots size="16px" />
       </button>
@@ -52,7 +57,7 @@ const Edit = ({ edit, remove }: EditProps) => {
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

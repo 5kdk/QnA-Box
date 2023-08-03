@@ -25,7 +25,7 @@ const Account = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const toEditProfile = () => navigate('/account/pofile');
+  const toEditProfile = () => navigate('/account/profile');
   const toEditPassword = () => navigate('/account/password');
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);

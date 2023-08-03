@@ -2,8 +2,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
 import Appshell from './components/pages/Appshell';
+
 import Box from './components/pages/Box';
 import BoxList from './components/pages/BoxList';
+import CreateBox from './components/pages/CreateBox';
+import Account from './components/pages/Account';
+import EditAccount from './components/pages/EditAccount';
+import User from './components/pages/User';
+import Error from './components/pages/Error';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +31,26 @@ const router = createBrowserRouter([
       {
         path: 'box/:id',
         element: <Box />,
+      },
+      {
+        path: 'box/create',
+        element: <CreateBox />,
+      },
+      {
+        path: 'account',
+        element: <Account />,
+      },
+      {
+        path: 'account/:target',
+        element: <EditAccount />,
+      },
+      {
+        path: 'user/:username',
+        element: <User />,
+      },
+      {
+        path: '*',
+        element: <Error />,
       },
     ],
   },

@@ -4,11 +4,11 @@ import { InfoSubject } from '.';
 
 const userCss = {
   wrapper: css`
-    padding-top: 4rem;
-    gap: 3.3rem;
+    padding-top: 64px;
+    gap: 54px;
   `,
   subject: css`
-    gap: 2.2rem;
+    gap: 34px;
   `,
 };
 

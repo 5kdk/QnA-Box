@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { css } from '@emotion/react';
 
-const flexStyle = ({ flexDirection, justifyContent, alignItems, alignContent, flexWrap }: FlexProps) => css`
+const flexCss = ({ flexDirection, justifyContent, alignItems, alignContent, flexWrap }: FlexProps) => css`
   display: flex;
   flex-direction: ${flexDirection};
   justify-content: ${justifyContent};
@@ -21,7 +21,7 @@ interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
 const Flex = forwardRef<HTMLDivElement, FlexProps>(
   ({ flexDirection, justifyContent, alignItems, alignContent, flexWrap, children, ...rest }, ref) => {
     return (
-      <div ref={ref} css={flexStyle({ flexDirection, justifyContent, alignItems, alignContent, flexWrap })} {...rest}>
+      <div ref={ref} css={flexCss({ flexDirection, justifyContent, alignItems, alignContent, flexWrap })} {...rest}>
         {children}
       </div>
     );

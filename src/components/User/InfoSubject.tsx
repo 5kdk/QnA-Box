@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { Flex } from '../atom';
 
 const subjectCss = css`
-  gap: 1rem;
+  gap: 16px;
 `;
 
 interface InfoProps {

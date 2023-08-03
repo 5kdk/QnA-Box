@@ -15,7 +15,7 @@ const errorCss = {
   code: css`
     font-size: 100px;
     font-weight: 900;
-    color: var(--deep_gray);
+    color: var(--gray);
     padding-bottom: 18px;
   `,
   buttons: css`

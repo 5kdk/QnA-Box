@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 const style = ({ fs }: { fs?: string }) => css`
   color: var(--deep_gray);
-  font-size: ${fs || '1rem'};
+  font-size: ${fs || '16px'};
 `;
 
 interface NoteProps {

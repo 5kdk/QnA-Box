@@ -21,7 +21,7 @@ const SigninCss = {
   `,
   kakaobutton: css`
     background-color: var(--kakao);
-    min-width: 20rem;
+    min-width: 320px;
     height: 57px;
     border-radius: 10px;
     margin: 10px 0;
@@ -67,7 +67,7 @@ const Signin = () => {
           input={password}
           handleInput={handlePassword}
         />
-        <Note css={SigninCss.forgetpwstyle} text="비밀번호를 잊으셨나요?" fs="0.7rem" onClick={() => {}} />
+        <Note css={SigninCss.forgetpwstyle} text="비밀번호를 잊으셨나요?" fs="14px" onClick={() => {}} />
         <WideButton text="Login" bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />
         <button css={SigninCss.kakaobutton}>
           <img src={kakaologin} alt="kakaologin-img" />

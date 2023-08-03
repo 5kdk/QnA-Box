@@ -21,7 +21,7 @@ const SigninCss = {
   `,
   kakaobutton: css`
     background-color: var(--kakao);
-    min-width: 20rem;
+    min-width: 320px;
     height: 57px;
     border-radius: 10px;
     margin: 10px 0;

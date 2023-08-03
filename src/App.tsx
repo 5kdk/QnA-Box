@@ -1,7 +1,18 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import GlobalStyle from './styles/GlobalStyle';
-import { Account, Appshell, Box, BoxList, CreateBox, EditAccount, Error, User } from './components/pages';
+import {
+  Account,
+  Appshell,
+  Box,
+  BoxList,
+  CreateBox,
+  EditAccount,
+  Error,
+  Signin,
+  Signup,
+  User,
+} from './components/pages';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,6 +27,14 @@ const router = createBrowserRouter([
     path: '/',
     element: <Appshell />,
     children: [
+      {
+        path: 'signin',
+        element: <Signin />,
+      },
+      {
+        path: 'signup',
+        element: <Signup />,
+      },
       {
         path: 'box',
         element: <BoxList />,

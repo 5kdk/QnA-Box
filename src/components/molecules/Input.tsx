@@ -5,16 +5,16 @@ import { ChangeEvent } from 'react';
 interface InputType {
   text: string;
   type: string;
-  width: string;
+  width?: string;
   input: string;
   handleInput: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ text, type, width, input, handleInput }: InputType) => {
+const Input = ({ text, type, width, input, handleInput, ...rest }: InputType) => {
   return (
-    <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-start">
-      <div css={textstyle}>{text}</div>
-      <input css={inputstyle2(width)} type={type} onChange={handleInput} value={input}></input>
+    <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-start" {...rest}>
+      <label css={textstyle}>{text}</label>
+      <input css={inputstyle(width)} type={type} onChange={handleInput} value={input}></input>
     </Flex>
   );
 };
@@ -25,15 +25,15 @@ const textstyle = css`
   font-weight: 600;
   color: #595959;
 `;
-const inputstyle2 = (props: string) =>
+const inputstyle = (props?: string) =>
   css({
-    marginTop: '20px',
+    marginTop: '10px',
+    fontWeight: 'bold',
     width: props,
     border: 'none',
     borderBottom: '2px solid #595959',
     lineHeight: '25px',
     fontSize: '1rem',
-    opacity: '0.7',
     ':focus': {
       outline: 'none',
     },

@@ -1,7 +1,7 @@
+import { css, keyframes } from '@emotion/react';
 import UserInfo from './UserInfo';
 import BoxInfo from './BoxInfo';
 import Flex from '../../atom/Flex';
-import { css, keyframes } from '@emotion/react';
 import Note from '../../atom/Note';
 import WideButton from '../../atom/WideButton';
 
@@ -24,40 +24,42 @@ const Slide = keyframes`
       opacity: 1;
     }
 `;
-const navContainer = css`
-  background-color: white;
-  z-index: 999;
-  position: absolute;
-  left: 31rem;
-  width: 28rem;
-  animation: ${Slide} 0.2s ease-in;
-`;
-
-const serviceContainer = css`
-  border-top: 0.5px solid #515254;
-  margin-bottom: 100px;
-`;
-const notestyle = css`
-  margin: 15px 20px 0 20px;
-  font-weight: bold;
-  color: black;
-`;
-const teamstyle = css`
-  margin-bottom: 20px;
-`;
+const SideNavCss = {
+  navContainer: css`
+    position: absolute;
+    width: 448px;
+    height: 100vh;
+    left: 488px;
+    z-index: 999;
+    background-color: var(--white);
+    animation: ${Slide} 0.2s ease-in;
+  `,
+  serviceContainer: css`
+    margin-bottom: 100px;
+    border-top: 0.5px solid var(--deep_gray);
+  `,
+  notestyle: css`
+    margin: 15px 20px 0 20px;
+    font-weight: bold;
+    color: var(--black);
+  `,
+  teamstyle: css`
+    margin-bottom: 20px;
+  `,
+};
 
 const SideNav = () => {
   return (
-    <Flex css={navContainer} flexDirection="column">
+    <Flex css={SideNavCss.navContainer} flexDirection="column">
       <UserInfo src={UserData.src} name={UserData.name} email={UserData.email} />
       <BoxInfo UserBoxData={UserBoxData} title="새소식" />
       <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
-      <Flex css={serviceContainer} flexDirection="column" alignItems="flex-start">
-        <Note css={notestyle} text="서비스 소개" onClick={() => {}} />
-        <Note css={notestyle} text="서비스 문의" onClick={() => {}} />
+      <Flex css={SideNavCss.serviceContainer} flexDirection="column" alignItems="flex-start">
+        <Note css={SideNavCss.notestyle} text="서비스 소개" onClick={() => {}} />
+        <Note css={SideNavCss.notestyle} text="서비스 문의" onClick={() => {}} />
       </Flex>
       <Flex flexDirection="column" alignItems="center">
-        <Note css={teamstyle} text="by Team 쬬와규" onClick={() => {}} />
+        <Note css={SideNavCss.teamstyle} text="by Team 쬬와규" onClick={() => {}} />
         <WideButton text="로그아웃" color="white" bgColor="black" onClick={() => {}} />
       </Flex>
     </Flex>

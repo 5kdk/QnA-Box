@@ -1,11 +1,17 @@
 import { css } from '@emotion/react';
+import { PlusSm } from '@emotion-icons/heroicons-solid/';
 import Button from '../atom/Button';
 import Flex from '../atom/Flex';
-import { PlusSm } from '@emotion-icons/heroicons-solid/';
+
+const ButtonStyle = {
+  flexStyle: css`
+    padding: 0 10px;
+  `,
+};
 
 const Buttons = () => {
   return (
-    <Flex justifyContent="space-between" css={css({ padding: '0 10px' })}>
+    <Flex justifyContent="space-between" css={ButtonStyle.flexStyle}>
       <Flex css={css({ gap: '10px' })}>
         <Button
           text="참여 중인 BOX"

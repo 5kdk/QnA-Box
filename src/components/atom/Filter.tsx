@@ -1,54 +1,57 @@
-import { css } from '@emotion/react';
 import { useState } from 'react';
+import { css } from '@emotion/react';
 
-const boxstyle = ({ isShow }: { isShow: boolean }) =>
-  css({
-    position: 'relative',
-    width: '90px',
-    padding: '8px',
-    borderRadius: '8px',
-    alignSelf: 'center',
-    '::before': {
-      content: isShow ? "'▲'" : "'▼'",
-      position: 'absolute',
-      top: '7px',
-      right: '8px',
-      color: '000000',
-      fontSize: '15px',
-    },
-  });
-const selectstyle = ({ isShow }: { isShow: boolean }) =>
-  css({
-    position: 'absolute',
-    top: '40px',
-    left: '0px',
-    width: '100%',
-    overflow: 'hidden',
-    maxHeight: isShow ? '90px' : 0,
-    height: '90px',
-    padding: '0',
-    borderRadius: '3px',
-    backgroundColor: 'white',
-    color: 'black',
-    zIndex: 1,
-    boxShadow: isShow ? '1px 2px 5px 2px rgba(0, 0, 0, 0.2)' : '',
-  });
-
-const labelStyle = css({ fontSize: '14px' });
-
-const optionstyle = css({
-  fontSize: '14px',
-  padding: '6px 8px',
-  width: '100%',
-  textAlign: 'left',
-  backgroundColor: 'white',
-  border: 'none',
-
-  '&:hover': {
-    backgroundColor: '#1c56fc',
-    color: 'white',
+const FilterCss = {
+  boxstyle: (isShow: boolean) => {
+    return css`
+      position: relative;
+      width: 90px;
+      padding: 8px;
+      border-radius: 8px;
+      align-self: center;
+      ::before {
+        position: absolute;
+        content: ${isShow ? "'▲'" : "'▼'"};
+        top: 7px;
+        right: 8px;
+        color: var(--black);
+        font-size: 15px;
+      }
+    `;
   },
-});
+  selectstyle: (isShow: boolean) => {
+    return css`
+      position: absolute;
+      top: 40px;
+      left: 0px;
+      width: 100%;
+      overflow: hidden;
+      max-height: ${isShow ? '90px' : 0};
+      height: 90px;
+      padding: 0;
+      border-radius: 3px;
+      background-color: var(--white);
+      color: var(--black);
+      z-index: 1;
+      box-shadow: ${isShow ? '1px 2px 5px 2px var(--shadow)' : ''};
+    `;
+  },
+  labelStyle: css`
+    font-size: 14px;
+  `,
+  optionstyle: css`
+    padding: 6px 8px;
+    width: 100%;
+    font-size: 14px;
+    text-align: left;
+    background-color: var(--white);
+    border: none;
+    &:hover {
+      background-color: var(--blue);
+      color: var(--white);
+    }
+  `,
+};
 
 type FilterType = '최신순' | '좋아요순' | '오래된순';
 
@@ -63,18 +66,18 @@ const Filter = () => {
     <div
       role="button"
       tabIndex={0}
-      css={boxstyle({ isShow })}
+      css={FilterCss.boxstyle(isShow)}
       onClick={() => setIsShow(prev => !prev)}
       onKeyDown={() => {}}>
-      <label css={labelStyle}>{curValue}</label>
-      <div css={selectstyle({ isShow })}>
-        <button css={optionstyle} onClick={() => handleCurValue('최신순')}>
+      <label css={FilterCss.labelStyle}>{curValue}</label>
+      <div css={FilterCss.selectstyle(isShow)}>
+        <button css={FilterCss.optionstyle} onClick={() => handleCurValue('최신순')}>
           최신순
         </button>
-        <button css={optionstyle} onClick={() => handleCurValue('좋아요순')}>
+        <button css={FilterCss.optionstyle} onClick={() => handleCurValue('좋아요순')}>
           좋아요순
         </button>
-        <button css={optionstyle} onClick={() => handleCurValue('오래된순')}>
+        <button css={FilterCss.optionstyle} onClick={() => handleCurValue('오래된순')}>
           오래된순
         </button>
       </div>

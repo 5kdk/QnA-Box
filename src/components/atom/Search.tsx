@@ -1,16 +1,22 @@
+import { ChangeEvent } from 'react';
 import { Search as SearchIcon } from '@emotion-icons/evaicons-solid/';
 import { css } from '@emotion/react';
-import { ChangeEvent } from 'react';
 
-const inputstyle = css`
-  line-height: 30px;
-  border: none;
-  padding-left: 20px;
-`;
-const wrapstyle = css`
-  display: flex;
-  align-items: center;
-`;
+const SearchCss = {
+  inputstyle: css`
+    height: 30px;
+    padding-left: 5px;
+    border: none;
+    border-radius: 5px;
+    :focus {
+      outline: 1px solid var(--black);
+    }
+  `,
+  wrapstyle: css`
+    display: flex;
+    align-items: center;
+  `,
+};
 
 interface SearchType {
   input: string;
@@ -19,9 +25,9 @@ interface SearchType {
 
 const Search = ({ input, handleInput }: SearchType) => {
   return (
-    <div css={wrapstyle}>
+    <div css={SearchCss.wrapstyle}>
       <SearchIcon size="20px" />
-      <input title="박스 검색창" css={inputstyle} onChange={handleInput} value={input}></input>
+      <input title="박스 검색창" css={SearchCss.inputstyle} onChange={handleInput} value={input}></input>
     </div>
   );
 };

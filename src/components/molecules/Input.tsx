@@ -1,11 +1,10 @@
+import { ChangeEvent } from 'react';
 import { css } from '@emotion/react';
 import Flex from '../atom/Flex';
-import { ChangeEvent } from 'react';
 
 interface InputType {
   text: string;
   type: string;
-  width?: string;
   width?: string;
   input: string;
   handleInput: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -30,7 +29,6 @@ const inputstyle = (props?: string) =>
   css({
     marginTop: '10px',
     fontWeight: 'bold',
-    marginTop: '20px',
     width: props || '100%',
     border: 'none',
     borderBottom: '2px solid #595959',

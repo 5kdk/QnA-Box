@@ -25,7 +25,7 @@ const Account = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const toEditProfile = () => navigate('/account/pofile');
+  const toEditProfile = () => navigate('/account/profile');
   const toEditPassword = () => navigate('/account/password');
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
@@ -35,8 +35,14 @@ const Account = () => {
     <Flex css={accountCss.wrapper} flexDirection="column">
       <UserInfo {...tmpData} />
       <Flex css={accountCss.buttons} flexDirection="column">
-        <WideButton text="회원정보 수정" color="black" bgColor="white" borderColor="black" onClick={toEditProfile} />
-        <WideButton text="비밀번호 변경" color="white" bgColor="black" onClick={toEditPassword} />
+        <WideButton
+          text="회원정보 수정"
+          color="var(--black)"
+          bgColor="var(--white)"
+          borderColor="var(--black)"
+          onClick={toEditProfile}
+        />
+        <WideButton text="비밀번호 변경" color="var(--white)" bgColor="var(--black)" onClick={toEditPassword} />
         <Note text="회원 탈퇴" onClick={openModal} />
       </Flex>
       {open && (

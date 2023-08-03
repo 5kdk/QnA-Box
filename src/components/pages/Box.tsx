@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { InfoCircle } from '@emotion-icons/bootstrap';
 import { css } from '@emotion/react';
-import BoxListController from '../molecules/Controller';
+import { Flex, Text } from '../atom';
+import { Question } from '../molecules';
 import BoxItem from '../Box/BoxItem';
-import Flex from '../atom/Flex';
-import Text from '../atom/Text';
-import Question from '../molecules/Question';
+import BoxListController from '../molecules/Controller';
 
 type Box = {
   id: string;
@@ -96,24 +95,30 @@ const boxData: Box = {
   ],
 };
 
-const wrapperStyle = css({ padding: '10px 20px 0 20px' });
-const infoWrapperStyle = css({ gap: '5px' });
-const borderStyle = css({
-  border: '1px solid #F0F0F0',
-});
+const boxCss = {
+  wrapper: css`
+    padding: 10px 20px 0 20px;
+  `,
+  info: css`
+    gap: 5px;
+  `,
+  border: css`
+    border: 1px solid var(--light_gray);
+  `,
+};
 
 const Box = () => {
   const [moreInfo, setMoreInfo] = useState(false);
 
   return (
     <div>
-      <Flex justifyContent="space-between" alignItems="center" css={wrapperStyle}>
+      <Flex justifyContent="space-between" alignItems="center" css={boxCss.wrapper}>
         <h2>{boxData.title}</h2>
         <button aria-label="더 많은 정보 보기">
           <InfoCircle size="16px" onClick={() => setMoreInfo(prev => !prev)} />
         </button>
       </Flex>
-      <Flex flexDirection="column" css={[wrapperStyle, infoWrapperStyle]}>
+      <Flex flexDirection="column" css={[boxCss.wrapper, boxCss.info]}>
         {moreInfo && (
           <>
             <Text>{boxData.owner}</Text>
@@ -124,7 +129,7 @@ const Box = () => {
       </Flex>
       <BoxListController />
       {boxData.questions.map(({ responder, responderAvatarUrl, postTime, content, like, answer }, i) => (
-        <Flex css={borderStyle} flexDirection="column" key={`${responder} ${i}`}>
+        <Flex css={boxCss.border} flexDirection="column" key={`${responder} ${i}`}>
           <BoxItem
             owner={boxData.owner}
             responder={responder}

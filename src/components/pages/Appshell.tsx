@@ -1,26 +1,27 @@
 import { Outlet } from 'react-router-dom';
-import Header from '../molecules/Header';
 import { css } from '@emotion/react';
 import { useAtomValue } from 'jotai';
+import { Header } from '../molecules';
+import { SideNav } from '../molecules/SideNav';
 import sideNavState from '../../jotai/atom/sideNavState';
-import SideNav from '../molecules/SideNav/SideNav';
 
-const wrapperStyle = css({
-  width: '28rem',
-  margin: '0 auto',
-});
-
-const style = css({
-  minHeight: 'calc(100vh - 56px)',
-  backgroundColor: '#fff',
-});
+const appShellCss = {
+  wrapper: css`
+    width: 448px;
+    margin: 0 auto;
+  `,
+  main: css`
+    min-height: calc(100vh - 56px);
+    background-color: var(--white);
+  `,
+};
 
 const Appshell = () => {
   const isOpen = useAtomValue(sideNavState);
   return (
-    <div css={wrapperStyle}>
+    <div css={appShellCss.wrapper}>
       <Header />
-      <main css={style}>
+      <main css={appShellCss.main}>
         {isOpen ? <SideNav /> : null}
         <Outlet />
       </main>

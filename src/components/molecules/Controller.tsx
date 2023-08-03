@@ -1,8 +1,8 @@
 import { useState, ChangeEvent } from 'react';
 import { css } from '@emotion/react';
-import { Filter, Flex, Search } from '../atom/';
+import { Filter, Flex, Search } from '../atom';
 
-const ControllerCss = css`
+const controllerCss = css`
   padding: 10px 20px;
 `;
 
@@ -14,7 +14,7 @@ const BoxListController = () => {
   };
 
   return (
-    <Flex justifyContent="space-between" css={ControllerCss}>
+    <Flex justifyContent="space-between" css={controllerCss}>
       <Search input={userInput} handleInput={handleInput} />
       <Filter />
     </Flex>

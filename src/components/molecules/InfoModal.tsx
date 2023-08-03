@@ -51,12 +51,12 @@ const InfoModal = ({ title, text, normalBtn, importantBtn }: ModalProps) => {
         <Flex css={modalCss.buttons}>
           <Button
             text={normalBtn.text}
-            color="black"
-            bgColor="white"
-            borderColor="#D6D6D6"
+            color="var(--black)"
+            bgColor="var(--white)"
+            borderColor="var(--gray)"
             onClick={normalBtn.onClick}
           />
-          <Button text={importantBtn.text} color="white" bgColor="black" onClick={importantBtn.onClick} />
+          <Button text={importantBtn.text} color="var(--white)" bgColor="var(--black)" onClick={importantBtn.onClick} />
         </Flex>
       </Flex>
     </Flex>

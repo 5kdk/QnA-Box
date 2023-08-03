@@ -1,16 +1,7 @@
 import { css, keyframes } from '@emotion/react';
-import Avatar from '../atom/Avatar';
-import Flex from '../atom/Flex';
+import { Avatar, Flex } from '../atom';
 
-const wrapperStyle = css({
-  width: '28rem',
-  minHeight: '100px',
-  padding: '12px 24px',
-  gap: '15px',
-  border: '1px solid #F0F0F0',
-});
-
-const blinkStyle = keyframes`
+const blink = keyframes`
   0%, 100% {
     opacity: 1;
   }
@@ -18,29 +9,42 @@ const blinkStyle = keyframes`
     opacity: 0.3; 
   }
 `;
-const textStyle = css({
-  width: '100px',
-  height: '18px',
-  backgroundColor: '#D6D6D6',
-  borderRadius: '10px',
-  animation: `${blinkStyle} 2s ease-in-out infinite`,
-});
 
-const detailStyle = css({
-  width: '340px',
-  height: '15px',
-});
+const itemSkeletonCss = {
+  wrapper: css`
+    width: 448px;
+    min-height: 100px;
+    padding: 12px 24px;
+    border: 1px solid var(--light_gray);
+    gap: 15px;
+  `,
+  question: css`
+    width: '100%';
+    gap: '5px';
+  `,
+  text: css`
+    width: 100px;
+    height: 18px;
+    border-radius: 10px;
+    animation: ${blink} 2s ease-in-out infinite;
+    background-color: var(--gray);
+  `,
+  detail: css`
+    width: 340px;
+    height: 15px;
+  `,
+};
 
 const ItemSkeleton = () => {
   return (
     <>
       {Array.from({ length: 5 }, () => (
-        <Flex css={wrapperStyle} justifyContent="space-between">
+        <Flex css={itemSkeletonCss.wrapper} justifyContent="space-between">
           <Avatar size="sm" />
-          <Flex flexDirection="column" css={css({ width: '100%', gap: '5px' })}>
-            <div css={textStyle}></div>
+          <Flex flexDirection="column" css={itemSkeletonCss.question}>
+            <div css={itemSkeletonCss.text} />
             {Array.from({ length: 3 }, () => (
-              <div css={[textStyle, detailStyle]}></div>
+              <div css={[itemSkeletonCss.text, itemSkeletonCss.detail]} />
             ))}
           </Flex>
         </Flex>

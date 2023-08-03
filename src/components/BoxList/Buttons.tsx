@@ -2,23 +2,26 @@ import { css } from '@emotion/react';
 import { PlusSm } from '@emotion-icons/heroicons-solid/';
 import { Button, Flex } from '../atom';
 
-const ButtonStyle = {
-  flexStyle: css`
+const buttonCss = {
+  wrapper: css`
     padding: 0 10px;
+  `,
+  tap: css`
+    gap: 10px;
   `,
 };
 
 const Buttons = () => {
   return (
-    <Flex justifyContent="space-between" css={ButtonStyle.flexStyle}>
-      <Flex css={css({ gap: '10px' })}>
+    <Flex justifyContent="space-between" css={buttonCss.wrapper}>
+      <Flex css={buttonCss.tap}>
         <Button
           text="참여 중인 BOX"
           onClick={() => {
             console.log('hi');
           }}
-          bgColor="#000000"
-          color="#fff"
+          bgColor="var(--black)"
+          color="var(--white)"
           fontWeight={300}
           minWidth="102px"
         />
@@ -27,9 +30,9 @@ const Buttons = () => {
           onClick={() => {
             console.log('hi');
           }}
-          borderColor="#D6D6D6"
-          bgColor="#fff"
-          color="#000000"
+          borderColor="var(--gray)"
+          bgColor="var(--white)"
+          color="var(--black)"
           fontWeight={300}
           minWidth="102px"
         />
@@ -40,8 +43,8 @@ const Buttons = () => {
         onClick={() => {
           console.log('hi');
         }}
-        bgColor="#1C56FC"
-        color="#fff"
+        bgColor="var(--blue)"
+        color="var(--white)"
         fontWeight={300}
         minWidth="102px"
       />

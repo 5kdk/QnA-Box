@@ -1,43 +1,40 @@
 import { ChangeEvent, useState } from 'react';
 import { css } from '@emotion/react';
-import Toggler from '../atom/Toggler';
-import Button from '../atom/Button';
-import Flex from '../atom/Flex';
-import Avatar from '../atom/Avatar';
+import { Avatar, Button, Flex, Toggler } from '../atom';
 import loading from '../../assets/images/loading.png';
 
 const questionCss = {
-  wrapper: css({
-    position: 'fixed',
-    bottom: '0',
-    zIndex: '10',
-    width: '28rem',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    gap: '10px',
-    padding: '20px',
-    backgroundColor: 'white',
-    boxShadow: '0px -10px 10px 1px rgba(0, 0, 0, 0.10)',
-  }),
-  inputBox: css({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '9px',
-    backgroundColor: '#F0F0F0',
-    borderRadius: '50px',
-    padding: '9px',
-    border: '2px solid #F0F0F0',
-    '&:focus-within': {
-      borderColor: '#1C56FC',
-    },
-  }),
-  input: css({
-    width: '100%',
-    border: 'none',
-    backgroundColor: 'inherit',
-    fontSize: '15px',
-    outline: 'none',
-  }),
+  wrapper: css`
+    z-index: 10;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 448px;
+    padding: 20px;
+    gap: 10px;
+    background-color: var(--white);
+    box-shadow: 0px -10px 10px 1px var(--shadow);
+  `,
+  inputBox: css`
+    display: flex;
+    align-items: center;
+    padding: 9px;
+    gap: 9px;
+    border: 2px solid var(--light_gray);
+    border-radius: 50px;
+    background-color: var(--light_gray);
+    &:focus-within {
+      border-color: var(--blue);
+    }
+  `,
+  input: css`
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: inherit;
+    font-size: 15px;
+  `,
 };
 
 const Question = () => {
@@ -56,7 +53,7 @@ const Question = () => {
       </label>
       <Flex justifyContent="space-between" alignItems="center">
         <Toggler selected={isAnonymous} setSelected={setAnonymous} text="익명으로 질문하기" />
-        <Button text="질문 등록" color="white" bgColor="black" onClick={createQuestion} />
+        <Button text="질문 등록" color="var(--white)" bgColor="var(--black)" onClick={createQuestion} />
       </Flex>
     </Flex>
   );

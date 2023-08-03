@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { Avatar, Edit, Flex, Text } from '../atom';
 import { SuitHeart, SuitHeartFill } from '@emotion-icons/bootstrap';
+import { Avatar, Edit, Flex, Text } from '../atom';
 
 const boxItemCss = {
   wrapper: css`

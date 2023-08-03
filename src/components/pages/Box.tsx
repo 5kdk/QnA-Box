@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { InfoCircle } from '@emotion-icons/bootstrap';
 import { css } from '@emotion/react';
-import BoxListController from '../molecules/Controller';
+import { Flex, Text } from '../atom';
+import { Question } from '../molecules';
 import BoxItem from '../Box/BoxItem';
-import Flex from '../atom/Flex';
-import Text from '../atom/Text';
-import Question from '../molecules/Question';
+import BoxListController from '../molecules/Controller';
 
 type Box = {
   id: string;

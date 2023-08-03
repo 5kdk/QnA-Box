@@ -20,7 +20,7 @@ const SigninCss = {
     margin: 10px 0;
   `,
   kakaobutton: css`
-    background-color: #fee500;
+    background-color: var(--kakao);
     min-width: 20rem;
     height: 57px;
     border-radius: 10px;
@@ -76,7 +76,7 @@ const Signup = () => {
           input={checkPw}
           handleInput={handleCheckPw}
         />
-        <WideButton text="SignUp" bgColor="#1C56FC" color="white" onClick={() => {}} />
+        <WideButton text="SignUp" bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />
         <button css={SigninCss.kakaobutton}>
           <img src={kakaologin} alt="kakaologin-img" />
         </button>

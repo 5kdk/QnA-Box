@@ -57,7 +57,7 @@ const SideNav = () => {
       </Flex>
       <Flex flexDirection="column" alignItems="center">
         <Note css={SideNavCss.teamstyle} text="by Team 쬬와규" onClick={() => {}} />
-        <WideButton text="로그아웃" color="white" bgColor="black" onClick={() => {}} />
+        <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={() => {}} />
       </Flex>
     </Flex>
   );

@@ -21,9 +21,9 @@ const questionCss = {
     align-items: center;
     padding: 9px;
     gap: 9px;
-    border: 2px solid var(--white);
+    border: 2px solid var(--light_gray);
     border-radius: 50px;
-    background-color: var(--white);
+    background-color: var(--light_gray);
     &:focus-within {
       border-color: var(--blue);
     }

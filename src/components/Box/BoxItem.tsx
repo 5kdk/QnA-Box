@@ -14,7 +14,7 @@ const boxItemCss = {
     height: calc(100% + 30px);
     margin-top: 10px;
     margin-bottom: -10px;
-    background-color: var(--white);
+    background-color: var(--light_gray);
   `,
   question: css`
     width: 100%;

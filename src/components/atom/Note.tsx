@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 const style = ({ fs }: { fs?: string }) => css`
-  color: #515254;
+  color: var(--deep_gray);
   font-size: ${fs || '1rem'};
 `;
 

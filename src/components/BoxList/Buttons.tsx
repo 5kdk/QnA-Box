@@ -17,8 +17,8 @@ const Buttons = () => {
           onClick={() => {
             console.log('hi');
           }}
-          bgColor="#000000"
-          color="#fff"
+          bgColor="var(--black)"
+          color="var(--white)"
           fontWeight={300}
           minWidth="102px"
         />
@@ -27,9 +27,9 @@ const Buttons = () => {
           onClick={() => {
             console.log('hi');
           }}
-          borderColor="#D6D6D6"
-          bgColor="#fff"
-          color="#000000"
+          borderColor="var(--gray)"
+          bgColor="var(--white)"
+          color="var(--black)"
           fontWeight={300}
           minWidth="102px"
         />
@@ -40,8 +40,8 @@ const Buttons = () => {
         onClick={() => {
           console.log('hi');
         }}
-        bgColor="#1C56FC"
-        color="#fff"
+        bgColor="var(--blue)"
+        color="var(--white)"
         fontWeight={300}
         minWidth="102px"
       />

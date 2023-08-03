@@ -99,7 +99,7 @@ const boxData: Box = {
 const wrapperStyle = css({ padding: '10px 20px 0 20px' });
 const infoWrapperStyle = css({ gap: '5px' });
 const borderStyle = css({
-  border: '1px solid #F0F0F0',
+  border: '1px solid var(--light_gray)',
 });
 
 const Box = () => {

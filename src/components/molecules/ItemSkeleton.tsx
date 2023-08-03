@@ -15,7 +15,7 @@ const itemSkeletonCss = {
     width: 448px;
     min-height: 100px;
     padding: 12px 24px;
-    border: 1px solid var(--white);
+    border: 1px solid var(--light_gray);
     gap: 15px;
   `,
   question: css`

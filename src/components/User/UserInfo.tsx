@@ -1,16 +1,16 @@
 import { css } from '@emotion/react';
-import InfoSubject from '../User/InfoSubject';
-import Avatar from '../atom/Avatar';
 import Flex from '../atom/Flex';
+import Avatar from '../atom/Avatar';
+import InfoSubject from '../User/InfoSubject';
 
 const userCss = {
-  wrapper: css({
-    paddingTop: '4rem',
-    gap: '3.3rem',
-  }),
-  subject: css({
-    gap: '2.2rem',
-  }),
+  wrapper: css`
+    padding-top: 4rem;
+    gap: 3.3rem;
+  `,
+  subject: css`
+    gap: 2.2rem;
+  `,
 };
 
 interface InfoProps {
@@ -18,6 +18,7 @@ interface InfoProps {
   email: string;
   name: string;
 }
+
 const UserInfo = ({ imgSrc, email, name }: InfoProps) => {
   return (
     <Flex css={userCss.wrapper} flexDirection="column" alignItems="center">

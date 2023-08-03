@@ -10,9 +10,9 @@ interface NoteProps {
   fs?: string;
   onClick: () => void;
 }
-const Note = ({ text, fs, onClick }: NoteProps) => {
+const Note = ({ text, fs, onClick, ...rest }: NoteProps) => {
   return (
-    <button css={style({ fs })} onClick={onClick}>
+    <button css={style({ fs })} {...rest} onClick={onClick}>
       {text}
     </button>
   );

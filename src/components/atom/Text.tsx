@@ -1,15 +1,15 @@
 import { css } from '@emotion/react';
 
-const textStyle = css({
-  fontSize: '14px',
-});
+const textCss = css`
+  font-size: 14px;
+`;
 
 interface TextProps {
   children: React.ReactNode;
 }
 
 const Text = ({ children }: TextProps) => {
-  return <p css={textStyle}>{children}</p>;
+  return <p css={textCss}>{children}</p>;
 };
 
 export default Text;

@@ -6,6 +6,7 @@ interface InputType {
   text: string;
   type: string;
   width?: string;
+  width?: string;
   input: string;
   handleInput: (e: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -29,7 +30,8 @@ const inputstyle = (props?: string) =>
   css({
     marginTop: '10px',
     fontWeight: 'bold',
-    width: props,
+    marginTop: '20px',
+    width: props || '100%',
     border: 'none',
     borderBottom: '2px solid #595959',
     lineHeight: '25px',

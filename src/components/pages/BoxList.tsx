@@ -1,7 +1,7 @@
 import Controller from '../molecules/Controller';
 import Buttons from '../BoxList/Buttons';
-import Item from '../molecules/Item';
 import Pagenation from '../BoxList/Pagenation';
+import BoxListItem from '../BoxList/BoxListItem';
 
 const boxData = [
   {
@@ -96,7 +96,7 @@ const BoxList = () => {
       <Buttons />
       <Controller />
       {boxData.map(({ id, owner, ownerAvatarUrl, title, description }) => (
-        <Item title={title} userName={owner} text={description} imgUrl={ownerAvatarUrl} key={id} />
+        <BoxListItem title={title} userName={owner} text={description} imgUrl={ownerAvatarUrl} key={id} />
       ))}
       <Pagenation currentPage={1} maxPage={5} onClickPageButton={() => console.log('hi')} />
     </>

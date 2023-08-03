@@ -1,16 +1,15 @@
 import { css } from '@emotion/react';
 
-type SizeType = 'lg' | 'md' | 'sm';
+const style = (size: SizeType) => css`
+  width: ${size === 'md' ? '64px' : size === 'lg' ? '148px' : '35px'};
+  height: ${size === 'md' ? '64px' : size === 'lg' ? '148px' : '35px'};
+  border-radius: 50%;
+  background-color: gray;
+  flex-shrink: 0;
+  object-fit: cover;
+`;
 
-const style = (size: SizeType) =>
-  css({
-    width: size === 'md' ? '64px' : size === 'lg' ? '148px' : '35px',
-    height: size === 'md' ? '64px' : size === 'lg' ? '148px' : '35px',
-    borderRadius: '50%',
-    backgroundColor: 'gray',
-    flexShrink: 0,
-    objectFit: 'cover',
-  });
+type SizeType = 'lg' | 'md' | 'sm';
 
 interface AvatarProps {
   src?: string;

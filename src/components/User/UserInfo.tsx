@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
-import Avatar from '../atom/Avatar';
-import InfoSubject from '../User/InfoSubject';
+import { Flex, Avatar } from '../atom';
+import { InfoSubject } from '.';
 
 const userCss = {
   wrapper: css`

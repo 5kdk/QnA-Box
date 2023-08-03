@@ -1,12 +1,6 @@
 import { css } from '@emotion/react';
 import Flex from '../atom/Flex';
 
-interface PagenationProps {
-  currentPage: number;
-  maxPage: number;
-  onClickPageButton: (page: number) => void;
-}
-
 const PagenationCss = {
   buttonStyle: css`
     width: 30px;
@@ -29,6 +23,12 @@ const PagenationCss = {
     gap: 5px;
   `,
 };
+
+interface PagenationProps {
+  currentPage: number;
+  maxPage: number;
+  onClickPageButton: (page: number) => void;
+}
 
 const Pagenation = ({ currentPage, maxPage, onClickPageButton }: PagenationProps) => {
   return (

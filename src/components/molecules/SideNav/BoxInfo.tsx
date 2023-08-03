@@ -2,11 +2,6 @@ import { css } from '@emotion/react';
 import Note from '../../atom/Note';
 import Flex from '../../atom/Flex';
 
-interface BoxData {
-  id: number;
-  box: string;
-}
-
 const BoxInfoCss = {
   flexstyle: css`
     margin-top: 10px;
@@ -25,6 +20,11 @@ const BoxInfoCss = {
     padding: 3px 0;
   `,
 };
+
+interface BoxData {
+  id: number;
+  box: string;
+}
 
 const BoxInfo = ({ title, UserBoxData }: { title: string; UserBoxData: BoxData[] }) => {
   return (

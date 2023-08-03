@@ -5,15 +5,6 @@ import Flex from '../../atom/Flex';
 import Note from '../../atom/Note';
 import WideButton from '../../atom/WideButton';
 
-const UserData = {
-  src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYBLxK6kQbI7JhBGVQ_A7pZpu_U9jKIvMulQ&usqp=CAU',
-  name: '쬬와규',
-  email: 'asdfasf@naver.com',
-};
-const UserBoxData = [
-  { id: 1, box: 'React-query의 모든 것' },
-  { id: 2, box: 'FireBase 배워보자' },
-];
 const Slide = keyframes`
     from {
       transform: translateX(5%);
@@ -47,6 +38,15 @@ const SideNavCss = {
     margin-bottom: 20px;
   `,
 };
+const UserData = {
+  src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYBLxK6kQbI7JhBGVQ_A7pZpu_U9jKIvMulQ&usqp=CAU',
+  name: '쬬와규',
+  email: 'asdfasf@naver.com',
+};
+const UserBoxData = [
+  { id: 1, box: 'React-query의 모든 것' },
+  { id: 2, box: 'FireBase 배워보자' },
+];
 
 const SideNav = () => {
   return (

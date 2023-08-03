@@ -3,11 +3,6 @@ import { IosArrowRight } from '@emotion-icons/fluentui-system-filled/IosArrowRig
 import Avatar from '../../atom/Avatar';
 import Flex from '../../atom/Flex';
 
-interface User {
-  src: string;
-  name: string;
-  email: string;
-}
 const UserInfoCss = {
   container: css`
     padding: 10px;
@@ -25,6 +20,12 @@ const UserInfoCss = {
     width: 100%;
   `,
 };
+
+interface User {
+  src: string;
+  name: string;
+  email: string;
+}
 
 const UserInfo = ({ src, name, email }: User) => {
   return (

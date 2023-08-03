@@ -2,11 +2,6 @@ import { css } from '@emotion/react';
 import MainLogo from '../../assets/qa-logo.svg';
 import Flex from './Flex';
 
-interface LogoProps {
-  size: 'lg' | 'sm';
-  onClick?: () => void;
-}
-
 const LogoCss = {
   large: css`
     width: 93px;
@@ -15,6 +10,11 @@ const LogoCss = {
     width: 36px;
   `,
 };
+
+interface LogoProps {
+  size: 'lg' | 'sm';
+  onClick?: () => void;
+}
 
 const Logo = ({ size, ...rest }: LogoProps) => {
   return (

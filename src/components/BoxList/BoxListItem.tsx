@@ -4,13 +4,6 @@ import Flex from '../atom/Flex';
 import Edit from '../atom/Edit';
 import Text from '../atom/Text';
 
-interface BoxListItemProps {
-  imgUrl?: string;
-  title: string;
-  userName: string;
-  text: string;
-}
-
 const BoxListCss = {
   wrapperStyle: css`
     padding: 12px 24px 24px 24px;
@@ -34,6 +27,13 @@ const BoxListCss = {
     width: 100%;
   `,
 };
+
+interface BoxListItemProps {
+  imgUrl?: string;
+  title: string;
+  userName: string;
+  text: string;
+}
 
 const BoxListItem = ({ title, imgUrl, userName, text }: BoxListItemProps) => {
   const editPost = () => {

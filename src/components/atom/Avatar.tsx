@@ -6,7 +6,7 @@ const avatarCss = (size: SizeType) => css`
   width: ${size === 'md' ? '64px' : size === 'lg' ? '148px' : '35px'};
   height: ${size === 'md' ? '64px' : size === 'lg' ? '148px' : '35px'};
   border-radius: 50%;
-  background-color: gray;
+  background-color: var(--gray);
 `;
 
 type SizeType = 'lg' | 'md' | 'sm';

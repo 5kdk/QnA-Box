@@ -23,7 +23,7 @@ const togglerCss = {
       border-radius: 50px;
       transform: translateY(-50%);
       transition: all 0.5s ease;
-      background-color: white;
+      background-color: var(--white);
     }
   `,
   label: css`

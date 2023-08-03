@@ -1,18 +1,17 @@
 import { css } from '@emotion/react';
 import { cssProps } from '../components/atom/Button';
 
-export const buttonCss = (props: cssProps) =>
-  css({
-    display: 'flex',
-    justifyContent: props.icon ? 'space-between' : 'center',
-    alignItems: 'center',
-    minWidth: props.minWidth || '6rem',
-    padding: props.padding || '10px',
-    borderRadius: '10px',
-    borderWidth: '2px',
-    borderStyle: 'solid',
-    borderColor: props.borderColor || props.bgColor,
-    fontWeight: props.fontWeight || 'bold',
-    color: props.color,
-    backgroundColor: props.bgColor,
-  });
+export const buttonCss = (props: cssProps) => css`
+  display: flex;
+  justify-content: ${props.icon ? 'space-between' : 'center'};
+  align-items: center;
+  min-width: ${props.minWidth || '96px'};
+  padding: ${props.padding || '10px'};
+  border-radius: 10px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: ${props.borderColor || props.bgColor};
+  font-weight: ${props.fontWeight || 'bold'};
+  color: ${props.color};
+  background-color: ${props.bgColor};
+`;

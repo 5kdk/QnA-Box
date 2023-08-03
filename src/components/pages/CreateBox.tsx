@@ -8,20 +8,20 @@ const tmpData = {
 };
 
 const createBoxCss = {
-  wrapper: css({
-    padding: '5.8rem 2.5rem',
-    gap: '3rem',
-  }),
-  form: css({
-    width: '100%',
-    gap: '2rem',
-  }),
-  inputs: css({
-    gap: '1rem',
-  }),
-  toggles: css({
-    gap: '0.75rem',
-  }),
+  wrapper: css`
+    padding: 92px 40px;
+    gap: 48px;
+  `,
+  form: css`
+    width: 100%;
+    gap: 32px;
+  `,
+  inputs: css`
+    gap: 16px;
+  `,
+  toggles: css`
+    gap: 12px;
+  `,
 };
 
 interface FormElement {
@@ -32,6 +32,7 @@ interface FormElement {
   closed: boolean;
   anonymous: boolean;
 }
+
 const CreateBox = () => {
   const [boxForm, setBoxForm] = useState<FormElement>({
     name: '',
@@ -83,7 +84,7 @@ const CreateBox = () => {
             text="익명 질문을 허용합니다."
           />
         </Flex>
-        <WideButton text="등록하기" color="white" bgColor="#1C56FC" onClick={createBox} />
+        <WideButton text="등록하기" color="var(--white)" bgColor="var(--blue)" onClick={createBox} />
       </Flex>
     </Flex>
   );

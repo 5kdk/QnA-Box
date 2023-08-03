@@ -89,6 +89,8 @@ const boxData = [
 ];
 
 const BoxList = () => {
+  const switchPage = () => console.log('hi');
+
   return (
     <>
       <Buttons />
@@ -96,7 +98,7 @@ const BoxList = () => {
       {boxData.map(({ id, owner, ownerAvatarUrl, title, description }) => (
         <BoxListItem title={title} userName={owner} text={description} imgUrl={ownerAvatarUrl} key={id} />
       ))}
-      <Pagenation currentPage={1} maxPage={5} onClickPageButton={() => console.log('hi')} />
+      <Pagenation currentPage={1} maxPage={5} onClickPageButton={switchPage} />
     </>
   );
 };

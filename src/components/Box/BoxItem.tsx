@@ -2,41 +2,45 @@ import { css } from '@emotion/react';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { SuitHeart, SuitHeartFill } from '@emotion-icons/bootstrap';
 
-const wrapperStyle = css({
-  width: '28rem',
-  minHeight: '100px',
-  padding: '12px 24px',
-  gap: '15px',
-});
-
-const nameStyle = css({
-  fontWeight: 700,
-  FontSize: '14px',
-  marginBottom: '5px',
-});
-
-const ownerNameStyle = css({
-  color: '#1C56FC',
-});
-
-const subTextStyle = css({
-  fontSize: '12px',
-  color: '#8E8E8E',
-  fontWeight: 400,
-  marginRight: '5px',
-});
-
-const menuWrapperStyle = css({
-  position: 'relative',
-});
-
-const lineStyle = css({
-  width: '1.5px',
-  marginTop: '10px',
-  marginBottom: '-10px',
-  backgroundColor: '#F0F0F0',
-  height: 'calc(100% + 30px)',
-});
+const boxItemCss = {
+  wrapper: css`
+    width: 448px;
+    min-height: 100px;
+    padding: 12px 24px;
+    gap: 15px;
+  `,
+  line: css`
+    width: 1.5px;
+    height: calc(100% + 30px);
+    margin-top: 10px;
+    margin-bottom: -10px;
+    background-color: var(--white);
+  `,
+  question: css`
+    width: 100%;
+  `,
+  name: css`
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 14px;
+  `,
+  ownerName: css`
+    color: var(--blue);
+  `,
+  menuWrapper: css`
+    position: relative;
+  `,
+  subText: css`
+    margin-right: 5px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--gray);
+  `,
+  like: css`
+    margin: 10px 0 12px 0;
+    gap: 5px;
+  `,
+};
 
 type Post = {
   responder: string;
@@ -47,14 +51,8 @@ type Post = {
   answer: Post[];
 };
 
-type BoxItemProps = {
+type BoxItemProps = Post & {
   owner: string;
-  responder: string;
-  responderAvatarUrl: string;
-  content: string;
-  postTime: string;
-  like: number;
-  answer: Post[];
 };
 
 const displayTimeAgo = (postTimestamp: string): string => {
@@ -95,25 +93,27 @@ const BoxItem = ({ owner, responder, postTime, content, responderAvatarUrl, like
 
   return (
     <>
-      <Flex css={wrapperStyle} justifyContent="space-between">
+      <Flex css={boxItemCss.wrapper} justifyContent="space-between">
         <Flex alignItems="center" flexDirection="column">
           <Avatar size="sm" src={responderAvatarUrl} />
-          {answer.length !== 0 && <div css={lineStyle}></div>}
+          {answer.length !== 0 && <div css={boxItemCss.line}></div>}
         </Flex>
-        <Flex flexDirection="column" css={css({ width: '100%' })}>
+        <Flex flexDirection="column" css={boxItemCss.question}>
           <Flex justifyContent="space-between" alignItems="flex-start">
             <Flex flexDirection="column">
-              <span css={owner === responder ? [nameStyle, ownerNameStyle] : nameStyle}>{responder}</span>
+              <span css={owner === responder ? [boxItemCss.name, boxItemCss.ownerName] : boxItemCss.name}>
+                {responder}
+              </span>
             </Flex>
-            <Flex alignItems="center" css={menuWrapperStyle}>
-              <span css={subTextStyle}>{displayTimeAgo(postTime)}</span>
+            <Flex alignItems="center" css={boxItemCss.menuWrapper}>
+              <span css={boxItemCss.subText}>{displayTimeAgo(postTime)}</span>
               <Edit edit={editPost} remove={removePost} />
             </Flex>
           </Flex>
           <Text>{content}</Text>
-          <Flex alignItems="center" css={css({ gap: '5px', margin: '10px 0 12px 0' })}>
-            {isLike ? <SuitHeartFill size="14px" color="#FC6D1C" /> : <SuitHeart size="14px" />}
-            {like !== 0 && <span css={subTextStyle}>{`${like} likes`}</span>}
+          <Flex alignItems="center" css={boxItemCss.like}>
+            {isLike ? <SuitHeartFill size="14px" color="var(--orange)" /> : <SuitHeart size="14px" />}
+            {like !== 0 && <span css={boxItemCss.subText}>{`${like} likes`}</span>}
           </Flex>
         </Flex>
       </Flex>

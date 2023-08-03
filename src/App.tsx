@@ -1,15 +1,7 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import GlobalStyle from './styles/GlobalStyle';
-import Appshell from './components/pages/Appshell';
-
-import Box from './components/pages/Box';
-import BoxList from './components/pages/BoxList';
-import CreateBox from './components/pages/CreateBox';
-import Account from './components/pages/Account';
-import EditAccount from './components/pages/EditAccount';
-import User from './components/pages/User';
-import Error from './components/pages/Error';
+import { Account, Appshell, Box, BoxList, CreateBox, EditAccount, Error, User } from './components/pages';
 
 const queryClient = new QueryClient({
   defaultOptions: {

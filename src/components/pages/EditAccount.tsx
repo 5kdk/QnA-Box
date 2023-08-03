@@ -121,9 +121,17 @@ const EditAccount = () => {
         )}
       </Flex>
       {target === 'profile' ? (
-        <WideButton text="회원정보 수정" color="black" bgColor="white" borderColor="black" onClick={editAccount} />
+        <WideButton
+          text="회원정보 수정"
+          color="var(--black)"
+          bgColor="var(--white)"
+          borderColor="var(--black)"
+          onClick={editAccount}
+        />
       ) : (
-        target === 'password' && <WideButton text="비밀번호 변경" color="white" bgColor="black" onClick={editPswd} />
+        target === 'password' && (
+          <WideButton text="비밀번호 변경" color="var(--white)" bgColor="var(--black)" onClick={editPswd} />
+        )
       )}
     </Flex>
   );

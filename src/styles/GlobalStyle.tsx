@@ -68,6 +68,19 @@ const style = css`
     background: inherit;
     cursor: pointer;
   }
+
+  :root {
+    --black: #000000;
+    --white: #ffffff;
+    --gray: #d6d6d6;
+    --light_gray: #f0f0f0;
+    --deep_gray: #515254;
+    --blue: #1c56fc;
+    --orange: #fc6d1c;
+    --kakao: #fee500;
+    --shadow: rgba(0, 0, 0, 0.2);
+    --modal: rgba(0, 0, 0, 0.5);
+  }
 `;
 
 const GlobalStyle = () => {

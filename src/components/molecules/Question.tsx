@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { css } from '@emotion/react';
 import Toggler from '../atom/Toggler';
 import Button from '../atom/Button';
@@ -44,15 +44,19 @@ const Question = () => {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [question, setQuestion] = useState('');
 
+  const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setQuestion(e.target.value);
+  const setAnonymous = () => setIsAnonymous(pre => !pre);
+  const createQuestion = () => console.log(question);
+
   return (
     <Flex css={questionCss.wrapper} flexDirection="column">
       <label css={questionCss.inputBox}>
         <Avatar src={loading} size="sm" />
-        <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={e => setQuestion(e.target.value)} />
+        <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={handleQustionInput} />
       </label>
       <Flex justifyContent="space-between" alignItems="center">
-        <Toggler selected={isAnonymous} setSelected={setIsAnonymous} text="익명으로 질문하기" />
-        <Button text="질문 등록" color="white" bgColor="black" onClick={() => console.log(question)} />
+        <Toggler selected={isAnonymous} setSelected={setAnonymous} text="익명으로 질문하기" />
+        <Button text="질문 등록" color="white" bgColor="black" onClick={createQuestion} />
       </Flex>
     </Flex>
   );

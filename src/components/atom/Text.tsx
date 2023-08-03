@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-const textStyle = css`
+const textCss = css`
   font-size: 14px;
 `;
 
@@ -9,7 +9,7 @@ interface TextProps {
 }
 
 const Text = ({ children }: TextProps) => {
-  return <p css={textStyle}>{children}</p>;
+  return <p css={textCss}>{children}</p>;
 };
 
 export default Text;

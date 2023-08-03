@@ -1,30 +1,29 @@
 import { useCallback, useState, MouseEvent } from 'react';
 import { css } from '@emotion/react';
-import { ThreeDots } from 'emotion-icons/bootstrap';
-import { Pencil } from '@emotion-icons/bootstrap';
-import { Trash } from '@emotion-icons/bootstrap';
+import { Pencil, ThreeDots, Trash } from 'emotion-icons/bootstrap';
 import useClickOutside from '../../hooks/useClickOutside';
 
-const modalStyle = css({
-  position: 'absolute',
-  top: '14px',
-  right: 0,
-  width: '70px',
-  boxShadow: '1px 2px 5px 2px rgba(0, 0, 0, 0.2)',
-  backgroundColor: '#fff',
-  borderRadius: '5px',
-});
-
-const buttonStyle = css({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
-  textAlign: 'left',
-  borderRadius: '10px',
-  fontSize: '13px',
-  padding: '5px 15px 5px 10px',
-});
+const editCss = {
+  modal: css`
+    position: absolute;
+    top: 14px;
+    right: 0;
+    width: 70px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 5px 2px var(--shadow);
+    background-color: var(--white);
+  `,
+  button: css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 5px 15px 5px 10px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 13px;
+  `,
+};
 
 interface EditProps {
   edit: () => void;
@@ -46,12 +45,12 @@ const Edit = ({ edit, remove }: EditProps) => {
         <ThreeDots size="16px" />
       </button>
       {isOpen && (
-        <div css={modalStyle} ref={ref}>
-          <button css={buttonStyle} onClick={edit}>
+        <div css={editCss.modal} ref={ref}>
+          <button css={editCss.button} onClick={edit}>
             <Pencil size="12px" />
             {' 수정'}
           </button>
-          <button css={buttonStyle} onClick={remove}>
+          <button css={editCss.button} onClick={remove}>
             <Trash size="12px" />
             {' 삭제'}
           </button>

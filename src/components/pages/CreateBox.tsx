@@ -49,7 +49,9 @@ const CreateBox = () => {
   };
 
   const handleToggle = (key: string) => () => {
-    setBoxForm({ ...boxForm, [key]: !boxForm[key] });
+    setBoxForm(pre => {
+      return { ...pre, [key]: !pre[key] };
+    });
   };
 
   const createBox = () => {

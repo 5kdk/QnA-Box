@@ -1,34 +1,34 @@
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
-import Button from '../atom/Button';
+import { Flex, Button } from '../atom';
 
 const modalCss = {
-  modal: css({
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    zIndex: '20',
-    width: '100%',
-    height: '100vh',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  }),
-  infoBox: css({
-    width: '28rem',
-    padding: '3rem 1.5rem',
-    gap: '2rem',
-    backgroundColor: 'white',
-  }),
-  text: css({
-    gap: '0.5rem',
-    '> p': {
-      fontSize: '14px',
-    },
-  }),
-  buttons: css({
-    alignSelf: 'flex-end',
-    gap: '0.7rem',
-  }),
+  modal: css`
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--modal);
+  `,
+  infoBox: css`
+    width: 448px;
+    padding: 48px 24px;
+    gap: 32px;
+    background-color: var(--white);
+  `,
+  text: css`
+    gap: 8px;
+    > p {
+      font-size: 14px;
+    }
+  `,
+  buttons: css`
+    align-self: flex-end;
+    gap: 11.2px;
+  `,
 };
+
 interface BtnProps {
   text: string;
   onClick: () => void;
@@ -39,6 +39,7 @@ interface ModalProps {
   normalBtn: BtnProps;
   importantBtn: BtnProps;
 }
+
 const InfoModal = ({ title, text, normalBtn, importantBtn }: ModalProps) => {
   return (
     <Flex css={modalCss.modal} justifyContent="center" alignItems="center" onClick={importantBtn.onClick}>

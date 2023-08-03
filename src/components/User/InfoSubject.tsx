@@ -1,14 +1,15 @@
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
+import { Flex } from '../atom';
 
-const subjectCss = css({
-  gap: '1rem',
-});
+const subjectCss = css`
+  gap: 16px;
+`;
 
 interface InfoProps {
   title: string;
   body: string;
 }
+
 const InfoSubject = ({ title, body }: InfoProps) => {
   return (
     <Flex css={subjectCss} flexDirection="column" alignItems="center">

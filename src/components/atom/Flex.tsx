@@ -1,15 +1,14 @@
-import { css } from '@emotion/react';
 import { forwardRef } from 'react';
+import { css } from '@emotion/react';
 
-const flexStyle = ({ flexDirection, justifyContent, alignItems, alignContent, flexWrap }: FlexProps) =>
-  css({
-    display: 'flex',
-    flexDirection,
-    justifyContent,
-    alignItems,
-    alignContent,
-    flexWrap,
-  });
+const flexStyle = ({ flexDirection, justifyContent, alignItems, alignContent, flexWrap }: FlexProps) => css`
+  display: flex;
+  flex-direction: ${flexDirection};
+  justify-content: ${justifyContent};
+  align-items: ${alignItems};
+  align-content: ${alignContent};
+  flex-wrap: ${flexWrap};
+`;
 
 interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
   flexDirection?: 'row' | 'row-reverse' | 'column' | 'column-reverse';

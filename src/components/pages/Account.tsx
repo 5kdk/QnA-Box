@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
-import Flex from '../atom/Flex';
-import Note from '../atom/Note';
-import WideButton from '../atom/WideButton';
-import InfoModal from '../molecules/InfoModal';
-import UserInfo from '../User/UserInfo';
+import { Flex, Note, WideButton } from '../atom';
+import { InfoModal } from '../molecules';
+import { UserInfo } from '../User';
 
 const tmpData = {
   imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
@@ -14,13 +12,13 @@ const tmpData = {
 };
 
 const accountCss = {
-  wrapper: css({
-    gap: '4.5rem',
-    margin: '0 2.5rem',
-  }),
-  buttons: css({
-    gap: '1rem',
-  }),
+  wrapper: css`
+    gap: 4.5rem;
+    margin: 0 2.5rem;
+  `,
+  buttons: css`
+    gap: 1rem;
+  `,
 };
 
 const Account = () => {

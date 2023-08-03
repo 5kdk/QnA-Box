@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import Avartar from '../atom/Avartar';
+import Avatar from '../atom/Avatar';
 import Flex from '../atom/Flex';
 
 const wrapperStyle = css({
@@ -36,7 +36,7 @@ const ItemSkeleton = () => {
     <>
       {Array.from({ length: 5 }, () => (
         <Flex css={wrapperStyle} justifyContent="space-between">
-          <Avartar size="sm" />
+          <Avatar size="sm" />
           <Flex flexDirection="column" css={css({ width: '100%', gap: '5px' })}>
             <div css={textStyle}></div>
             {Array.from({ length: 3 }, () => (

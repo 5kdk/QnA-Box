@@ -1,13 +1,11 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
-import Avatar from '../atom/Avatar';
-import WideButton from '../atom/WideButton';
-import Input from '../molecules/Input';
-import InfoSubject from '../User/InfoSubject';
-import useImgFile from '../../hooks/useImgFile';
+import { Avatar, Flex, WideButton } from '../atom';
+import { Input } from '../molecules';
+import { InfoSubject } from '../User';
 import { buttonCss } from '../../styles/buttonCss';
+import useImgFile from '../../hooks/useImgFile';
 
 const tmpData = {
   imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',

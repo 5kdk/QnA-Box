@@ -1,8 +1,6 @@
 import { useCallback, useState, MouseEvent } from 'react';
 import { css } from '@emotion/react';
-import { ThreeDots } from 'emotion-icons/bootstrap';
-import { Pencil } from '@emotion-icons/bootstrap';
-import { Trash } from '@emotion-icons/bootstrap';
+import { Pencil, ThreeDots, Trash } from 'emotion-icons/bootstrap';
 import useClickOutside from '../../hooks/useClickOutside';
 
 const modalStyle = css({

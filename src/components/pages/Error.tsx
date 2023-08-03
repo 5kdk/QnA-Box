@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
-import Button from '../atom/Button';
+import { Button, Flex } from '../atom';
 
 const errorCss = {
   wrapper: css({

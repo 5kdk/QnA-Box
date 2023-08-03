@@ -1,7 +1,5 @@
+import { BoxListItem, Buttons, Pagenation } from '../BoxList';
 import Controller from '../molecules/Controller';
-import Buttons from '../BoxList/Buttons';
-import Pagenation from '../BoxList/Pagenation';
-import BoxListItem from '../BoxList/BoxListItem';
 
 const boxData = [
   {

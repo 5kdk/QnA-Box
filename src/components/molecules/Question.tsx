@@ -1,9 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { css } from '@emotion/react';
-import Toggler from '../atom/Toggler';
-import Button from '../atom/Button';
-import Flex from '../atom/Flex';
-import Avatar from '../atom/Avatar';
+import { Avatar, Button, Flex, Toggler } from '../atom';
 import loading from '../../assets/images/loading.png';
 
 const questionCss = {

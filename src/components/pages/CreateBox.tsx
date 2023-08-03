@@ -1,10 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import Flex from '../atom/Flex';
-import Title from '../atom/Title';
-import Toggler from '../atom/Toggler';
-import WideButton from '../atom/WideButton';
-import Input from '../molecules/Input';
+import { Flex, Title, Toggler, WideButton } from '../atom';
+import { Input } from '../molecules';
 
 const tmpData = {
   name: 'minjae3',

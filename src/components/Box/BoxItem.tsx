@@ -1,10 +1,6 @@
 import { css } from '@emotion/react';
-import { SuitHeart } from '@emotion-icons/bootstrap';
-import { SuitHeartFill } from '@emotion-icons/bootstrap';
-import Avatar from '../atom/Avatar';
-import Flex from '../atom/Flex';
-import Edit from '../atom/Edit';
-import Text from '../atom/Text';
+import { Avatar, Edit, Flex, Text } from '../atom';
+import { SuitHeart, SuitHeartFill } from '@emotion-icons/bootstrap';
 
 const wrapperStyle = css({
   width: '28rem',

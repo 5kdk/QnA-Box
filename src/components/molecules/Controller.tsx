@@ -1,8 +1,6 @@
 import { useState, ChangeEvent } from 'react';
-import Filter from '../atom/Filter';
-import Flex from '../atom/Flex';
-import Search from '../atom/Search';
 import { css } from '@emotion/react';
+import { Filter, Flex, Search } from '../atom';
 
 const BoxListController = () => {
   const [userInput, setUserInput] = useState('');

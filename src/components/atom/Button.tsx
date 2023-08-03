@@ -7,13 +7,14 @@ export interface cssProps {
   color: string;
   bgColor: string;
   borderColor?: string;
-  icon?: ReactNode;
   fontWeight?: number;
+  icon?: ReactNode;
 }
 export interface ButtonProps extends cssProps {
   text: string;
   onClick: () => void;
 }
+
 const Button = ({ minWidth, padding, text, color, bgColor, borderColor, fontWeight, icon, onClick }: ButtonProps) => {
   return (
     <button css={buttonCss({ minWidth, padding, color, bgColor, borderColor, fontWeight, icon })} onClick={onClick}>

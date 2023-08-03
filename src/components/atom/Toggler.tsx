@@ -37,6 +37,7 @@ interface TogglerProps {
   setSelected: (b: boolean) => void;
   text: string;
 }
+
 const Toggler = ({ selected, setSelected, text }: TogglerProps) => {
   return (
     <button css={togglerCss.button} onClick={() => setSelected(!selected)}>

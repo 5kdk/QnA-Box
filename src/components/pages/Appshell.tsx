@@ -4,7 +4,7 @@ import { Header } from '../molecules';
 
 const appShellCss = {
   wrapper: css`
-    width: 448px;
+    width: var(--app_width);
     margin: 0 auto;
     padding-top: 56px;
   `,

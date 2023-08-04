@@ -10,7 +10,7 @@ const questionCss = {
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
-    width: 448px;
+    width: var(--app_width);
     padding: 20px;
     gap: 10px;
     background-color: var(--white);

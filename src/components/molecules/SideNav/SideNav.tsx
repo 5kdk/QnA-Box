@@ -8,8 +8,8 @@ const SideNavCss = {
     z-index: 999;
 
     top: 56px;
-    left: ${isOpen ? '0' : '448px'};
-    width: ${isOpen ? '448px' : '0'};
+    left: ${isOpen ? '0' : 'var(--app_width)'};
+    width: ${isOpen ? 'var(--app_width)' : '0'};
     height: calc(100vh - 56px);
     transition: 1s;
     overflow: hidden;

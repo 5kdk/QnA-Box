@@ -13,7 +13,7 @@ const HeaderCss = {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 448px;
+    width: var(--app_width);
     padding: 10px;
     background-color: var(--white);
   `,

@@ -1,30 +1,25 @@
-import { css, keyframes } from '@emotion/react';
+import { css } from '@emotion/react';
 import { UserInfo, BoxInfo } from './';
 import { Flex, Note, WideButton } from '../../atom';
 
-const Slide = keyframes`
-    from {
-      transform: translateX(5%);
-      opacity: 0.25;
-    }
-    to {
-      transform: translateX(0%);
-      opacity: 1;
-    }
-`;
 const SideNavCss = {
-  navContainer: css`
+  navContainer: (isOpen: boolean) => css`
     position: absolute;
-    width: 448px;
-    height: 100vh;
-    left: 488px;
     z-index: 999;
+
+    top: 56px;
+    left: ${isOpen ? '0' : '448px'};
+    width: ${isOpen ? '448px' : '0'};
+    height: calc(100vh - 56px);
+    transition: 1s;
+    overflow: hidden;
+    white-space: nowrap;
     background-color: var(--white);
-    animation: ${Slide} 0.2s ease-in;
+    box-shadow: -1px 5px 5px 0px var(--shadow);
   `,
   serviceContainer: css`
     margin-bottom: 100px;
-    border-top: 0.5px solid var(--deep_gray);
+    border-top: 0.5px solid var(--gray);
   `,
   notestyle: css`
     margin: 15px 20px 0 20px;
@@ -45,9 +40,13 @@ const UserBoxData = [
   { id: 2, box: 'FireBase 배워보자' },
 ];
 
-const SideNav = () => {
+interface SideNavProps {
+  isOpen: boolean;
+}
+
+const SideNav = ({ isOpen }: SideNavProps) => {
   return (
-    <Flex css={SideNavCss.navContainer} flexDirection="column">
+    <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
       <UserInfo src={UserData.src} name={UserData.name} email={UserData.email} />
       <BoxInfo UserBoxData={UserBoxData} title="새소식" />
       <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />

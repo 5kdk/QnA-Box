@@ -7,7 +7,7 @@ const BoxListCss = {
     min-height: 100px;
     width: 448px;
     gap: 15px;
-    border: 1px solid var(--light_gray);
+    border-bottom: 1px solid var(--gray);
   `,
   titleStyle: css`
     margin-bottom: 5px;

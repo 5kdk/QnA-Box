@@ -6,7 +6,6 @@ const SideNavCss = {
   navContainer: (isOpen: boolean) => css`
     position: absolute;
     z-index: 999;
-
     top: 56px;
     left: ${isOpen ? '0' : 'var(--app_width)'};
     width: ${isOpen ? 'var(--app_width)' : '0'};
@@ -16,6 +15,9 @@ const SideNavCss = {
     white-space: nowrap;
     background-color: var(--white);
     box-shadow: -1px 5px 5px 0px var(--shadow);
+  `,
+  wrapper: css`
+    width: var(--app_width);
   `,
   serviceContainer: css`
     margin-bottom: 100px;
@@ -47,16 +49,18 @@ interface SideNavProps {
 const SideNav = ({ isOpen }: SideNavProps) => {
   return (
     <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
-      <UserInfo src={UserData.src} name={UserData.name} email={UserData.email} />
-      <BoxInfo UserBoxData={UserBoxData} title="새소식" />
-      <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
-      <Flex css={SideNavCss.serviceContainer} flexDirection="column" alignItems="flex-start">
-        <Note css={SideNavCss.notestyle} text="서비스 소개" onClick={() => {}} />
-        <Note css={SideNavCss.notestyle} text="서비스 문의" onClick={() => {}} />
-      </Flex>
-      <Flex flexDirection="column" alignItems="center">
-        <Note css={SideNavCss.teamstyle} text="by Team 쬬와규" onClick={() => {}} />
-        <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={() => {}} />
+      <Flex css={SideNavCss.wrapper} flexDirection="column">
+        <UserInfo src={UserData.src} name={UserData.name} email={UserData.email} />
+        <BoxInfo UserBoxData={UserBoxData} title="새소식" />
+        <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
+        <Flex css={SideNavCss.serviceContainer} flexDirection="column" alignItems="flex-start">
+          <Note css={SideNavCss.notestyle} text="서비스 소개" onClick={() => {}} />
+          <Note css={SideNavCss.notestyle} text="서비스 문의" onClick={() => {}} />
+        </Flex>
+        <Flex flexDirection="column" alignItems="center">
+          <Note css={SideNavCss.teamstyle} text="by Team 쬬와규" onClick={() => {}} />
+          <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={() => {}} />
+        </Flex>
       </Flex>
     </Flex>
   );

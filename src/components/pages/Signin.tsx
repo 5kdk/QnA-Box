@@ -29,9 +29,6 @@ const SigninCss = {
     border-radius: 10px;
     margin: 10px 0;
   `,
-  formstyle: css`
-    text-align: right;
-  `,
   forgetpwstyle: css`
     margin-bottom: 50px;
   `,
@@ -53,7 +50,7 @@ const Signin = () => {
   return (
     <Flex css={SigninCss.container} flexDirection="column" alignItems="center">
       <Logo css={SigninCss.logostyle} size="lg" />
-      <form css={SigninCss.formstyle}>
+      <form>
         <Input
           css={SigninCss.inputstyle}
           text="E-mail"

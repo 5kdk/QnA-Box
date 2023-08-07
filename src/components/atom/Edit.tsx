@@ -41,7 +41,7 @@ const Edit = ({ edit, remove }: EditProps) => {
 
   return (
     <div>
-      <button onClick={handleClickMenuButton}>
+      <button aria-label="Edit-button" onClick={handleClickMenuButton}>
         <ThreeDots size="16px" />
       </button>
       {isOpen && (

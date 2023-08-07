@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { InfoCircle } from '@emotion-icons/bootstrap';
 import { css } from '@emotion/react';
 import { Flex, Text } from '../atom';
-import { Question } from '../molecules';
+import { Question, Controller } from '../molecules';
 import BoxItem from '../Box/BoxItem';
-import BoxListController from '../molecules/Controller';
+import { Boxes } from '../BoxList';
 
 type Box = {
   id: string;
@@ -103,7 +103,7 @@ const boxCss = {
     gap: 5px;
   `,
   border: css`
-    border: 1px solid var(--light_gray);
+    border-bottom: 1px solid var(--gray);
   `,
 };
 
@@ -127,20 +127,22 @@ const Box = () => {
         )}
         <Text>마지막 답변 날짜: 2023.07.31</Text>
       </Flex>
-      <BoxListController />
-      {boxData.questions.map(({ responder, responderAvatarUrl, postTime, content, like, answer }, i) => (
-        <Flex css={boxCss.border} flexDirection="column" key={`${responder} ${i}`}>
-          <BoxItem
-            owner={boxData.owner}
-            responder={responder}
-            content={content}
-            postTime={postTime}
-            responderAvatarUrl={responderAvatarUrl}
-            like={like}
-            answer={answer}
-          />
-        </Flex>
-      ))}
+      <Controller />
+      <Boxes>
+        {boxData.questions.map(({ responder, responderAvatarUrl, postTime, content, like, answer }, i) => (
+          <Flex css={boxCss.border} flexDirection="column" key={`${responder} ${i}`}>
+            <BoxItem
+              owner={boxData.owner}
+              responder={responder}
+              content={content}
+              postTime={postTime}
+              responderAvatarUrl={responderAvatarUrl}
+              like={like}
+              answer={answer}
+            />
+          </Flex>
+        ))}
+      </Boxes>
       <Question />
     </div>
   );

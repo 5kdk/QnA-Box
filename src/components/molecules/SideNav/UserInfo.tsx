@@ -5,7 +5,7 @@ import { Avatar, Flex } from '../../atom';
 const UserInfoCss = {
   container: css`
     padding: 10px;
-    border-top: 0.5px solid var(--deep_gray);
+    border-top: 0.5px solid var(--gray);
   `,
   namestyle: css`
     margin-bottom: 10px;

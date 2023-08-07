@@ -12,10 +12,10 @@ const blink = keyframes`
 
 const itemSkeletonCss = {
   wrapper: css`
-    width: 448px;
+    width: var(--app_width);
     min-height: 100px;
     padding: 12px 24px;
-    border: 1px solid var(--light_gray);
+    border: 1px solid var(--gray);
     gap: 15px;
   `,
   question: css`

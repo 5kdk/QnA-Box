@@ -4,7 +4,7 @@ import { Avatar, Edit, Flex, Text } from '../atom';
 
 const boxItemCss = {
   wrapper: css`
-    width: 448px;
+    width: var(--app_width);
     min-height: 100px;
     padding: 12px 24px;
     gap: 15px;
@@ -14,7 +14,7 @@ const boxItemCss = {
     height: calc(100% + 30px);
     margin-top: 10px;
     margin-bottom: -10px;
-    background-color: var(--light_gray);
+    background-color: var(--gray);
   `,
   question: css`
     width: 100%;

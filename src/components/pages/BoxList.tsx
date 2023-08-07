@@ -1,4 +1,4 @@
-import { BoxListItem, Buttons, Pagenation } from '../BoxList';
+import { BoxListItem, Buttons, Pagenation, Boxes } from '../BoxList';
 import Controller from '../molecules/Controller';
 
 const boxData = [
@@ -95,9 +95,11 @@ const BoxList = () => {
     <>
       <Buttons />
       <Controller />
-      {boxData.map(({ id, owner, ownerAvatarUrl, title, description }) => (
-        <BoxListItem title={title} userName={owner} text={description} imgUrl={ownerAvatarUrl} key={id} />
-      ))}
+      <Boxes>
+        {boxData.map(({ id, owner, ownerAvatarUrl, title, description }) => (
+          <BoxListItem title={title} userName={owner} text={description} imgUrl={ownerAvatarUrl} key={id} />
+        ))}
+      </Boxes>
       <Pagenation currentPage={1} maxPage={5} onClickPageButton={switchPage} />
     </>
   );

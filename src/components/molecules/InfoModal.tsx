@@ -12,7 +12,7 @@ const modalCss = {
     background-color: var(--modal);
   `,
   infoBox: css`
-    width: 448px;
+    width: var(--app_width);
     padding: 48px 24px;
     gap: 32px;
     background-color: var(--white);

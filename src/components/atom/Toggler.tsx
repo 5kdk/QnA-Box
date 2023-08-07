@@ -40,7 +40,7 @@ interface TogglerProps {
 
 const Toggler = ({ selected, setSelected, text }: TogglerProps) => {
   return (
-    <button css={togglerCss.button} onClick={setSelected}>
+    <button css={togglerCss.button} aria-label={`${text} ${selected}`} onClick={setSelected}>
       <div css={togglerCss.toggle({ selected })} />
       <p css={togglerCss.label}>{text}</p>
     </button>

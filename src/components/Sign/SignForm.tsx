@@ -16,6 +16,9 @@ const SignFormCss = {
   logostyle: css`
     flex-grow: 0.5;
   `,
+  form: css`
+    width: 320px;
+  `,
   inputstyle: css`
     margin: 10px 0;
   `,
@@ -61,7 +64,7 @@ const SignForm = ({
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">
       <Logo css={SignFormCss.logostyle} size="lg" />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form css={SignFormCss.form} onSubmit={handleSubmit(onSubmit)}>
         <FormInput css={SignFormCss.inputstyle} label="E-mail" formKey="email" type="text" register={register} />
         <FormInput
           css={SignFormCss.inputstyle}
@@ -75,7 +78,7 @@ const SignForm = ({
         ))}
         <div css={SignFormCss.buttons}>
           <WideButton text={buttonText} bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />
-          <button css={SignFormCss.kakaobutton}>
+          <button css={SignFormCss.kakaobutton} aria-label="카카오 로그인">
             <img src={kakaologin} alt="kakaologin-img" />
           </button>
         </div>

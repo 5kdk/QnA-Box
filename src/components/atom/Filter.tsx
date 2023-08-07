@@ -71,7 +71,7 @@ const Filter = () => {
       <label css={FilterCss.labelStyle}>{curValue}</label>
       <div css={FilterCss.selectstyle(isShow)}>
         {filters.map(filter => (
-          <button key={filter} css={FilterCss.optionstyle} onClick={handleCurValue(filter)}>
+          <button key={filter} css={FilterCss.optionstyle} aria-label={filter} onClick={handleCurValue(filter)}>
             {filter}
           </button>
         ))}

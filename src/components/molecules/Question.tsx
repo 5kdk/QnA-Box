@@ -34,6 +34,9 @@ const questionCss = {
     outline: none;
     background-color: inherit;
     font-size: 15px;
+    &::placeholder {
+      color: var(--deep_gray);
+    }
   `,
 };
 

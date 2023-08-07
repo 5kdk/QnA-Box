@@ -4,6 +4,7 @@ import { UseFormRegister } from 'react-hook-form';
 
 const InputCss = {
   textstyle: css`
+    width: 100%;
     font-weight: 600;
     color: var(--deep_gray);
   `,
@@ -36,8 +37,10 @@ interface InputType {
 const FormInput = ({ label, formKey, type, register, ...rest }: InputType) => {
   return (
     <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-start" {...rest}>
-      <label css={InputCss.textstyle}>{label}</label>
-      <input css={InputCss.inputstyle} type={type} {...register(formKey)}></input>
+      <label css={InputCss.textstyle}>
+        {label}
+        <input css={InputCss.inputstyle} type={type} {...register(formKey)}></input>
+      </label>
     </Flex>
   );
 };

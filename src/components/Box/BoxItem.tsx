@@ -34,7 +34,7 @@ const boxItemCss = {
     margin-right: 5px;
     font-size: 12px;
     font-weight: 400;
-    color: var(--gray);
+    color: var(--deep_gray);
   `,
   like: css`
     margin: 10px 0 12px 0;

@@ -17,7 +17,10 @@ export interface ButtonProps extends cssProps {
 
 const Button = ({ minWidth, padding, text, color, bgColor, borderColor, fontWeight, icon, onClick }: ButtonProps) => {
   return (
-    <button css={buttonCss({ minWidth, padding, color, bgColor, borderColor, fontWeight, icon })} onClick={onClick}>
+    <button
+      css={buttonCss({ minWidth, padding, color, bgColor, borderColor, fontWeight, icon })}
+      aria-label={text}
+      onClick={onClick}>
       {icon}
       {text}
     </button>

@@ -4,9 +4,9 @@ import { Flex } from '../atom/';
 
 const InputCss = {
   textstyle: css`
+    width: 100%;
     font-weight: 600;
     color: var(--deep_gray);
-    width: 320px;
   `,
   inputstyle: (props?: string) => {
     return css`

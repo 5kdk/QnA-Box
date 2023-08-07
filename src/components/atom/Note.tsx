@@ -13,7 +13,7 @@ interface NoteProps {
 }
 const Note = ({ text, type, fs, onClick, ...rest }: NoteProps) => {
   return (
-    <button css={style({ fs })} type={type} {...rest} onClick={onClick}>
+    <button css={style({ fs })} aria-label={text} type={type} {...rest} onClick={onClick}>
       {text}
     </button>
   );

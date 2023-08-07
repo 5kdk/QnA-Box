@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
-import { UserInfo, BoxInfo } from './';
+import { useSetAtom } from 'jotai';
+import { UserInfo, BoxInfo } from '.';
 import { Flex, Note, WideButton } from '../../atom';
 import { logoutUser } from '../../../services/auth';
+import sideNavState from '../../../jotai/atom/sideNavState';
 
 const SideNavCss = {
   navContainer: (isOpen: boolean) => css`
@@ -48,8 +50,11 @@ interface SideNavProps {
 }
 
 const SideNav = ({ isOpen }: SideNavProps) => {
+  const setSideNavState = useSetAtom(sideNavState);
+
   const handleSignOutClick = async () => {
     await logoutUser();
+    setSideNavState(false);
   };
 
   return (

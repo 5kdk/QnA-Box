@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { buttonCss } from '../../styles/buttonCss';
+import { buttonCss } from '../../styles';
 
 export interface cssProps {
   minWidth?: string;

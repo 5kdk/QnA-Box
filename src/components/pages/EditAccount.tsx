@@ -4,8 +4,8 @@ import { css } from '@emotion/react';
 import { Avatar, Flex, WideButton } from '../atom';
 import { Input } from '../molecules';
 import { InfoSubject } from '../User';
-import { buttonCss } from '../../styles/buttonCss';
 import useImgFile from '../../hooks/useImgFile';
+import { buttonCss, visuallyHidden } from '../../styles';
 
 const tmpData = {
   imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
@@ -21,18 +21,6 @@ const editCss = {
   `,
   account: css`
     gap: 22px;
-  `,
-  visuallyHidden: css`
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    white-space: nowrap;
-    clip-path: inset(100%);
-    clip: rect(0 0 0 0);
-    overflow: hidden;
   `,
   btnProps: {
     color: 'var(--black)',
@@ -99,7 +87,7 @@ const EditAccount = () => {
         <Avatar src={imgBuffer} size="lg" />
         {target === 'profile' && (
           <>
-            <input css={editCss.visuallyHidden} type="file" onChange={setNewImg} id="attachment" />
+            <input css={visuallyHidden} type="file" onChange={setNewImg} id="attachment" />
             <label css={[buttonCss(editCss.btnProps), editCss.button]} htmlFor="attachment">
               이미지 수정
             </label>

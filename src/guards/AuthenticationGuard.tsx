@@ -1,15 +1,52 @@
+import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import authState from '../jotai/atom/authState';
 import { auth } from '../services/firebase';
+import { Flex, Loading } from '../components/atom';
 
 interface AuthenticationGuardProps {
   redirectTo: string;
   element: React.ReactNode;
 }
 
-const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-  const isLogin = auth.currentUser;
+const KEY = 'firebaseUser';
 
-  if (!isLogin) {
+const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
+  const [user, setUser] = useAtom(authState);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem(KEY);
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
+    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
+      setUser(user);
+      setIsLoading(false);
+
+      if (user) {
+        localStorage.setItem(KEY, JSON.stringify(user));
+      } else {
+        localStorage.removeItem(KEY);
+      }
+    });
+
+    return () => {
+      unregisterAuthObserver();
+    };
+  }, [setUser]);
+
+  if (isLoading) {
+    return (
+      <Flex alignItems="center">
+        <Loading />
+      </Flex>
+    );
+  }
+
+  if (!user) {
     return <Navigate to={redirectTo} replace />;
   }
 

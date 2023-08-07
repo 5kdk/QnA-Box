@@ -36,33 +36,34 @@ const router = createBrowserRouter([
         path: 'signup',
         element: <Signup />,
       },
-      {
-        path: 'box',
-        // element: <BoxList />,
-        element: <AuthenticationGuard redirectTo="/signin" element={<BoxList />} />,
-      },
-      {
-        path: 'box/:id',
-        element: <Box />,
-      },
-      {
-        path: 'box/create',
-        // element: <CreateBox />,
-        element: <AuthenticationGuard redirectTo="/signin" element={<CreateBox />} />,
-      },
+
       {
         path: 'account',
-        element: <Account />,
-        // element: <AuthenticationGuard redirectTo="/signin" element={<Account />} />,
-      },
-      {
-        path: 'account/:target',
-        element: <EditAccount />,
-        // element: <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} />,
+        element: <AuthenticationGuard redirectTo="/signin" element={<Account />} />,
+        children: [
+          {
+            path: ':target',
+            element: <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} />,
+          },
+        ],
       },
       {
         path: 'user/:username',
         element: <User />,
+      },
+      {
+        path: 'box',
+        element: <AuthenticationGuard redirectTo="/signin" element={<BoxList />} />,
+        children: [
+          {
+            path: ':id',
+            element: <Box />,
+          },
+          {
+            path: 'create',
+            element: <AuthenticationGuard redirectTo="/signin" element={<CreateBox />} />,
+          },
+        ],
       },
       {
         path: '*',

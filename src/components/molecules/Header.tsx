@@ -80,12 +80,12 @@ const Header = () => {
 
   return (
     <Flex css={HeaderCss.wrapperStyle} justifyContent="space-between" alignItems="center">
-      <button css={HeaderCss.buttonStyle} onClick={handleBackButtonClick}>
+      <button aria-label="GotoBack-button" css={HeaderCss.buttonStyle} onClick={handleBackButtonClick}>
         <ChevronLeft size="22px" />
       </button>
       <Logo size="sm" css={HeaderCss.LogoStyle} onClick={handleLogoClick} />
       <Flex>
-        <button css={HeaderCss.buttonStyle} onClick={handleBurgerClick}>
+        <button aria-label="Info-button" css={HeaderCss.buttonStyle} onClick={handleBurgerClick}>
           <i css={HeaderCss.iconStyle(isOpen)}></i>
         </button>
       </Flex>

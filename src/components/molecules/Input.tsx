@@ -6,6 +6,7 @@ const InputCss = {
   textstyle: css`
     font-weight: 600;
     color: var(--deep_gray);
+    width: 320px;
   `,
   inputstyle: (props?: string) => {
     return css`
@@ -34,8 +35,10 @@ interface InputType {
 const Input = ({ text, type, width, input, handleInput, ...rest }: InputType) => {
   return (
     <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-start" {...rest}>
-      <label css={InputCss.textstyle}>{text}</label>
-      <input css={InputCss.inputstyle(width)} type={type} onChange={handleInput} value={input}></input>
+      <label css={InputCss.textstyle}>
+        {text}
+        <input css={InputCss.inputstyle(width)} type={type} onChange={handleInput} value={input}></input>
+      </label>
     </Flex>
   );
 };

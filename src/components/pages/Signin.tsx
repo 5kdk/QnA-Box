@@ -16,6 +16,9 @@ const SigninCss = {
   inputstyle: css`
     margin: 10px 0;
   `,
+  pwinputstyle: css`
+    margin: 10px 0 70px 0;
+  `,
   notestyle: css`
     margin: 10px 0;
   `,
@@ -60,14 +63,13 @@ const Signin = () => {
           handleInput={handleEmail}
         />
         <Input
-          css={SigninCss.inputstyle}
+          css={SigninCss.pwinputstyle}
           text="Password"
           type="password"
           width="100%"
           input={password}
           handleInput={handlePassword}
         />
-        <Note css={SigninCss.forgetpwstyle} text="비밀번호를 잊으셨나요?" fs="14px" onClick={() => {}} />
         <WideButton text="Login" bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />
         <button css={SigninCss.kakaobutton}>
           <img src={kakaologin} alt="kakaologin-img" />

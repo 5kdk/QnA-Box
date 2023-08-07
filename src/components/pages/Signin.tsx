@@ -59,7 +59,7 @@ const Signin = () => {
     try {
       await loginUser(email, password);
 
-      navigate('/box');
+      navigate('/box', { replace: true });
     } catch (error) {
       console.error(error);
     }

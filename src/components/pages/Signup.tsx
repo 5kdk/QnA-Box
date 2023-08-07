@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { Logo, Flex, WideButton, Note } from '../atom';
 import { Input } from '../molecules';
 import kakaologin from '../../assets/images/kakao_login.png';
+import { registerUser } from '../../services/auth';
 
 const SigninCss = {
   container: css`
@@ -32,23 +33,42 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [checkPw, setCheckPw] = useState('');
-  const navigete = useNavigate();
+  const navigate = useNavigate();
+
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
+
   const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+
   const handleCheckPw = (e: ChangeEvent<HTMLInputElement>) => {
     setCheckPw(e.target.value);
   };
+
   const ToLogin = () => {
-    navigete('/signin');
+    navigate('/signin');
   };
+
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (email === '' || password === '') return;
+
+    try {
+      await registerUser(email, password);
+
+      navigate('/box');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Flex css={SigninCss.container} flexDirection="column" alignItems="center">
       <Logo css={SigninCss.logostyle} size="lg" />
-      <form>
+      <form onSubmit={handleOnSubmit}>
         <Input
           css={SigninCss.inputstyle}
           text="E-mail"

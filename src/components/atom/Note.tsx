@@ -7,12 +7,13 @@ const style = ({ fs }: { fs?: string }) => css`
 
 interface NoteProps {
   text: string;
+  type?: 'button' | 'reset';
   fs?: string;
   onClick: () => void;
 }
-const Note = ({ text, fs, onClick, ...rest }: NoteProps) => {
+const Note = ({ text, type, fs, onClick, ...rest }: NoteProps) => {
   return (
-    <button css={style({ fs })} {...rest} onClick={onClick}>
+    <button css={style({ fs })} type={type} {...rest} onClick={onClick}>
       {text}
     </button>
   );

@@ -1,11 +1,11 @@
 import SignForm from '../Sign/SignForm';
-import { RegisterSchemaType, signinSchema } from '../../registerSchema';
+import { SigninSchemaType, signinSchema } from '../../registerSchema';
 
 const Signin = () => {
-  const reqSignin = (data: RegisterSchemaType) => console.log(data);
+  const reqSignin = (data: SigninSchemaType) => console.log(data);
 
   return (
-    <SignForm
+    <SignForm<SigninSchemaType>
       buttonText="LOGIN"
       formSchema={signinSchema}
       submitFunc={reqSignin}

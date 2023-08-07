@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 import { Flex } from '../atom/';
-import { UseFormRegister } from 'react-hook-form';
 
 const InputCss = {
   textstyle: css`
@@ -22,24 +22,18 @@ const InputCss = {
   `,
 };
 
-interface IFormValues {
-  [key: string]: string;
-  email: string;
-  password: string;
-}
 interface InputType {
   label: string;
-  formKey: string;
   type: string;
-  register: UseFormRegister<IFormValues>;
+  register: UseFormRegisterReturn;
 }
 
-const FormInput = ({ label, formKey, type, register, ...rest }: InputType) => {
+const FormInput = ({ label, type, register, ...rest }: InputType) => {
   return (
     <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-start" {...rest}>
       <label css={InputCss.textstyle}>
         {label}
-        <input css={InputCss.inputstyle} type={type} {...register(formKey)}></input>
+        <input css={InputCss.inputstyle} type={type} {...register}></input>
       </label>
     </Flex>
   );

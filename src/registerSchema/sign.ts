@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-export type RegisterSchemaType = z.infer<typeof signinSchema | typeof signupSchema>;
-
+export type SigninSchemaType = z.infer<typeof signinSchema>;
 export const signinSchema = z.object({
   email: z.string({ required_error: '이메일을 입력해주세요.' }).email('이메일 형식을 입력해주세요.'),
   password: z
@@ -12,6 +11,7 @@ export const signinSchema = z.object({
     ),
 });
 
+export type SignupSchemaType = z.infer<typeof signupSchema>;
 export const signupSchema = signinSchema
   .extend({
     passwordCheck: z.string({ required_error: '비밀번호를 다시 입력해주세요.' }),

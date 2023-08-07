@@ -16,10 +16,13 @@ const USERS_COLLECTION_NAME = 'users';
 const setUser = async (userId: string, email: string): Promise<void> => {
   const displayName = extractUsernameFromEmail(email);
 
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, userId);
-  const userData: User = { id: userId, email, displayName, joinedRooms: [], myRooms: [] };
-
-  await setDoc(userDocRef, userData);
+  try {
+    const userDocRef = doc(db, USERS_COLLECTION_NAME, userId);
+    const userData: User = { id: userId, email, displayName, joinedRooms: [], myRooms: [] };
+    await setDoc(userDocRef, userData);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export const loginUser = async (email: string, password: string): Promise<void> => {
@@ -36,4 +39,8 @@ export const registerUser = async (email: string, password: string): Promise<voi
 
 export const logoutUser = async (): Promise<void> => {
   await signOut(auth);
+};
+
+export const getCurrentUser = () => {
+  return auth?.currentUser;
 };

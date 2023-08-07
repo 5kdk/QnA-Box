@@ -4,7 +4,7 @@ import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '@emotion/react';
 import { Flex, Logo, Note, WideButton } from '../atom';
-import { FormInput } from '../molecules';
+import { FormInput } from '.';
 import kakaologin from '../../assets/images/kakao_login.png';
 
 const SignFormCss = {

@@ -1,4 +1,4 @@
-import SignForm from '../Sign/SignForm';
+import { SignForm } from '../molecules';
 import { SignupSchemaType, signupSchema } from '../../registerSchema';
 
 const Signup = () => {

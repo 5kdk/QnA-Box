@@ -5,3 +5,4 @@ export { default as InfoModal } from './InfoModal';
 export { default as Input } from './Input';
 export { default as ItemSkeleton } from './ItemSkeleton';
 export { default as Question } from './Question';
+export { default as SignForm } from './SignForm';

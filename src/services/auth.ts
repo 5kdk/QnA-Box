@@ -1,14 +1,26 @@
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, deleteUser } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  deleteUser,
+  updateProfile,
+  updatePassword,
+} from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import extractUsernameFromEmail from '../utils/extractUsernameFromEmail';
 
-export interface User {
+export interface UserCollectionDoc {
   id: string;
   email: string;
   displayName: string;
   joinedRooms: string[];
   myRooms: string[];
+}
+
+export interface updateUserProfileProps {
+  displayName?: string;
+  photoURL?: string;
 }
 
 const USERS_COLLECTION_NAME = 'users';
@@ -18,7 +30,7 @@ const setUser = async (userId: string, email: string): Promise<void> => {
 
   try {
     const userDocRef = doc(db, USERS_COLLECTION_NAME, userId);
-    const userData: User = { id: userId, email, displayName, joinedRooms: [], myRooms: [] };
+    const userData: UserCollectionDoc = { id: userId, email, displayName, joinedRooms: [], myRooms: [] };
     await setDoc(userDocRef, userData);
   } catch (err) {
     console.error(err);
@@ -34,7 +46,7 @@ export const registerUser = async (email: string, password: string): Promise<voi
 };
 
 export const deregisterUser = async () => {
-  const user = getCurrentUser();
+  const user = auth.currentUser;
   if (user) await deleteUser(user);
 };
 
@@ -46,6 +58,12 @@ export const logoutUser = async (): Promise<void> => {
   await signOut(auth);
 };
 
-export const getCurrentUser = () => {
-  return auth.currentUser;
+export const updateUserProfile = async (newData: updateUserProfileProps) => {
+  const user = auth.currentUser;
+  if (user) await updateProfile(user, { ...newData });
+};
+
+export const updateUserPassword = async (newPassword: string) => {
+  const user = auth.currentUser;
+  if (user) await updatePassword(user, newPassword);
 };

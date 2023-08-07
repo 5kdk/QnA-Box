@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import authState from '../jotai/atom/authState';
+import userState from '../jotai/atom/userState';
 import { auth } from '../services/firebase';
 import { Flex, Loading } from '../components/atom';
 
@@ -13,7 +13,7 @@ interface AuthenticationGuardProps {
 const KEY = 'firebaseUser';
 
 const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-  const [user, setUser] = useAtom(authState);
+  const [user, setUser] = useAtom(userState);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

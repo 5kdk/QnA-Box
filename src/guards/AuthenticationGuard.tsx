@@ -13,7 +13,7 @@ interface AuthenticationGuardProps {
 const KEY = 'firebaseUser';
 
 const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-  const [user, setUser] = useAtom(userState);
+  const [user, setUser] = useAtom(userState());
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -25,12 +25,6 @@ const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) 
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
       setUser(user);
       setIsLoading(false);
-
-      if (user) {
-        localStorage.setItem(KEY, JSON.stringify(user));
-      } else {
-        localStorage.removeItem(KEY);
-      }
     });
 
     return () => {

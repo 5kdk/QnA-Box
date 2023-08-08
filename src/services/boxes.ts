@@ -1,5 +1,4 @@
 import {
-  addDoc,
   arrayRemove,
   arrayUnion,
   collection,
@@ -8,6 +7,7 @@ import {
   getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -26,7 +26,7 @@ interface EditFormData extends FormData {
 }
 
 interface Box {
-  id: string;
+  boxId: string;
   title: string;
   owner: string;
   ownerId: string;
@@ -41,9 +41,19 @@ const OWNER_UID = 'ownerUid';
 export const createQnaBox = async (formData: FormData) => {
   const user = auth.currentUser;
   if (!user) return;
-  const newData = { ownerUid: user.uid, owner: user.displayName, createdAt: Date.now(), ...formData };
+
   const qnaBoxesCollection = collection(db, BOXES_COLLECTION_NAME);
-  await addDoc(qnaBoxesCollection, newData);
+  const newDocRef = doc(qnaBoxesCollection);
+
+  const newData = {
+    boxId: newDocRef.id,
+    ownerUid: user.uid,
+    owner: user.displayName,
+    createdAt: Date.now(),
+    ...formData,
+  };
+
+  await setDoc(newDocRef, newData);
 };
 
 export const getMyQnaBoxes = async () => {
@@ -55,13 +65,7 @@ export const getMyQnaBoxes = async () => {
   const q = query(qnaBoxesCollectionRef, ownerUidFilter);
   const querySnapshot = await getDocs(q);
 
-  const boxes: Box[] = querySnapshot.docs.map(
-    doc =>
-      ({
-        id: doc.id,
-        ...doc.data(),
-      }) as Box,
-  );
+  const boxes: Box[] = querySnapshot.docs.map(doc => doc.data() as Box);
 
   return boxes;
 };

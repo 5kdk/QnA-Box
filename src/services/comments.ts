@@ -1,21 +1,19 @@
-import { doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
 interface Reply {
   authorId: string;
   content: string;
-  createdAt: string;
-  likes: number;
+  createdAt: number;
 }
-
 interface CommentData {
   commentId: string;
   boxId: string;
   authorId: string;
   content: string;
   likes: number;
-  createdAt: string;
+  createdAt: number;
   replies: Reply[];
 }
 
@@ -23,17 +21,18 @@ export const createComment = async (boxId: string, content: string) => {
   const user = auth.currentUser;
   if (!user) return;
 
-  const newCommentId = performance.now().toString();
+  const commentsCollectionRef = collection(db, COMMENTS_COLLECTION_NAME);
+  const commentDocRef = doc(commentsCollectionRef);
+
   const newComment: CommentData = {
-    commentId: newCommentId,
+    commentId: commentDocRef.id,
     boxId,
     authorId: user.uid,
-    content: content,
+    content,
     likes: 0,
-    createdAt: new Date().toISOString(),
+    createdAt: Date.now(),
     replies: [],
   };
 
-  const commentDocRef = doc(db, COMMENTS_COLLECTION_NAME, newCommentId);
   await setDoc(commentDocRef, newComment);
 };

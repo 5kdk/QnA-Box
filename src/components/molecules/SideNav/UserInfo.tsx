@@ -6,6 +6,7 @@ const UserInfoCss = {
   container: css`
     padding: 10px;
     border-top: 0.5px solid var(--gray);
+    border-bottom: 0.5px solid var(--gray);
     cursor: pointer;
   `,
   namestyle: css`

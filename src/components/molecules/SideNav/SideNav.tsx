@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
-import { Flex, Note, WideButton } from '../../atom';
+import { Flex, Logo, Note, WideButton } from '../../atom';
 import { UserInfo, BoxInfo } from '.';
 import { logoutUser } from '../../../services/auth';
-import sideNavState from '../../../jotai/atom/sideNavState';
+import { sideNavState, userState } from '../../../jotai/atom';
 
 const SideNavCss = {
   navContainer: (isOpen: boolean) => css`
@@ -22,10 +22,10 @@ const SideNavCss = {
   `,
   wrapper: css`
     width: var(--app_width);
+    height: 100%;
   `,
-  serviceContainer: css`
-    margin-bottom: 100px;
-    border-top: 0.5px solid var(--gray);
+  logostyle: css`
+    flex-grow: 0.4;
   `,
   notestyle: css`
     margin: 15px 20px 0 20px;
@@ -33,7 +33,10 @@ const SideNavCss = {
     color: var(--black);
   `,
   teamstyle: css`
-    margin-bottom: 20px;
+    display: flex;
+    align-self: center;
+    margin: 100px 0 20px;
+    text-align: center;
   `,
 };
 const UserData = {
@@ -52,6 +55,7 @@ interface SideNavProps {
 
 const SideNav = ({ isOpen }: SideNavProps) => {
   const setSideNavState = useSetAtom(sideNavState);
+  const user = useAtomValue(userState);
   const navigate = useNavigate();
 
   const redirectTo = (path: string) => () => {
@@ -65,23 +69,31 @@ const SideNav = ({ isOpen }: SideNavProps) => {
 
   return (
     <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
-      <Flex css={SideNavCss.wrapper} flexDirection="column">
-        <UserInfo
-          src={UserData.src}
-          displayName={UserData.displayName}
-          email={UserData.email}
-          toAccount={redirectTo('/account')}
-        />
-        <BoxInfo UserBoxData={UserBoxData} title="새소식" />
-        <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
-        <Flex css={SideNavCss.serviceContainer} flexDirection="column" alignItems="flex-start">
+      <Flex css={SideNavCss.wrapper} flexDirection="column" alignItems={user ? 'stretch' : 'center'}>
+        {user ? (
+          <>
+            <UserInfo
+              src={UserData.src}
+              displayName={UserData.displayName}
+              email={UserData.email}
+              toAccount={redirectTo('/account')}
+            />
+            <BoxInfo UserBoxData={UserBoxData} title="새소식" />
+            <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
+          </>
+        ) : (
+          <Logo css={SideNavCss.logostyle} size="lg" />
+        )}
+        <Flex flexDirection="column" alignItems="flex-start">
           <Note css={SideNavCss.notestyle} text="서비스 소개" onClick={() => {}} />
           <Note css={SideNavCss.notestyle} text="서비스 문의" onClick={() => {}} />
-        </Flex>
-        <Flex flexDirection="column" alignItems="center">
           <Note css={SideNavCss.teamstyle} text="by Team 쬬와규" onClick={() => {}} />
-          <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={handleSignOutClick} />
         </Flex>
+        {user && (
+          <Flex flexDirection="column" alignItems="center">
+            <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={handleSignOutClick} />
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );

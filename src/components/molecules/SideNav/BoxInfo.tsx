@@ -12,8 +12,8 @@ const BoxInfoCss = {
     font-weight: bold;
   `,
   container: css`
-    margin-bottom: 30px;
-    border-top: 0.5px solid var(--gray);
+    padding-bottom: 30px;
+    border-bottom: 0.5px solid var(--gray);
   `,
   boxstyle: css`
     padding: 3px 0;

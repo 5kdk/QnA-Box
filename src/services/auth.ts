@@ -4,18 +4,23 @@ import {
   signOut,
   deleteUser,
   updatePassword,
+  signInWithPopup,
 } from 'firebase/auth';
 import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, db } from './firebase';
+import { auth, db, googleProvider } from './firebase';
 import extractUsernameFromEmail from '../utils/extractUsernameFromEmail';
+import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
-const USERS_COLLECTION_NAME = 'users';
-
-const createUserDoc = async (id: string, email: string, displayName: string, photoURL: string): Promise<void> => {
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, id);
+const createUserDoc = async (
+  uid: string,
+  email: string,
+  displayName: string,
+  photoURL: string | null,
+): Promise<void> => {
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
 
   await setDoc(userDocRef, {
-    id,
+    uid,
     email,
     displayName,
     photoURL,
@@ -27,7 +32,15 @@ const createUserDoc = async (id: string, email: string, displayName: string, pho
 export const registerUser = async (email: string, password: string): Promise<void> => {
   const credential = await createUserWithEmailAndPassword(auth, email, password);
   const displayName = extractUsernameFromEmail(email);
-  await createUserDoc(credential.user.uid, email, displayName, credential.user.photoURL ?? '');
+  await createUserDoc(credential.user.uid, email, displayName, credential.user.photoURL);
+};
+
+export const loginWithGoogle = async () => {
+  const credential = await signInWithPopup(auth, googleProvider);
+  if (credential.user.email) {
+    const displayName = extractUsernameFromEmail(credential.user.email);
+    await createUserDoc(credential.user.uid, credential.user.email, displayName, credential.user.photoURL);
+  }
 };
 
 export const loginUser = async (email: string, password: string) => {

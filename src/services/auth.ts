@@ -3,64 +3,69 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   deleteUser,
-  updateProfile,
   updatePassword,
+  signInWithPopup,
 } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from './firebase';
+import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, db, googleProvider } from './firebase';
 import extractUsernameFromEmail from '../utils/extractUsernameFromEmail';
+import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
-export interface UserCollectionDoc {
-  id: string;
-  email: string;
-  displayName: string;
-  joinedRooms: string[];
-  myRooms: string[];
-}
+const createUserDoc = async (
+  uid: string,
+  email: string,
+  displayName: string,
+  photoURL: string | null,
+): Promise<void> => {
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
 
-export interface updateUserProfileProps {
-  displayName?: string;
-  photoURL?: string;
-}
-
-const USERS_COLLECTION_NAME = 'users';
-
-const setUser = async (userId: string, email: string): Promise<void> => {
-  const displayName = extractUsernameFromEmail(email);
-
-  try {
-    const userDocRef = doc(db, USERS_COLLECTION_NAME, userId);
-    const userData: UserCollectionDoc = { id: userId, email, displayName, joinedRooms: [], myRooms: [] };
-    await setDoc(userDocRef, userData);
-  } catch (err) {
-    console.error(err);
-  }
+  await setDoc(userDocRef, {
+    uid,
+    email,
+    displayName,
+    photoURL,
+    joinedRooms: [],
+    myRooms: [],
+  });
 };
 
 export const registerUser = async (email: string, password: string): Promise<void> => {
   const credential = await createUserWithEmailAndPassword(auth, email, password);
+  const displayName = extractUsernameFromEmail(email);
+  await createUserDoc(credential.user.uid, email, displayName, credential.user.photoURL);
+};
 
-  if (credential.user) {
-    await setUser(credential.user.uid, email);
+export const loginWithGoogle = async () => {
+  const credential = await signInWithPopup(auth, googleProvider);
+  if (credential.user.email) {
+    const displayName = extractUsernameFromEmail(credential.user.email);
+    await createUserDoc(credential.user.uid, credential.user.email, displayName, credential.user.photoURL);
+  }
+};
+
+export const loginUser = async (email: string, password: string) => {
+  await signInWithEmailAndPassword(auth, email, password);
+  const user = auth.currentUser;
+
+  if (user) {
+    const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+    const userData = await getDoc(userDocRef);
+
+    return userData.data();
   }
 };
 
 export const deregisterUser = async () => {
   const user = auth.currentUser;
-  if (user) await deleteUser(user);
-};
-
-export const loginUser = async (email: string, password: string): Promise<void> => {
-  await signInWithEmailAndPassword(auth, email, password);
+  if (user) {
+    const docRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+    await deleteDoc(docRef);
+    await deleteUser(user);
+  }
 };
 
 export const logoutUser = async (): Promise<void> => {
   await signOut(auth);
-};
-
-export const updateUserProfile = async (newData: updateUserProfileProps) => {
-  const user = auth.currentUser;
-  if (user) await updateProfile(user, { ...newData });
 };
 
 export const updateUserPassword = async (newPassword: string) => {

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { SignForm } from '../molecules';
 import { SignupSchemaType, signupSchema } from '../../registerSchema';
 import { registerUser } from '../../services/auth';
+import { FirebaseError } from 'firebase/app';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -9,9 +10,11 @@ const Signup = () => {
     try {
       await registerUser(data.email, data.password);
 
-      navigate('/box');
-    } catch (error) {
-      console.error(error);
+      navigate('/signin');
+    } catch (err) {
+      if ((err as FirebaseError).code === 'auth/email-already-in-use') {
+        console.error('이미 존재하는 이메일 입니다.', err);
+      }
     }
   };
   const anotherInputs = [{ label: 'Password Check', formKey: 'passwordCheck', type: 'password' }];

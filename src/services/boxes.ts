@@ -1,6 +1,18 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import { auth, db } from './firebase';
-import { BOXES_COLLECTION_NAME } from '../constants/collectionNames';
+import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
 interface FormData {
   title: string;
@@ -95,4 +107,26 @@ export const deleteQnaBox = async (boxId: string): Promise<void> => {
 
   const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
   await deleteDoc(qnaBoxDocRef);
+};
+
+export const joinQnaBox = async (boxId: string) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+
+  await updateDoc(userDocRef, {
+    joinedBoxes: arrayUnion(boxId),
+  });
+};
+
+export const exitQnaBox = async (boxId: string) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+
+  await updateDoc(userDocRef, {
+    joinedBoxes: arrayRemove(boxId),
+  });
 };

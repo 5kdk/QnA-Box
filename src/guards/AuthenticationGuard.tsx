@@ -16,8 +16,8 @@ const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) 
 
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
-      setUser(user);
       setIsLoading(false);
+      if (!user) setUser(null);
     });
 
     return () => {

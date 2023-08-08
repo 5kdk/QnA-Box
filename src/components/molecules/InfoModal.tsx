@@ -1,16 +1,8 @@
 import { css } from '@emotion/react';
 import { Flex, Button } from '../atom';
+import { modalCss } from '../../styles';
 
-const modalCss = {
-  modal: css`
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 20;
-    width: 100%;
-    height: 100vh;
-    background-color: var(--modal);
-  `,
+const infoModalCss = {
   infoBox: css`
     width: var(--app_width);
     padding: 48px 24px;
@@ -42,13 +34,13 @@ interface ModalProps {
 
 const InfoModal = ({ title, text, normalBtn, importantBtn }: ModalProps) => {
   return (
-    <Flex css={modalCss.modal} justifyContent="center" alignItems="center" onClick={importantBtn.onClick}>
-      <Flex css={modalCss.infoBox} flexDirection="column" alignContent="center" onClick={e => e.stopPropagation()}>
-        <Flex css={modalCss.text} flexDirection="column">
+    <Flex css={modalCss} justifyContent="center" alignItems="center" onClick={importantBtn.onClick}>
+      <Flex css={infoModalCss.infoBox} flexDirection="column" alignContent="center" onClick={e => e.stopPropagation()}>
+        <Flex css={infoModalCss.text} flexDirection="column">
           <h3>{title}</h3>
           {text && <p>{text}</p>}
         </Flex>
-        <Flex css={modalCss.buttons}>
+        <Flex css={infoModalCss.buttons}>
           <Button
             text={normalBtn.text}
             color="var(--black)"

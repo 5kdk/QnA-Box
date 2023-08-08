@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
+import { EditBox } from '.';
 
 const BoxListCss = {
   wrapperStyle: css`
@@ -33,15 +35,21 @@ interface BoxListItemProps {
 }
 
 const BoxListItem = ({ title, imgUrl, userName, text }: BoxListItemProps) => {
+  const [editMode, setEditMode] = useState(false);
   const editPost = () => {
     console.log('edit');
+    setEditMode(true);
   };
   const removePost = () => {
     console.log('delete');
   };
+  const closeEdit = () => {
+    setEditMode(false);
+  };
 
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
+      {editMode && <EditBox boxInfo={{ name: title, owner: userName, desc: text }} closeEdit={closeEdit} />}
       <Avatar size="sm" src={imgUrl} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Flex justifyContent="space-between" alignItems="flex-start">

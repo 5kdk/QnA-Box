@@ -3,7 +3,7 @@ import { FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '@emotion/react';
-import { Flex, Logo, Note, WideButton } from '../atom';
+import { Flex, Logo, Note, Notification, WideButton } from '../atom';
 import { FormInput } from '.';
 import kakaologin from '../../assets/images/kakao_login.png';
 
@@ -56,12 +56,12 @@ const SignForm = <T extends FieldValues>({
     formState: { errors },
   } = useForm<T>({ resolver: zodResolver(formSchema) });
   const onSubmit: SubmitHandler<T> = submitFunc;
-  console.log(errors);
   const navigate = useNavigate();
   const toOtherPage = () => navigate(redirectTo);
 
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">
+      <Notification errors={errors} />
       <Logo css={SignFormCss.logostyle} size="lg" />
       <form css={SignFormCss.form} onSubmit={handleSubmit(onSubmit)}>
         <FormInput css={SignFormCss.inputstyle} label="E-mail" type="text" register={register('email' as Path<T>)} />

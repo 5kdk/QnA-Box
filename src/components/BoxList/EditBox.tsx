@@ -26,7 +26,7 @@ const editBoxCss = {
 
 interface EditBoxProps {
   boxInfo: {
-    name: string;
+    title: string;
     owner: string;
     desc: string;
   };

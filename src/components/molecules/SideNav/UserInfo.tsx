@@ -25,17 +25,17 @@ const UserInfoCss = {
 
 interface User {
   src: string;
-  name: string;
+  displayName: string;
   email: string;
 }
 
-const UserInfo = ({ src, name, email }: User) => {
+const UserInfo = ({ src, displayName, email }: User) => {
   return (
     <Flex css={UserInfoCss.container}>
       <Flex css={UserInfoCss.flexStyle} justifyContent="space-between" alignItems="center">
         <Avatar src={src} size="md" />
         <Flex css={UserInfoCss.infoStyle} flexDirection="column">
-          <div css={UserInfoCss.namestyle}>{name}</div>
+          <div css={UserInfoCss.namestyle}>{displayName}</div>
           <div css={UserInfoCss.emailstyle}>{email}</div>
         </Flex>
         <IosArrowRight size="20px" />

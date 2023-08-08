@@ -4,7 +4,8 @@ import { SignupSchemaType, signupSchema } from '../../registerSchema';
 import { registerUser } from '../../services/auth';
 
 const Signup = () => {
-  const reqSignup = (data: SignupSchemaType) => {
+  const navigate = useNavigate();
+  const reqSignup = async (data: SignupSchemaType) => {
     try {
       await registerUser(data.email, data.password);
 

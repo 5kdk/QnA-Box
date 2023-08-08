@@ -5,7 +5,7 @@ import { loginUser } from '../../services/auth';
 
 const Signin = () => {
   const navigate = useNavigate();
-  const reqSignin = (data: SigninSchemaType) => {
+  const reqSignin = async (data: SigninSchemaType) => {
     try {
       await loginUser(data.email, data.password);
 

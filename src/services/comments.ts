@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, orderBy, query, setDoc, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
@@ -48,4 +48,14 @@ export const getComments = async (boxId: string) => {
   const comments = querySnapshot.docs.map(doc => doc.data() as CommentData);
 
   return comments;
+};
+
+export const updateComment = async (commentId: string, updatedContent: string) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  await updateDoc(commentRef, { content: updatedContent });
+};
+
+export const deleteComment = async (commentId: string) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  await deleteDoc(commentRef);
 };

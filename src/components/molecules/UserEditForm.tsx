@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { Flex, Notification, WideButton } from '../atom';
 import { FormInput } from '../molecules';
 
-const editFormCss = {
+const userEditFormCss = {
   form: css`
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@ const editFormCss = {
   `,
 };
 
-interface EditFormProps<T> {
+interface UserEditFormProps<T> {
   formElement: {
     text: string;
     key: string;
@@ -33,13 +33,13 @@ interface EditFormProps<T> {
   submitFunc: (data: T) => void;
 }
 
-const EditForm = <T extends FieldValues>({
+const UserEditForm = <T extends FieldValues>({
   formElement,
   iniForm,
   formSchema,
   btnSettings,
   submitFunc,
-}: EditFormProps<T>) => {
+}: UserEditFormProps<T>) => {
   const {
     register,
     handleSubmit,
@@ -52,8 +52,8 @@ const EditForm = <T extends FieldValues>({
   return (
     <>
       <Notification errors={errors} />
-      <form css={editFormCss.form} onSubmit={handleSubmit(onSubmit)}>
-        <Flex css={editFormCss.account} flexDirection="column">
+      <form css={userEditFormCss.form} onSubmit={handleSubmit(onSubmit)}>
+        <Flex css={userEditFormCss.account} flexDirection="column">
           {formElement.map(({ text, key, type }) => (
             <FormInput key={key} label={text} type={type} register={register(key as Path<T>, { required: true })} />
           ))}
@@ -64,4 +64,4 @@ const EditForm = <T extends FieldValues>({
   );
 };
 
-export default EditForm;
+export default UserEditForm;

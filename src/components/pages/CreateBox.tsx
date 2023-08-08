@@ -3,7 +3,7 @@ import { Flex, Title } from '../atom';
 import { BoxForm } from '../molecules';
 
 const tmpData = {
-  name: 'minjae3',
+  displayName: 'minjae3',
 };
 
 const createBoxCss = {
@@ -18,7 +18,7 @@ const CreateBox = () => {
     <Flex css={createBoxCss.wrapper} flexDirection="column" justifyContent="center" alignItems="center">
       <Title text="QA Box 만들기" />
       <BoxForm
-        defaultValues={{ owner: tmpData.name }}
+        defaultValues={{ owner: tmpData.displayName }}
         btnOpt={{ text: '등록하기', color: 'var(--white)', bgColor: 'var(--blue)' }}
         submitFunc={() => {}}
       />

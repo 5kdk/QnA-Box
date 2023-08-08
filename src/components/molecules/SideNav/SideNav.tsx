@@ -37,7 +37,7 @@ const SideNavCss = {
 };
 const UserData = {
   src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYBLxK6kQbI7JhBGVQ_A7pZpu_U9jKIvMulQ&usqp=CAU',
-  name: '쬬와규',
+  displayName: '쬬와규',
   email: 'asdfasf@naver.com',
 };
 const UserBoxData = [
@@ -60,7 +60,7 @@ const SideNav = ({ isOpen }: SideNavProps) => {
   return (
     <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
       <Flex css={SideNavCss.wrapper} flexDirection="column">
-        <UserInfo src={UserData.src} name={UserData.name} email={UserData.email} />
+        <UserInfo src={UserData.src} displayName={UserData.displayName} email={UserData.email} />
         <BoxInfo UserBoxData={UserBoxData} title="새소식" />
         <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
         <Flex css={SideNavCss.serviceContainer} flexDirection="column" alignItems="flex-start">

@@ -23,7 +23,7 @@ const boxFormCss = {
 
 interface FormElement {
   [key: string]: boolean | string;
-  name: string;
+  title: string;
   owner: string;
   desc: string;
   closed: boolean;
@@ -32,7 +32,7 @@ interface FormElement {
 
 interface BoxFormProps {
   defaultValues: {
-    name?: string;
+    title?: string;
     owner: string;
     desc?: string;
     closed?: boolean;
@@ -68,7 +68,7 @@ const BoxForm = ({ defaultValues, btnOpt, submitFunc }: BoxFormProps) => {
       <Notification errors={errors} />
       <form css={boxFormCss.form} onSubmit={handleSubmit(onSubmit)}>
         <Flex css={boxFormCss.inputs} flexDirection="column">
-          <FormInput label="Name" type="text" register={register('name' as Path<FormElement>, { required: true })} />
+          <FormInput label="Title" type="text" register={register('title' as Path<FormElement>, { required: true })} />
           <FormInput label="Owner" type="text" register={register('owner' as Path<FormElement>, { required: true })} />
           <FormInput
             label="Description"

@@ -15,16 +15,16 @@ const userCss = {
 interface InfoProps {
   imgSrc: string;
   email: string;
-  name: string;
+  displayName: string;
 }
 
-const UserInfo = ({ imgSrc, email, name }: InfoProps) => {
+const UserInfo = ({ imgSrc, email, displayName }: InfoProps) => {
   return (
     <Flex css={userCss.wrapper} flexDirection="column" alignItems="center">
       <Avatar src={imgSrc} size="lg" />
       <Flex css={userCss.subject} flexDirection="column">
         <InfoSubject title="E-mail" body={email} />
-        <InfoSubject title="Name" body={name} />
+        <InfoSubject title="DisplayName" body={displayName} />
       </Flex>
     </Flex>
   );

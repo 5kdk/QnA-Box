@@ -8,7 +8,7 @@ import { UserInfo } from '../User';
 const tmpData = {
   imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
   email: 'minjae3@test.com',
-  name: ' minjae3',
+  displayName: ' minjae3',
 };
 
 const accountCss = {

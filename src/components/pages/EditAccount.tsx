@@ -11,7 +11,7 @@ import { buttonCss, visuallyHidden } from '../../styles';
 const tmpData = {
   imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
   email: 'minjae3@test.com',
-  name: ' minjae3',
+  displayName: ' minjae3',
 };
 
 const editCss = {
@@ -40,9 +40,9 @@ const formPassword = [
   { text: '비밀번호 확인', key: 'passwordCheck', type: 'password' },
 ];
 
-const formName = [{ text: 'Name', key: 'newName', type: 'text' }];
+const formName = [{ text: 'DisplayName', key: 'displayName', type: 'text' }];
 interface NameType {
-  name: string;
+  displayName: string;
 }
 
 const EditAccount = () => {
@@ -51,8 +51,11 @@ const EditAccount = () => {
   const navigate = useNavigate();
 
   const editImgName = (data: NameType) => {
-    if (tmpData.imgSrc === imgBuffer && tmpData.name === data.name) return;
-    const newData: { imgSrc: string; name: string } = { imgSrc: imgBuffer || tmpData.imgSrc, name: data.name };
+    if (tmpData.imgSrc === imgBuffer && tmpData.displayName === data.displayName) return;
+    const newData: { imgSrc: string; displayName: string } = {
+      imgSrc: imgBuffer || tmpData.imgSrc,
+      displayName: data.displayName,
+    };
     console.log(newData);
   };
 
@@ -83,7 +86,7 @@ const EditAccount = () => {
       {target === 'profile' ? (
         <UserEditForm<NameType>
           formElement={formName}
-          iniForm={{ name: tmpData.name }}
+          iniForm={{ displayName: tmpData.displayName }}
           btnSettings={{
             text: '회원정보 수정',
             color: 'var(--black)',

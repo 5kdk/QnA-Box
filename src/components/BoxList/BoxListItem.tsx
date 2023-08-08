@@ -30,11 +30,11 @@ const BoxListCss = {
 interface BoxListItemProps {
   imgUrl?: string;
   title: string;
-  userName: string;
+  owner: string;
   text: string;
 }
 
-const BoxListItem = ({ title, imgUrl, userName, text }: BoxListItemProps) => {
+const BoxListItem = ({ title, imgUrl, owner, text }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
   const editPost = () => {
     console.log('edit');
@@ -49,13 +49,13 @@ const BoxListItem = ({ title, imgUrl, userName, text }: BoxListItemProps) => {
 
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
-      {editMode && <EditBox boxInfo={{ name: title, owner: userName, desc: text }} closeEdit={closeEdit} />}
+      {editMode && <EditBox boxInfo={{ title, owner, desc: text }} closeEdit={closeEdit} />}
       <Avatar size="sm" src={imgUrl} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Flex justifyContent="space-between" alignItems="flex-start">
           <Flex flexDirection="column">
             <span css={BoxListCss.titleStyle}>{title}</span>
-            <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{userName}</span>
+            <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{owner}</span>
           </Flex>
           <Flex alignItems="center" css={BoxListCss.menuWrapperStyle}>
             <Edit edit={editPost} remove={removePost} />

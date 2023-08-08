@@ -1,4 +1,16 @@
-import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import {
+  arrayRemove,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
@@ -58,4 +70,24 @@ export const updateComment = async (commentId: string, updatedContent: string) =
 export const deleteComment = async (commentId: string) => {
   const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
   await deleteDoc(commentRef);
+};
+
+export const createReplyToComment = async (commentId: string, replyContent: string) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const newReply = {
+    authorId: user.uid,
+    content: replyContent,
+    createdAt: new Date(),
+    likes: 0,
+  };
+
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  await updateDoc(commentRef, { replies: arrayUnion(newReply) });
+};
+
+export const removeReplyFromComment = async (commentId: string, replyToRemove: string) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  await updateDoc(commentRef, { replies: arrayRemove(replyToRemove) });
 };

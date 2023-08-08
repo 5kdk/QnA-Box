@@ -2,26 +2,21 @@ import { atom } from 'jotai';
 
 const KEY = 'user';
 
-const userState = () => {
-  const getInitialValue = () => {
-    const item = localStorage.getItem(KEY);
-    if (item !== null) {
-      return JSON.parse(item);
-    }
-    return null;
-  };
-
-  const baseAtom = atom(getInitialValue());
-
-  const derivedAtom = atom(
-    get => get(baseAtom),
-    (get, set, update) => {
-      const nextValue = typeof update === 'function' ? update(get(baseAtom)) : update;
-      set(baseAtom, nextValue);
-      localStorage.setItem(KEY, JSON.stringify(nextValue));
-    },
-  );
-  return derivedAtom;
+export const getInitialValue = () => {
+  const user = localStorage.getItem(KEY);
+  return user ? JSON.parse(user) : null;
 };
+
+const baseAtom = atom(getInitialValue());
+
+export const userState = atom(
+  get => get(baseAtom),
+  (get, set, update) => {
+    const currentValue = get(baseAtom);
+    const nextValue = typeof update === 'function' ? update(currentValue) : update;
+    set(baseAtom, nextValue);
+    localStorage.setItem(KEY, JSON.stringify(nextValue));
+  },
+);
 
 export default userState;

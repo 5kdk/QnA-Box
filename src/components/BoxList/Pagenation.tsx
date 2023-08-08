@@ -33,7 +33,7 @@ interface PagenationProps {
 const Pagenation = ({ currentPage, maxPage, onClickPageButton }: PagenationProps) => {
   return (
     <Flex justifyContent="space-between" css={PagenationCss.containerFlex}>
-      <button css={PagenationCss.buttonStyle} disabled={currentPage === 1}>
+      <button css={PagenationCss.buttonStyle} aria-label="첫 페이지" disabled={currentPage === 1}>
         {'<'}
       </button>
       <Flex css={PagenationCss.buttonFlex}>
@@ -42,13 +42,14 @@ const Pagenation = ({ currentPage, maxPage, onClickPageButton }: PagenationProps
             <button
               key={i}
               css={[PagenationCss.buttonStyle, PagenationCss.selectedButtonStyle(currentPage === i + 1)]}
+              aria-label={`${i + 1} 페이지`}
               onClick={() => onClickPageButton(i + 1)}>
               {i + 1}
             </button>
           );
         })}
       </Flex>
-      <button css={PagenationCss.buttonStyle} disabled={currentPage === maxPage}>
+      <button css={PagenationCss.buttonStyle} aria-label="마지막 페이지" disabled={currentPage === maxPage}>
         {'>'}
       </button>
     </Flex>

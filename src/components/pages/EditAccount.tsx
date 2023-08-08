@@ -1,11 +1,12 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
-import { Avatar, Flex, WideButton } from '../atom';
-import { Input } from '../molecules';
+import { Avatar, Flex } from '../atom';
+import { EditForm } from '../molecules';
 import { InfoSubject } from '../User';
-import { buttonCss } from '../../styles/buttonCss';
 import useImgFile from '../../hooks/useImgFile';
+import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
+import { buttonCss, visuallyHidden } from '../../styles';
 
 const tmpData = {
   imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
@@ -22,18 +23,6 @@ const editCss = {
   account: css`
     gap: 22px;
   `,
-  visuallyHidden: css`
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    white-space: nowrap;
-    clip-path: inset(100%);
-    clip: rect(0 0 0 0);
-    overflow: hidden;
-  `,
   btnProps: {
     color: 'var(--black)',
     bgColor: 'var(--white)',
@@ -45,46 +34,30 @@ const editCss = {
   `,
 };
 
-const formElement = [
-  { text: '기존 비밀번호', key: 'prePswd' },
-  { text: '새 비밀번호', key: 'newPswd' },
-  { text: '비밀번호 확인', key: 'ckPswd' },
+const formPassword = [
+  { text: '기존 비밀번호', key: 'prePassword', type: 'password' },
+  { text: '새 비밀번호', key: 'password', type: 'password' },
+  { text: '비밀번호 확인', key: 'passwordCheck', type: 'password' },
 ];
 
-interface PswdFormElement {
-  [key: string]: string;
-  prePswd: string;
-  newPswd: string;
-  ckPswd: string;
+const formName = [{ text: 'Name', key: 'newName', type: 'text' }];
+interface NameType {
+  name: string;
 }
 
 const EditAccount = () => {
-  const [newName, setNewName] = useState(tmpData.name);
-  const [pswdForm, setPswdForm] = useState<PswdFormElement>({ prePswd: '', newPswd: '', ckPswd: '' });
   const { setNewImg, imgBuffer } = useImgFile(tmpData.imgSrc);
   const { target } = useParams();
   const navigate = useNavigate();
 
-  const handleNameInput = (e: ChangeEvent<HTMLInputElement>) => setNewName(e.target.value);
-
-  const handlePswdForm = (key: string) => (e: ChangeEvent<HTMLInputElement>) =>
-    setPswdForm({ ...pswdForm, [key]: e.target.value });
-
-  const editAccount = () => {
-    if (tmpData.imgSrc === imgBuffer && tmpData.name === newName) return;
-
-    const data: { imgSrc?: string; name: string } = { imgSrc: '', name: '' };
-    data.imgSrc = imgBuffer || tmpData.imgSrc;
-    data.name = newName || tmpData.name;
-
-    console.log(data);
+  const editImgName = (data: NameType) => {
+    if (tmpData.imgSrc === imgBuffer && tmpData.name === data.name) return;
+    const newData: { imgSrc: string; name: string } = { imgSrc: imgBuffer || tmpData.imgSrc, name: data.name };
+    console.log(newData);
   };
 
-  const editPswd = () => {
-    const { prePswd, newPswd, ckPswd } = pswdForm;
-    if (prePswd && newPswd && newPswd !== ckPswd) return;
-
-    console.log({ prePswd, newPswd });
+  const editPswd = (data: editPswdSchemaType) => {
+    console.log(data, 123);
   };
 
   useEffect(() => {
@@ -99,38 +72,34 @@ const EditAccount = () => {
         <Avatar src={imgBuffer} size="lg" />
         {target === 'profile' && (
           <>
-            <input css={editCss.visuallyHidden} type="file" onChange={setNewImg} id="attachment" />
-            <label css={[buttonCss(editCss.btnProps), editCss.button]} htmlFor="attachment">
+            <label css={[buttonCss(editCss.btnProps), editCss.button]}>
+              <input css={visuallyHidden} type="file" onChange={setNewImg} />
               이미지 수정
             </label>
           </>
         )}
         <InfoSubject title="E-mail" body={tmpData.email} />
       </Flex>
-      <Flex css={editCss.account} flexDirection="column">
-        {target === 'profile' ? (
-          <Input text="Name" type="text" width="100%" input={newName} handleInput={handleNameInput} />
-        ) : (
-          target === 'password' && (
-            <>
-              {formElement.map(({ text, key }) => (
-                <Input key={key} text={text} type="password" input={pswdForm[key]} handleInput={handlePswdForm(key)} />
-              ))}
-            </>
-          )
-        )}
-      </Flex>
       {target === 'profile' ? (
-        <WideButton
-          text="회원정보 수정"
-          color="var(--black)"
-          bgColor="var(--white)"
-          borderColor="var(--black)"
-          onClick={editAccount}
+        <EditForm<NameType>
+          formElement={formName}
+          iniForm={{ name: tmpData.name }}
+          btnSettings={{
+            text: '회원정보 수정',
+            color: 'var(--black)',
+            bgColor: 'var(--white)',
+            borderColor: 'var(--black)',
+          }}
+          submitFunc={editImgName}
         />
       ) : (
         target === 'password' && (
-          <WideButton text="비밀번호 변경" color="var(--white)" bgColor="var(--black)" onClick={editPswd} />
+          <EditForm<editPswdSchemaType>
+            formElement={formPassword}
+            formSchema={editPswdSchema}
+            btnSettings={{ text: '비밀번호 변경', color: 'var(--white)', bgColor: 'var(--black)' }}
+            submitFunc={editPswd}
+          />
         )
       )}
     </Flex>

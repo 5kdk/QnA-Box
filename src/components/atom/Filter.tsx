@@ -53,31 +53,28 @@ const FilterCss = {
   `,
 };
 
-type FilterType = '최신순' | '좋아요순' | '오래된순';
+type FilterType = '최신순' | '좋아요순' | '오래된순' | 'dlalsdkjf';
 
 const Filter = () => {
   const [curValue, setCurValue] = useState<FilterType>('최신순');
   const [isShow, setIsShow] = useState(false);
-  const handleCurValue = (filter: FilterType) => {
+  const handleCurValue = (filter: FilterType) => () => {
     setCurValue(filter);
   };
   const handleShow = () => {
     setIsShow(prev => !prev);
   };
+  const filters: FilterType[] = ['최신순', '좋아요순', '오래된순'];
 
   return (
     <div role="button" tabIndex={0} css={FilterCss.boxstyle(isShow)} onClick={handleShow} onKeyDown={() => {}}>
       <label css={FilterCss.labelStyle}>{curValue}</label>
       <div css={FilterCss.selectstyle(isShow)}>
-        <button css={FilterCss.optionstyle} onClick={() => handleCurValue('최신순')}>
-          최신순
-        </button>
-        <button css={FilterCss.optionstyle} onClick={() => handleCurValue('좋아요순')}>
-          좋아요순
-        </button>
-        <button css={FilterCss.optionstyle} onClick={() => handleCurValue('오래된순')}>
-          오래된순
-        </button>
+        {filters.map(filter => (
+          <button key={filter} css={FilterCss.optionstyle} aria-label={filter} onClick={handleCurValue(filter)}>
+            {filter}
+          </button>
+        ))}
       </div>
     </div>
   );

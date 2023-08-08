@@ -1,10 +1,14 @@
 import { css } from '@emotion/react';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import { visuallyHidden } from '../../styles';
 
 const togglerCss = {
   button: css`
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 14px;
+    letter-spacing: -0.32px;
   `,
   toggle: ({ selected }: { selected: boolean }) => css`
     position: relative;
@@ -32,19 +36,20 @@ const togglerCss = {
   `,
 };
 
-interface TogglerProps {
+interface FormTogglerProps {
   selected: boolean;
-  setSelected: () => void;
   text: string;
+  register?: UseFormRegisterReturn;
 }
 
-const Toggler = ({ selected, setSelected, text }: TogglerProps) => {
+const FormToggler = ({ selected, text, register }: FormTogglerProps) => {
   return (
-    <button css={togglerCss.button} aria-label={`${text} ${selected}`} onClick={setSelected}>
+    <label css={togglerCss.button}>
       <div css={togglerCss.toggle({ selected })} />
-      <p css={togglerCss.label}>{text}</p>
-    </button>
+      <input css={visuallyHidden} type="checkbox" {...register} />
+      {text}
+    </label>
   );
 };
 
-export default Toggler;
+export default FormToggler;

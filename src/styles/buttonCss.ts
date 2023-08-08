@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { cssProps } from '../components/atom/Button';
 
-export const buttonCss = (props: cssProps) => css`
+export default (props: cssProps) => css`
   display: flex;
   justify-content: ${props.icon ? 'space-between' : 'center'};
   align-items: center;

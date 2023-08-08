@@ -3,6 +3,7 @@ export { default as Button } from './Button';
 export { default as Edit } from './Edit';
 export { default as Filter } from './Filter';
 export { default as Flex } from './Flex';
+export { default as FormToggler } from './FormToggler';
 export { default as Loading } from './Loading';
 export { default as Logo } from './Logo';
 export { default as Note } from './Note';

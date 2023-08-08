@@ -1,7 +1,8 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { Path, SubmitHandler, useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
-import { Flex, Title, Toggler, WideButton } from '../atom';
-import { Input } from '../molecules';
+import { Flex, FormToggler, Title, WideButton } from '../atom';
+import { FormInput } from '../molecules';
 
 const tmpData = {
   name: 'minjae3',
@@ -13,6 +14,8 @@ const createBoxCss = {
     gap: 48px;
   `,
   form: css`
+    display: flex;
+    flex-direction: column;
     width: 100%;
     gap: 32px;
   `,
@@ -34,58 +37,57 @@ interface FormElement {
 }
 
 const CreateBox = () => {
-  const [boxForm, setBoxForm] = useState<FormElement>({
-    name: '',
-    owner: '',
-    desc: '',
-    closed: false,
-    anonymous: true,
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    // formState: { errors },
+  } = useForm<FormElement>({
+    defaultValues: {
+      owner: tmpData.name,
+    },
   });
-
-  const handleInput = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    setBoxForm({ ...boxForm, [key]: e.target.value });
-  };
-
-  const handleToggle = (key: string) => () => {
-    setBoxForm(pre => {
-      return { ...pre, [key]: !pre[key] };
-    });
-  };
-
-  const createBox = () => {
-    const { name, owner, desc } = boxForm;
-    if (name && owner && desc) {
-      console.log({ ...boxForm });
-    }
+  const onSubmit: SubmitHandler<FormElement> = data => {
+    // const { name, owner, desc } = data;
+    // if (name && owner && desc) {
+    console.log({ ...data });
+    // }
   };
 
   useEffect(() => {
     if (tmpData) {
-      setBoxForm(pre => {
-        return { ...pre, owner: tmpData.name };
-      });
+      setValue('owner', tmpData.name);
     }
-  }, [tmpData, setBoxForm]);
+  }, [tmpData, setValue]);
 
   return (
     <Flex css={createBoxCss.wrapper} flexDirection="column" justifyContent="center" alignItems="center">
       <Title text="QA Box 만들기" />
-      <Flex css={createBoxCss.form} flexDirection="column">
+      <form css={createBoxCss.form} onSubmit={handleSubmit(onSubmit)}>
         <Flex css={createBoxCss.inputs} flexDirection="column">
-          <Input text="Name" type="text" input={boxForm.name} handleInput={handleInput('name')} />
-          <Input text="Owner" type="text" input={boxForm.owner} handleInput={handleInput('owner')} />
-          <Input text="Description" type="text" input={boxForm.desc} handleInput={handleInput('desc')} />
-        </Flex>
-        <Flex css={createBoxCss.toggles} flexDirection="column">
-          <Toggler selected={boxForm.closed} setSelected={handleToggle('closed')} text="질문 기능 비활성화" />
-          <Toggler
-            selected={boxForm.anonymous}
-            setSelected={handleToggle('anonymous')}
-            text="익명 질문을 허용합니다."
+          <FormInput label="Name" type="text" register={register('name' as Path<FormElement>, { required: true })} />
+          <FormInput label="Owner" type="text" register={register('owner' as Path<FormElement>, { required: true })} />
+          <FormInput
+            label="Description"
+            type="text"
+            register={register('desc' as Path<FormElement>, { required: true })}
           />
         </Flex>
-        <WideButton text="등록하기" color="var(--white)" bgColor="var(--blue)" onClick={createBox} />
-      </Flex>
+        <Flex css={createBoxCss.toggles} flexDirection="column">
+          <FormToggler
+            selected={watch('closed')}
+            text="질문 기능 비활성화"
+            register={register('closed' as Path<FormElement>)}
+          />
+          <FormToggler
+            selected={watch('anonymous')}
+            text="익명 질문을 허용합니다."
+            register={register('anonymous' as Path<FormElement>)}
+          />
+        </Flex>
+        <WideButton text="등록하기" color="var(--white)" bgColor="var(--blue)" onClick={() => {}} />
+      </form>
     </Flex>
   );
 };

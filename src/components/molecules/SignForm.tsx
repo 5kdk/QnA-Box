@@ -3,9 +3,9 @@ import { FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '@emotion/react';
-import { Flex, Logo, Note, WideButton } from '../atom';
+import { Flex, Logo, Note, Notification, WideButton } from '../atom';
 import { FormInput } from '.';
-import kakaologin from '../../assets/images/kakao_login.png';
+import googlelogin2 from '../../assets/images/btn_google_signin_light_normal_web.png';
 
 const SignFormCss = {
   container: css`
@@ -23,13 +23,10 @@ const SignFormCss = {
   `,
   buttons: css`
     margin-top: 20px;
+    text-align: center;
   `,
-  kakaobutton: css`
-    background-color: var(--kakao);
-    min-width: 320px;
-    height: 57px;
-    border-radius: 10px;
-    margin: 10px 0;
+  googlelogin: css`
+    margin-top: 10px;
   `,
 };
 
@@ -56,12 +53,12 @@ const SignForm = <T extends FieldValues>({
     formState: { errors },
   } = useForm<T>({ resolver: zodResolver(formSchema) });
   const onSubmit: SubmitHandler<T> = submitFunc;
-  console.log(errors);
   const navigate = useNavigate();
   const toOtherPage = () => navigate(redirectTo);
 
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">
+      <Notification errors={errors} />
       <Logo css={SignFormCss.logostyle} size="lg" />
       <form css={SignFormCss.form} onSubmit={handleSubmit(onSubmit)}>
         <FormInput css={SignFormCss.inputstyle} label="E-mail" type="text" register={register('email' as Path<T>)} />
@@ -76,8 +73,8 @@ const SignForm = <T extends FieldValues>({
         ))}
         <div css={SignFormCss.buttons}>
           <WideButton text={buttonText} bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />
-          <button css={SignFormCss.kakaobutton} aria-label="카카오 로그인">
-            <img src={kakaologin} alt="kakaologin-img" />
+          <button aria-label="구글 로그인">
+            <img css={SignFormCss.googlelogin} src={googlelogin2} alt="google" />
           </button>
         </div>
       </form>

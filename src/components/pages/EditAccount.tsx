@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Avatar, Flex } from '../atom';
-import { EditForm } from '../molecules';
+import { UserEditForm } from '../molecules';
 import { InfoSubject } from '../User';
 import useImgFile from '../../hooks/useImgFile';
 import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
@@ -81,7 +81,7 @@ const EditAccount = () => {
         <InfoSubject title="E-mail" body={tmpData.email} />
       </Flex>
       {target === 'profile' ? (
-        <EditForm<NameType>
+        <UserEditForm<NameType>
           formElement={formName}
           iniForm={{ name: tmpData.name }}
           btnSettings={{
@@ -94,7 +94,7 @@ const EditAccount = () => {
         />
       ) : (
         target === 'password' && (
-          <EditForm<editPswdSchemaType>
+          <UserEditForm<editPswdSchemaType>
             formElement={formPassword}
             formSchema={editPswdSchema}
             btnSettings={{ text: '비밀번호 변경', color: 'var(--white)', bgColor: 'var(--black)' }}

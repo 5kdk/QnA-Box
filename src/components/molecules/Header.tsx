@@ -9,7 +9,7 @@ import sideNavState from '../../jotai/atom/sideNavState';
 const HeaderCss = {
   wrapperStyle: css`
     position: fixed;
-    z-index: 999;
+    z-index: 990;
     top: 0;
     left: 50%;
     transform: translateX(-50%);

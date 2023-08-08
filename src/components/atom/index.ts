@@ -7,6 +7,7 @@ export { default as FormToggler } from './FormToggler';
 export { default as Loading } from './Loading';
 export { default as Logo } from './Logo';
 export { default as Note } from './Note';
+export { default as Notification } from './Notification';
 export { default as Search } from './Search';
 export { default as Text } from './Text';
 export { default as Title } from './Title';

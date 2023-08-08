@@ -15,7 +15,8 @@ export const userState = atom(
     const currentValue = get(baseAtom);
     const nextValue = typeof update === 'function' ? update(currentValue) : update;
     set(baseAtom, nextValue);
-    localStorage.setItem(KEY, JSON.stringify(nextValue));
+    if (nextValue) localStorage.setItem(KEY, JSON.stringify(nextValue));
+    else localStorage.removeItem(KEY);
   },
 );
 

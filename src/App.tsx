@@ -13,6 +13,7 @@ import {
   Signup,
   User,
 } from './components/pages';
+import AuthenticationGuard from './guards/AuthenticationGuard';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,29 +36,34 @@ const router = createBrowserRouter([
         path: 'signup',
         element: <Signup />,
       },
-      {
-        path: 'box',
-        element: <BoxList />,
-      },
-      {
-        path: 'box/:id',
-        element: <Box />,
-      },
-      {
-        path: 'box/create',
-        element: <CreateBox />,
-      },
+
       {
         path: 'account',
-        element: <Account />,
-      },
-      {
-        path: 'account/:target',
-        element: <EditAccount />,
+        element: <AuthenticationGuard redirectTo="/signin" element={<Account />} />,
+        children: [
+          {
+            path: ':target',
+            element: <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} />,
+          },
+        ],
       },
       {
         path: 'user/:username',
         element: <User />,
+      },
+      {
+        path: 'box',
+        element: <AuthenticationGuard redirectTo="/signin" element={<BoxList />} />,
+        children: [
+          {
+            path: ':id',
+            element: <Box />,
+          },
+          {
+            path: 'create',
+            element: <AuthenticationGuard redirectTo="/signin" element={<CreateBox />} />,
+          },
+        ],
       },
       {
         path: '*',

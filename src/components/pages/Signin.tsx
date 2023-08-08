@@ -1,8 +1,19 @@
+import { useNavigate } from 'react-router-dom';
 import { SignForm } from '../molecules';
 import { SigninSchemaType, signinSchema } from '../../registerSchema';
+import { loginUser } from '../../services/auth';
 
 const Signin = () => {
-  const reqSignin = (data: SigninSchemaType) => console.log(data);
+  const navigate = useNavigate();
+  const reqSignin = (data: SigninSchemaType) => {
+    try {
+      await loginUser(data.email, data.password);
+
+      navigate('/box', { replace: true });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <SignForm<SigninSchemaType>

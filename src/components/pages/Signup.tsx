@@ -1,8 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import { SignForm } from '../molecules';
 import { SignupSchemaType, signupSchema } from '../../registerSchema';
+import { registerUser } from '../../services/auth';
 
 const Signup = () => {
-  const reqSignup = (data: SignupSchemaType) => console.log(data);
+  const reqSignup = (data: SignupSchemaType) => {
+    try {
+      await registerUser(data.email, data.password);
+
+      navigate('/box');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const anotherInputs = [{ label: 'Password Check', formKey: 'passwordCheck', type: 'password' }];
   return (
     <SignForm<SignupSchemaType>

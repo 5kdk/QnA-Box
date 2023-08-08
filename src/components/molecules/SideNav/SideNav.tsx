@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
-import { UserInfo, BoxInfo } from './';
+import { useSetAtom } from 'jotai';
+import { UserInfo, BoxInfo } from '.';
 import { Flex, Note, WideButton } from '../../atom';
+import { logoutUser } from '../../../services/auth';
+import sideNavState from '../../../jotai/atom/sideNavState';
 
 const SideNavCss = {
   navContainer: (isOpen: boolean) => css`
@@ -47,6 +50,13 @@ interface SideNavProps {
 }
 
 const SideNav = ({ isOpen }: SideNavProps) => {
+  const setSideNavState = useSetAtom(sideNavState);
+
+  const handleSignOutClick = async () => {
+    await logoutUser();
+    setSideNavState(false);
+  };
+
   return (
     <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
       <Flex css={SideNavCss.wrapper} flexDirection="column">
@@ -59,7 +69,7 @@ const SideNav = ({ isOpen }: SideNavProps) => {
         </Flex>
         <Flex flexDirection="column" alignItems="center">
           <Note css={SideNavCss.teamstyle} text="by Team 쬬와규" onClick={() => {}} />
-          <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={() => {}} />
+          <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={handleSignOutClick} />
         </Flex>
       </Flex>
     </Flex>

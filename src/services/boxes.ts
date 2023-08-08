@@ -1,4 +1,16 @@
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { USERS_COLLECTION_NAME, BOXES_COLLECTION_NAME } from '../constants/collectionNames';
 
@@ -30,7 +42,7 @@ const updateUserQnaBoxes = async (userUid: string, boxId: string) => {
   const userDocRef = doc(db, USERS_COLLECTION_NAME, userUid);
 
   await updateDoc(userDocRef, {
-    myBoxs: arrayUnion(boxId),
+    myBoxes: arrayUnion(boxId),
   });
 };
 
@@ -43,7 +55,7 @@ export const createQnaBox = async (formData: FormData) => {
   await updateUserQnaBoxes(user.uid, qnaBoxDocRef.id);
 };
 
-export const getMyQnaBoxs = async () => {
+export const getMyQnaBoxes = async () => {
   const user = auth.currentUser;
   if (!user) return;
 
@@ -96,4 +108,21 @@ export const updateQnaBox = async (boxId: string, editFormData: EditFormData): P
   };
 
   await updateDoc(qnaBoxDocRef, updatedData);
+};
+
+const deleteUserQnaBoxes = async (userUid: string, boxId: string) => {
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, userUid);
+
+  await updateDoc(userDocRef, {
+    myBoxes: arrayRemove(boxId),
+  });
+};
+
+export const deleteQnaBox = async (boxId: string): Promise<void> => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
+  await deleteDoc(qnaBoxDocRef);
+  await deleteUserQnaBoxes(user.uid, boxId);
 };

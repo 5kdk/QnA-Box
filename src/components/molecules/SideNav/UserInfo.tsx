@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
-import { IosArrowRight } from '@emotion-icons/fluentui-system-filled/IosArrowRight';
 import { Avatar, Flex } from '../../atom';
+import { IosArrowRight } from '@emotion-icons/fluentui-system-filled/IosArrowRight';
 
 const UserInfoCss = {
   container: css`
     padding: 10px;
     border-top: 0.5px solid var(--gray);
+    cursor: pointer;
   `,
   namestyle: css`
     margin-bottom: 10px;
@@ -27,11 +28,12 @@ interface User {
   src: string;
   displayName: string;
   email: string;
+  toAccount: () => void;
 }
 
-const UserInfo = ({ src, displayName, email }: User) => {
+const UserInfo = ({ src, displayName, email, toAccount }: User) => {
   return (
-    <Flex css={UserInfoCss.container}>
+    <Flex css={UserInfoCss.container} onClick={toAccount}>
       <Flex css={UserInfoCss.flexStyle} justifyContent="space-between" alignItems="center">
         <Avatar src={src} size="md" />
         <Flex css={UserInfoCss.infoStyle} flexDirection="column">

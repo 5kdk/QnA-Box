@@ -1,7 +1,8 @@
-import { css } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 import { useSetAtom } from 'jotai';
-import { UserInfo, BoxInfo } from '.';
+import { css } from '@emotion/react';
 import { Flex, Note, WideButton } from '../../atom';
+import { UserInfo, BoxInfo } from '.';
 import { logoutUser } from '../../../services/auth';
 import sideNavState from '../../../jotai/atom/sideNavState';
 
@@ -51,7 +52,12 @@ interface SideNavProps {
 
 const SideNav = ({ isOpen }: SideNavProps) => {
   const setSideNavState = useSetAtom(sideNavState);
+  const navigate = useNavigate();
 
+  const redirectTo = (path: string) => () => {
+    navigate(path);
+    setSideNavState(false);
+  };
   const handleSignOutClick = async () => {
     await logoutUser();
     setSideNavState(false);
@@ -60,7 +66,12 @@ const SideNav = ({ isOpen }: SideNavProps) => {
   return (
     <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
       <Flex css={SideNavCss.wrapper} flexDirection="column">
-        <UserInfo src={UserData.src} displayName={UserData.displayName} email={UserData.email} />
+        <UserInfo
+          src={UserData.src}
+          displayName={UserData.displayName}
+          email={UserData.email}
+          toAccount={redirectTo('/account')}
+        />
         <BoxInfo UserBoxData={UserBoxData} title="새소식" />
         <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
         <Flex css={SideNavCss.serviceContainer} flexDirection="column" alignItems="flex-start">

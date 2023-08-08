@@ -17,7 +17,7 @@ const updateUserQnaRooms = async (userUid: string, roomId: string): Promise<void
   });
 };
 
-export const createRoom = async (formData: FormData) => {
+export const createQnaRoom = async (formData: FormData) => {
   const user = auth.currentUser;
   if (!user) return;
   const newData = { ownerUid: user.uid, owner: user.displayName, createdAt: Date.now(), ...formData };

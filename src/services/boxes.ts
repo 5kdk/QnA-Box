@@ -1,18 +1,6 @@
-import {
-  addDoc,
-  arrayRemove,
-  arrayUnion,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { auth, db } from './firebase';
-import { USERS_COLLECTION_NAME, BOXES_COLLECTION_NAME } from '../constants/collectionNames';
+import { BOXES_COLLECTION_NAME } from '../constants/collectionNames';
 
 interface FormData {
   title: string;
@@ -38,21 +26,12 @@ interface Box {
 
 const OWNER_UID = 'ownerUid';
 
-const updateUserQnaBoxes = async (userUid: string, boxId: string) => {
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, userUid);
-
-  await updateDoc(userDocRef, {
-    myBoxes: arrayUnion(boxId),
-  });
-};
-
 export const createQnaBox = async (formData: FormData) => {
   const user = auth.currentUser;
   if (!user) return;
   const newData = { ownerUid: user.uid, owner: user.displayName, createdAt: Date.now(), ...formData };
-  const qnaBoxsCollection = collection(db, BOXES_COLLECTION_NAME);
-  const qnaBoxDocRef = await addDoc(qnaBoxsCollection, newData);
-  await updateUserQnaBoxes(user.uid, qnaBoxDocRef.id);
+  const qnaBoxesCollection = collection(db, BOXES_COLLECTION_NAME);
+  await addDoc(qnaBoxesCollection, newData);
 };
 
 export const getMyQnaBoxes = async () => {
@@ -110,19 +89,10 @@ export const updateQnaBox = async (boxId: string, editFormData: EditFormData): P
   await updateDoc(qnaBoxDocRef, updatedData);
 };
 
-const deleteUserQnaBoxes = async (userUid: string, boxId: string) => {
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, userUid);
-
-  await updateDoc(userDocRef, {
-    myBoxes: arrayRemove(boxId),
-  });
-};
-
 export const deleteQnaBox = async (boxId: string): Promise<void> => {
   const user = auth.currentUser;
   if (!user) return;
 
   const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
   await deleteDoc(qnaBoxDocRef);
-  await deleteUserQnaBoxes(user.uid, boxId);
 };

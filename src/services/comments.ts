@@ -4,6 +4,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   orderBy,
   query,
@@ -90,4 +91,43 @@ export const createReplyToComment = async (commentId: string, replyContent: stri
 export const removeReplyFromComment = async (commentId: string, replyToRemove: string) => {
   const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
   await updateDoc(commentRef, { replies: arrayRemove(replyToRemove) });
+};
+
+export const increaseCommentLikes = async (commentId: string) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const commentData = await getDoc(commentRef);
+  if (commentData.exists()) {
+    const updatedLikes = commentData.get('likes') + 1;
+    await updateDoc(commentRef, { likes: updatedLikes });
+  }
+};
+
+export const decreaseCommentLikes = async (commentId: string) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const commentData = await getDoc(commentRef);
+  if (commentData.exists()) {
+    const updatedLikes = Math.max(0, commentData.get('likes') - 1);
+    await updateDoc(commentRef, { likes: updatedLikes });
+  }
+};
+
+export const increaseReplyLikes = async (commentId: string, replyIndex: number) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const commentData = await getDoc(commentRef);
+  if (commentData.exists()) {
+    const replies = commentData.get('replies');
+
+    replies[replyIndex].likes += 1;
+    await updateDoc(commentRef, { replies: replies });
+  }
+};
+
+export const decreaseReplyLikes = async (commentId: string, replyIndex: number) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const commentData = await getDoc(commentRef);
+  if (commentData.exists()) {
+    const replies = commentData.get('replies');
+    replies[replyIndex].likes = Math.max(0, replies[replyIndex].likes - 1);
+    await updateDoc(commentRef, { replies: replies });
+  }
 };

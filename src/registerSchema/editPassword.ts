@@ -1,16 +1,16 @@
 import { ZodObject, ZodRawShape, z } from 'zod';
 
 export const pswdSchema = z
-  .string({ required_error: '비밀번호를 입력해주세요.' })
+  .string()
   .regex(
     /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/,
-    '영문+숫자+특수문자(! @ # $ % & * ?) 조합 8~15자리를 입력해주세요.',
+    '비밀번호는 영문, 숫자, 특수문자(!@#$%&*?)를 포함한 8 ~ 15자리로 입력해주세요.',
   );
 
 export const addPswdCheckSchema = (schema: ZodObject<ZodRawShape>) =>
   schema
     .extend({
-      passwordCheck: z.string({ required_error: '비밀번호를 다시 입력해주세요.' }),
+      passwordCheck: z.string(),
     })
     .refine(data => data.password === data.passwordCheck, {
       path: ['passwordCheck'],

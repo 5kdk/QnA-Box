@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Path, SubmitHandler, useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
-import { Flex, FormToggler, Title, WideButton } from '../atom';
+import { Flex, FormToggler, Notification, Title, WideButton } from '../atom';
 import { FormInput } from '../molecules';
 
 const tmpData = {
@@ -42,7 +42,7 @@ const CreateBox = () => {
     handleSubmit,
     watch,
     setValue,
-    // formState: { errors },
+    formState: { errors },
   } = useForm<FormElement>({
     defaultValues: {
       owner: tmpData.name,
@@ -63,6 +63,7 @@ const CreateBox = () => {
 
   return (
     <Flex css={createBoxCss.wrapper} flexDirection="column" justifyContent="center" alignItems="center">
+      <Notification errors={errors} />
       <Title text="QA Box 만들기" />
       <form css={createBoxCss.form} onSubmit={handleSubmit(onSubmit)}>
         <Flex css={createBoxCss.inputs} flexDirection="column">

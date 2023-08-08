@@ -2,7 +2,7 @@ import { FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '@emotion/react';
-import { Flex, WideButton } from '../atom';
+import { Flex, Notification, WideButton } from '../atom';
 import { FormInput } from '../molecules';
 
 const editFormCss = {
@@ -43,21 +43,24 @@ const EditForm = <T extends FieldValues>({
   const {
     register,
     handleSubmit,
-    // formState: { errors },
+    formState: { errors },
   } = useForm<T>(formSchema ? { resolver: zodResolver(formSchema) } : iniForm);
   const onSubmit: SubmitHandler<T> = data => {
     submitFunc(data);
   };
 
   return (
-    <form css={editFormCss.form} onSubmit={handleSubmit(onSubmit)}>
-      <Flex css={editFormCss.account} flexDirection="column">
-        {formElement.map(({ text, key, type }) => (
-          <FormInput key={key} label={text} type={type} register={register(key as Path<T>, { required: true })} />
-        ))}
-      </Flex>
-      <WideButton {...btnSettings} onClick={() => {}} />
-    </form>
+    <>
+      <Notification errors={errors} />
+      <form css={editFormCss.form} onSubmit={handleSubmit(onSubmit)}>
+        <Flex css={editFormCss.account} flexDirection="column">
+          {formElement.map(({ text, key, type }) => (
+            <FormInput key={key} label={text} type={type} register={register(key as Path<T>, { required: true })} />
+          ))}
+        </Flex>
+        <WideButton {...btnSettings} onClick={() => {}} />
+      </form>
+    </>
   );
 };
 

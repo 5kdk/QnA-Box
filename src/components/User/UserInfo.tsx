@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { Flex, Avatar } from '../atom';
 import { InfoSubject } from '.';
+import logo from '../../assets/images/qa-logo.png';
 
 const userCss = {
   wrapper: css`
@@ -13,15 +14,15 @@ const userCss = {
 };
 
 interface InfoProps {
-  imgSrc: string;
+  photoURL: string;
   email: string;
   displayName: string;
 }
 
-const UserInfo = ({ imgSrc, email, displayName }: InfoProps) => {
+const UserInfo = ({ photoURL, email, displayName }: InfoProps) => {
   return (
     <Flex css={userCss.wrapper} flexDirection="column" alignItems="center">
-      <Avatar src={imgSrc} size="lg" />
+      <Avatar src={photoURL || logo} size="lg" />
       <Flex css={userCss.subject} flexDirection="column">
         <InfoSubject title="E-mail" body={email} />
         <InfoSubject title="DisplayName" body={displayName} />

@@ -14,12 +14,10 @@ import {
 } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
+import { getUserRef } from './profile';
 
-interface Reply {
-  authorId: string;
-  content: string;
-  createdAt: number;
-}
+export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
 interface CommentData {
   commentId: string;
   boxId: string;
@@ -27,10 +25,10 @@ interface CommentData {
   content: string;
   likes: number;
   createdAt: number;
-  replies: Reply[];
+  parentId: string | null;
 }
 
-export const createComment = async (boxId: string, content: string) => {
+export const createComment = async (boxId: string, content: string, commentId?: string) => {
   const user = auth.currentUser;
   if (!user) return;
 
@@ -44,7 +42,7 @@ export const createComment = async (boxId: string, content: string) => {
     content,
     likes: 0,
     createdAt: Date.now(),
-    replies: [],
+    parentId: commentId || null,
   };
 
   await setDoc(commentDocRef, newComment);
@@ -58,43 +56,28 @@ export const getComments = async (boxId: string) => {
   );
 
   const querySnapshot = await getDocs(commentsQuery);
-  const comments = querySnapshot.docs.map(doc => doc.data() as CommentData);
-
-  return comments;
+  const allComments = querySnapshot.docs.map(doc => doc.data() as CommentData);
+  const comments = allComments.filter(c => !c.parentId);
+  const replies = allComments.filter(c => c.parentId);
+  return comments.map(comment => {
+    return { ...comment, replies: replies.filter(reply => reply.parentId === comment.commentId) };
+  });
 };
 
 export const updateComment = async (commentId: string, updatedContent: string) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
-  await updateDoc(commentRef, { content: updatedContent });
+  await updateDoc(getCommentRef(commentId), { content: updatedContent });
 };
 
 export const deleteComment = async (commentId: string) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
-  await deleteDoc(commentRef);
-};
-
-export const createReplyToComment = async (commentId: string, replyContent: string) => {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  const newReply = {
-    authorId: user.uid,
-    content: replyContent,
-    createdAt: new Date(),
-    likes: 0,
-  };
-
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
-  await updateDoc(commentRef, { replies: arrayUnion(newReply) });
-};
-
-export const removeReplyFromComment = async (commentId: string, replyToRemove: string) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
-  await updateDoc(commentRef, { replies: arrayRemove(replyToRemove) });
+  await deleteDoc(getCommentRef(commentId));
 };
 
 export const increaseCommentLikes = async (commentId: string) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const user = auth.currentUser;
+  if (!user) return;
+  await updateDoc(getUserRef(user.uid), { likedComments: arrayUnion(commentId) });
+
+  const commentRef = getCommentRef(commentId);
   const commentData = await getDoc(commentRef);
   if (commentData.exists()) {
     const updatedLikes = commentData.get('likes') + 1;
@@ -103,31 +86,14 @@ export const increaseCommentLikes = async (commentId: string) => {
 };
 
 export const decreaseCommentLikes = async (commentId: string) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const user = auth.currentUser;
+  if (!user) return;
+  await updateDoc(getUserRef(user.uid), { likedComments: arrayRemove(commentId) });
+
+  const commentRef = getCommentRef(commentId);
   const commentData = await getDoc(commentRef);
   if (commentData.exists()) {
     const updatedLikes = Math.max(0, commentData.get('likes') - 1);
     await updateDoc(commentRef, { likes: updatedLikes });
-  }
-};
-
-export const increaseReplyLikes = async (commentId: string, replyIndex: number) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
-  const commentData = await getDoc(commentRef);
-  if (commentData.exists()) {
-    const replies = commentData.get('replies');
-
-    replies[replyIndex].likes += 1;
-    await updateDoc(commentRef, { replies: replies });
-  }
-};
-
-export const decreaseReplyLikes = async (commentId: string, replyIndex: number) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
-  const commentData = await getDoc(commentRef);
-  if (commentData.exists()) {
-    const replies = commentData.get('replies');
-    replies[replyIndex].likes = Math.max(0, replies[replyIndex].likes - 1);
-    await updateDoc(commentRef, { replies: replies });
   }
 };

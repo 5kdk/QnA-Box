@@ -9,7 +9,7 @@ const staleTime = 3000;
 const useMyListQuery = (boxFilter: MainFilter) => {
   const { joinedBoxes } = useAtomValue(userState);
 
-  const queryFn = boxFilter === 'joined' ? () => getQnaBoxesById(joinedBoxes) : getMyQnaBoxes;
+  const queryFn = boxFilter === 'joined' ? () => getQnaBoxesById(joinedBoxes) : () => getMyQnaBoxes();
 
   const { data } = useQuery({
     queryKey: ['box', boxFilter],

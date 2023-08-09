@@ -13,6 +13,15 @@ import { auth, db, googleProvider } from './firebase';
 import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 import { extractUsernameFromEmail } from '../utils';
 
+interface UserData {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string | null;
+  joinedBoxes: string[];
+  likedComments: string[];
+}
+
 const createUserDoc = async (
   uid: string,
   email: string,
@@ -21,13 +30,15 @@ const createUserDoc = async (
 ): Promise<void> => {
   const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
 
-  await setDoc(userDocRef, {
+  const newUser: UserData = {
     uid,
     email,
     displayName,
     photoURL,
     joinedBoxes: [],
-  });
+    likedComments: [],
+  };
+  await setDoc(userDocRef, newUser);
 };
 
 export const registerUser = async (email: string, password: string): Promise<void> => {

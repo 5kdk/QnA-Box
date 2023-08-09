@@ -18,8 +18,8 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
   return (
     <Boxes>
       {boxList?.length !== 0 ? (
-        boxList.map(({ boxId, owner, ownerId, title, description }) => (
-          <BoxItem title={title} owner={owner} text={description} ownerId={ownerId} key={boxId} />
+        boxList.map(({ boxId, owner, ownerUid, title, description }) => (
+          <BoxItem title={title} owner={owner} text={description} ownerUid={ownerUid} key={boxId} />
         ))
       ) : (
         <Flex justifyContent="center" alignItems="center" css={WrapperCss}>

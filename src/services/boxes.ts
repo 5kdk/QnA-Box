@@ -26,7 +26,7 @@ export interface Box {
   boxId: string;
   title: string;
   owner: string;
-  ownerId: string;
+  ownerUid: string;
   activation: boolean;
   anonymous: boolean;
   createdAt: number;

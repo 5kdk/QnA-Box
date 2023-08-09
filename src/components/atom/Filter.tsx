@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useAtom } from 'jotai';
 import { css } from '@emotion/react';
+import { filterState } from '../../jotai/atom';
 
 const FilterCss = {
   boxstyle: (isShow: boolean) => {
@@ -55,7 +57,7 @@ const FilterCss = {
 type FilterType = '최신순' | '오래된순';
 
 const Filter = () => {
-  const [curValue, setCurValue] = useState<FilterType>('최신순');
+  const [curValue, setCurValue] = useAtom(filterState);
   const [isShow, setIsShow] = useState(false);
   const handleCurValue = (filter: FilterType) => () => {
     setCurValue(filter);

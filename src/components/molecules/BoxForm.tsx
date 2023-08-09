@@ -2,6 +2,7 @@ import { Path, SubmitHandler, useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { Flex, FormToggler, Notification, WideButton } from '../atom';
 import { FormInput } from '../molecules';
+import requiredFormValue from '../../utils/requiredFormValue';
 
 const boxFormCss = {
   wrapper: css`
@@ -35,8 +36,8 @@ interface BoxFormProps {
     title?: string;
     owner: string;
     desc?: string;
-    closed?: boolean;
-    anonymous?: boolean;
+    closed: boolean;
+    anonymous: boolean;
   };
   btnOpt: {
     text: string;
@@ -56,11 +57,8 @@ const BoxForm = ({ defaultValues, btnOpt, submitFunc }: BoxFormProps) => {
     defaultValues,
   });
   const onSubmit: SubmitHandler<FormElement> = data => {
-    // const { name, owner, desc } = data;
-    // if (name && owner && desc) {
     submitFunc(data);
     console.log({ ...data });
-    // }
   };
 
   return (
@@ -68,12 +66,20 @@ const BoxForm = ({ defaultValues, btnOpt, submitFunc }: BoxFormProps) => {
       <Notification errors={errors} />
       <form css={boxFormCss.form} onSubmit={handleSubmit(onSubmit)}>
         <Flex css={boxFormCss.inputs} flexDirection="column">
-          <FormInput label="Title" type="text" register={register('title' as Path<FormElement>, { required: true })} />
-          <FormInput label="Owner" type="text" register={register('owner' as Path<FormElement>, { required: true })} />
+          <FormInput
+            label="Title"
+            type="text"
+            register={register('title' as Path<FormElement>, requiredFormValue('Title'))}
+          />
+          <FormInput
+            label="Owner"
+            type="text"
+            register={register('owner' as Path<FormElement>, requiredFormValue('Owner'))}
+          />
           <FormInput
             label="Description"
             type="text"
-            register={register('desc' as Path<FormElement>, { required: true })}
+            register={register('desc' as Path<FormElement>, requiredFormValue('Description'))}
           />
         </Flex>
         <Flex css={boxFormCss.toggles} flexDirection="column">

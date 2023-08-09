@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '@emotion/react';
 import { Flex, Notification, WideButton } from '../atom';
 import { FormInput } from '../molecules';
+import requiredFormValue from '../../utils/requiredFormValue';
 
 const userEditFormCss = {
   form: css`
@@ -55,7 +56,12 @@ const UserEditForm = <T extends FieldValues>({
       <form css={userEditFormCss.form} onSubmit={handleSubmit(submitFunc)}>
         <Flex css={userEditFormCss.account} flexDirection="column">
           {formElement.map(({ text, key, type }) => (
-            <FormInput key={key} label={text} type={type} register={register(key as Path<T>, { required: true })} />
+            <FormInput
+              key={key}
+              label={text}
+              type={type}
+              register={register(key as Path<T>, requiredFormValue(text))}
+            />
           ))}
         </Flex>
         <WideButton {...btnSettings} onClick={() => {}} />

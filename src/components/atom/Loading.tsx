@@ -1,5 +1,6 @@
 import { css, keyframes } from '@emotion/react';
 import loading from '../../assets/images/loading.png';
+import { Flex } from '.';
 
 const loadingCss = {
   bounce: keyframes`
@@ -21,6 +22,10 @@ interface LoadingProps {
 }
 
 const Loading = ({ size }: LoadingProps) => {
-  return <img css={loadingCss.loading({ size })} src={loading} alt="loading" />;
+  return (
+    <Flex justifyContent="center">
+      <img css={loadingCss.loading({ size })} src={loading} alt="loading" />
+    </Flex>
+  );
 };
 export default Loading;

@@ -11,7 +11,7 @@ import useImgFile from '../../hooks/useImgFile';
 import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
 import { getProfile, updateUserAvartar, updateUserDisplayName } from '../../services/profile';
 import { updateUserPassword } from '../../services/auth';
-import { reqTryCatch } from '../../utils';
+import useReqTryCatch from '../../hooks/useReqTryCatch';
 import { buttonCss, visuallyHidden } from '../../styles';
 
 const editCss = {
@@ -50,6 +50,7 @@ const EditAccount = () => {
   const { setNewImg, imgBuffer, imgFile } = useImgFile(user.photoURL);
   const { target } = useParams();
   const navigate = useNavigate();
+  const reqTryCatch = useReqTryCatch();
 
   const editImgName: SubmitHandler<NameType> = async data => {
     if (user.photoURL !== imgBuffer || user.displayName !== data.displayName) {

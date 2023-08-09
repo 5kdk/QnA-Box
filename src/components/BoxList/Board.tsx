@@ -6,6 +6,7 @@ import { Flex, Text } from '../atom';
 import { ItemWrapper } from '../molecules';
 import { filterState, searchInputState } from '../../jotai/atom';
 import { useAtomValue } from 'jotai';
+import { useRemoveMyBoxMutation } from '../../hooks/mutation';
 
 const WrapperCss = css`
   min-height: 6.25rem;
@@ -19,6 +20,7 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
   const boxList = useMyListQuery(boxFilter);
   const filter = useAtomValue(filterState);
   const searchInput = useAtomValue(searchInputState);
+  const { mutate: remove } = useRemoveMyBoxMutation();
 
   const filteredBoxList = () => {
     const sorted =
@@ -40,7 +42,15 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
       {boxList?.length !== 0 ? (
         filteredBoxList().length !== 0 ? (
           filteredBoxList().map(({ boxId, owner, ownerUid, title, description }) => (
-            <BoxItem title={title} owner={owner} text={description} ownerUid={ownerUid} key={boxId} />
+            <BoxItem
+              boxId={boxId}
+              title={title}
+              owner={owner}
+              text={description}
+              ownerUid={ownerUid}
+              key={boxId}
+              remove={remove}
+            />
           ))
         ) : (
           <Flex justifyContent="center" alignItems="center" css={WrapperCss}>

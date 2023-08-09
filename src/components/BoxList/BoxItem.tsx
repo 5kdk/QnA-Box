@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { UseMutateFunction, useQuery } from '@tanstack/react-query';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
 import { EditBox } from '.';
-import { useQuery } from '@tanstack/react-query';
 import { getProfile } from '../../services/profile';
+import { Box } from '../../services/boxes';
 
 const BoxListCss = {
   wrapperStyle: css`
@@ -33,12 +34,21 @@ const staleTime = 3000;
 
 interface BoxListItemProps {
   ownerUid: string;
+  boxId: string;
   title: string;
   owner: string;
   text: string;
+  remove: UseMutateFunction<
+    unknown,
+    Error,
+    string,
+    {
+      previous: Box[] | undefined;
+    }
+  >;
 }
 
-const BoxItem = ({ title, owner, ownerUid, text }: BoxListItemProps) => {
+const BoxItem = ({ boxId, title, owner, ownerUid, text, remove }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
 
   const { data: userData } = useQuery({
@@ -51,9 +61,11 @@ const BoxItem = ({ title, owner, ownerUid, text }: BoxListItemProps) => {
     console.log('edit');
     setEditMode(true);
   };
+
   const removePost = () => {
-    console.log('delete');
+    remove(boxId);
   };
+
   const closeEdit = () => {
     setEditMode(false);
   };

@@ -25,7 +25,7 @@ const boxFormCss = {
   `,
 };
 
-interface FormElement {
+export interface FormElement {
   [key: string]: boolean | string;
   title: string;
   owner: string;

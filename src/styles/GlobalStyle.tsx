@@ -77,7 +77,6 @@ const style = css`
     --deep_gray: #515254;
     --blue: #1c56fc;
     --orange: #fc6d1c;
-    --kakao: #fee500;
     --shadow: rgba(0, 0, 0, 0.2);
     --modal: rgba(0, 0, 0, 0.5);
     --app_width: 448px;

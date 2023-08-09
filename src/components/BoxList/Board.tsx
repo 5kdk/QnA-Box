@@ -22,7 +22,7 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
 
   const filteredBoxList = () => {
     const sorted =
-      filter === '최신순'
+      filter !== '최신순'
         ? boxList.sort((a, b) => a.createdAt - b.createdAt)
         : boxList.sort((a, b) => b.createdAt - a.createdAt);
 

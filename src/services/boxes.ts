@@ -14,18 +14,15 @@ import {
 import { auth, db } from './firebase';
 import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
-interface FormData {
+interface FormElement {
   title: string;
+  owner: string;
   description: string;
   activation: boolean;
   anonymous: boolean;
 }
 
-interface EditFormData extends FormData {
-  owner: string;
-}
-
-interface Box {
+export interface Box {
   boxId: string;
   title: string;
   owner: string;
@@ -38,7 +35,7 @@ interface Box {
 
 const OWNER_UID = 'ownerUid';
 
-export const createQnaBox = async (formData: FormData) => {
+export const createQnaBox = async (formData: FormElement) => {
   const user = auth.currentUser;
   if (!user) return;
 
@@ -48,7 +45,6 @@ export const createQnaBox = async (formData: FormData) => {
   const newData = {
     boxId: newDocRef.id,
     ownerUid: user.uid,
-    owner: user.displayName,
     createdAt: Date.now(),
     ...formData,
   };
@@ -70,7 +66,7 @@ export const getMyQnaBoxes = async () => {
   return boxes;
 };
 
-export const getQnaBoxesById = async (boxIds: string[]) => {
+export const getQnaBoxesById = async (boxIds: string[]): Promise<Box[] | undefined> => {
   const boxesCollection = collection(db, BOXES_COLLECTION_NAME);
 
   const boxDocsPromises = boxIds.map(boxId => {
@@ -84,10 +80,10 @@ export const getQnaBoxesById = async (boxIds: string[]) => {
     return docSnapshot.data() || null;
   });
 
-  return boxesData;
+  return boxesData as Box[] | undefined;
 };
 
-export const updateQnaBox = async (boxId: string, editFormData: EditFormData): Promise<void> => {
+export const updateQnaBox = async (boxId: string, editFormData: FormElement): Promise<void> => {
   const user = auth.currentUser;
   if (!user) return;
 

@@ -1,4 +1,4 @@
-import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
+import { DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '@emotion/react';
@@ -48,14 +48,11 @@ const UserEditForm = <T extends FieldValues>({
     resolver: formSchema && zodResolver(formSchema),
     defaultValues: iniForm && iniForm,
   });
-  const onSubmit: SubmitHandler<T> = data => {
-    submitFunc(data);
-  };
 
   return (
     <>
       <Notification errors={errors} />
-      <form css={userEditFormCss.form} onSubmit={handleSubmit(onSubmit)}>
+      <form css={userEditFormCss.form} onSubmit={handleSubmit(submitFunc)}>
         <Flex css={userEditFormCss.account} flexDirection="column">
           {formElement.map(({ text, key, type }) => (
             <FormInput key={key} label={text} type={type} register={register(key as Path<T>, { required: true })} />

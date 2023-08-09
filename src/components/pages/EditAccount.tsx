@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { SubmitHandler } from 'react-hook-form';
 import { useAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Avatar, Flex } from '../atom';
@@ -9,6 +10,7 @@ import { userState } from '../../jotai/atom';
 import useImgFile from '../../hooks/useImgFile';
 import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
 import { getProfile, updateUserAvartar, updateUserDisplayName } from '../../services/profile';
+import { updateUserPassword } from '../../services/auth';
 import reqTryCatch from '../../utils/reqTryCatch';
 import { buttonCss, visuallyHidden } from '../../styles';
 
@@ -49,7 +51,7 @@ const EditAccount = () => {
   const { target } = useParams();
   const navigate = useNavigate();
 
-  const editImgName = async (data: NameType) => {
+  const editImgName: SubmitHandler<NameType> = async data => {
     if (user.photoURL !== imgBuffer || user.displayName !== data.displayName) {
       reqTryCatch(async () => {
         if (imgFile && user.photoURL !== imgBuffer) {
@@ -63,8 +65,11 @@ const EditAccount = () => {
     navigate('/account');
   };
 
-  const editPswd = (data: editPswdSchemaType) => {
-    console.log(data, 123);
+  const editPswd: SubmitHandler<editPswdSchemaType> = data => {
+    reqTryCatch(async () => {
+      await updateUserPassword(data.prePassword, data.password);
+      navigate('/account');
+    });
   };
 
   useEffect(() => {

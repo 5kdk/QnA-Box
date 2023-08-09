@@ -4,6 +4,8 @@ import {
   signOut,
   deleteUser,
   updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
 import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
@@ -67,7 +69,11 @@ export const logoutUser = async (): Promise<void> => {
   await signOut(auth);
 };
 
-export const updateUserPassword = async (newPassword: string) => {
+export const updateUserPassword = async (password: string, newPassword: string) => {
   const user = auth.currentUser;
-  if (user) await updatePassword(user, newPassword);
+  if (user?.email) {
+    const credential = EmailAuthProvider.credential(user.email, password);
+    await reauthenticateWithCredential(user, credential);
+    await updatePassword(user, newPassword);
+  }
 };

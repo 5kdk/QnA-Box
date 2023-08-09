@@ -28,14 +28,15 @@ const BoxListCss = {
 };
 
 interface BoxListItemProps {
-  imgUrl?: string;
+  ownerId: string;
   title: string;
   owner: string;
   text: string;
 }
 
-const BoxListItem = ({ title, imgUrl, owner, text }: BoxListItemProps) => {
+const BoxItem = ({ title, owner, text }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
+
   const editPost = () => {
     console.log('edit');
     setEditMode(true);
@@ -50,7 +51,7 @@ const BoxListItem = ({ title, imgUrl, owner, text }: BoxListItemProps) => {
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
       {editMode && <EditBox boxInfo={{ title, owner, desc: text }} closeEdit={closeEdit} />}
-      <Avatar size="sm" src={imgUrl} />
+      <Avatar size="sm" src={''} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Flex justifyContent="space-between" alignItems="flex-start">
           <Flex flexDirection="column">
@@ -67,4 +68,4 @@ const BoxListItem = ({ title, imgUrl, owner, text }: BoxListItemProps) => {
   );
 };
 
-export default BoxListItem;
+export default BoxItem;

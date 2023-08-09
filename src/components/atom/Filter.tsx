@@ -27,7 +27,6 @@ const FilterCss = {
       width: 100%;
       overflow: hidden;
       max-height: ${isShow ? '90px' : 0};
-      height: 90px;
       padding: 0;
       border-radius: 3px;
       background-color: var(--white);
@@ -53,7 +52,7 @@ const FilterCss = {
   `,
 };
 
-type FilterType = '최신순' | '좋아요순' | '오래된순' | 'dlalsdkjf';
+type FilterType = '최신순' | '오래된순';
 
 const Filter = () => {
   const [curValue, setCurValue] = useState<FilterType>('최신순');
@@ -64,7 +63,7 @@ const Filter = () => {
   const handleShow = () => {
     setIsShow(prev => !prev);
   };
-  const filters: FilterType[] = ['최신순', '좋아요순', '오래된순'];
+  const filters: FilterType[] = ['최신순', '오래된순'];
 
   return (
     <div role="button" tabIndex={0} css={FilterCss.boxstyle(isShow)} onClick={handleShow} onKeyDown={() => {}}>

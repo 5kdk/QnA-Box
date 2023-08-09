@@ -1,10 +1,14 @@
+import { useEffect } from 'react';
 import { DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
-import { Flex, Notification, WideButton } from '../atom';
+import { Flex, WideButton } from '../atom';
 import { FormInput } from '../molecules';
+import { toastErrorState } from '../../jotai/atom';
 import requiredFormValue from '../../utils/requiredFormValue';
+import errorObjToString from '../../utils/errorObjToString';
 
 const userEditFormCss = {
   form: css`
@@ -49,10 +53,14 @@ const UserEditForm = <T extends FieldValues>({
     resolver: formSchema && zodResolver(formSchema),
     defaultValues: iniForm && iniForm,
   });
+  const setToastError = useSetAtom(toastErrorState);
+
+  useEffect(() => {
+    if (errors) setToastError(errorObjToString(errors));
+  }, [errors, setToastError]);
 
   return (
     <>
-      <Notification errors={errors} />
       <form css={userEditFormCss.form} onSubmit={handleSubmit(submitFunc)}>
         <Flex css={userEditFormCss.account} flexDirection="column">
           {formElement.map(({ text, key, type }) => (

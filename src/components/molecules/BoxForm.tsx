@@ -1,8 +1,12 @@
+import { useEffect } from 'react';
 import { Path, SubmitHandler, useForm } from 'react-hook-form';
+import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
-import { Flex, FormToggler, Notification, WideButton } from '../atom';
+import { Flex, FormToggler, WideButton } from '../atom';
 import { FormInput } from '../molecules';
+import { toastErrorState } from '../../jotai/atom';
 import requiredFormValue from '../../utils/requiredFormValue';
+import errorObjToString from '../../utils/errorObjToString';
 
 const boxFormCss = {
   wrapper: css`
@@ -56,14 +60,18 @@ const BoxForm = ({ defaultValues, btnOpt, submitFunc }: BoxFormProps) => {
   } = useForm<FormElement>({
     defaultValues,
   });
+  const setToastError = useSetAtom(toastErrorState);
   const onSubmit: SubmitHandler<FormElement> = data => {
     submitFunc(data);
     console.log({ ...data });
   };
 
+  useEffect(() => {
+    if (errors) setToastError(errorObjToString(errors));
+  }, [errors, setToastError]);
+
   return (
     <Flex css={boxFormCss.wrapper} flexDirection="column">
-      <Notification errors={errors} />
       <form css={boxFormCss.form} onSubmit={handleSubmit(onSubmit)}>
         <Flex css={boxFormCss.inputs} flexDirection="column">
           <FormInput

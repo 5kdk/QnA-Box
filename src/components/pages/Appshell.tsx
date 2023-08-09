@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Header } from '../molecules';
+import { Notification } from '../atom';
 
 const appShellCss = {
   wrapper: css`
@@ -17,6 +18,7 @@ const appShellCss = {
 const Appshell = () => {
   return (
     <div css={appShellCss.wrapper}>
+      <Notification />
       <Header />
       <main css={appShellCss.main}>
         <Outlet />

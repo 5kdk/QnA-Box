@@ -1,10 +1,14 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
-import { Flex, Logo, Note, Notification, WideButton } from '../atom';
+import { Flex, Logo, Note, WideButton } from '../atom';
 import { FormInput } from '.';
+import { toastErrorState } from '../../jotai/atom';
+import errorObjToString from '../../utils/errorObjToString';
 import googlelogin2 from '../../assets/images/btn_google_signin_light_normal_web.png';
 
 const SignFormCss = {
@@ -55,10 +59,14 @@ const SignForm = <T extends FieldValues>({
   const onSubmit: SubmitHandler<T> = submitFunc;
   const navigate = useNavigate();
   const toOtherPage = () => navigate(redirectTo);
+  const setToastError = useSetAtom(toastErrorState);
+
+  useEffect(() => {
+    if (errors) setToastError(errorObjToString(errors));
+  }, [errors, setToastError]);
 
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">
-      <Notification errors={errors} />
       <Logo css={SignFormCss.logostyle} size="lg" />
       <form css={SignFormCss.form} onSubmit={handleSubmit(onSubmit)}>
         <FormInput css={SignFormCss.inputstyle} label="E-mail" type="text" register={register('email' as Path<T>)} />

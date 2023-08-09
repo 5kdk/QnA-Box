@@ -3,12 +3,20 @@ import { db, storage } from './firebase';
 import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
+export interface UserData {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
+  joinedBoxes: string[];
+}
+
 const findUserRef = (uid: string) => doc(db, USERS_COLLECTION_NAME, uid);
 
-export const getProfile = async (uid: string) => {
+export const getProfile = async (uid: string): Promise<UserData | undefined> => {
   const snapshot = await getDoc(findUserRef(uid));
 
-  return snapshot.data();
+  return snapshot.data() as UserData | undefined;
 };
 
 export const updateUserDisplayName = async (uid: string, displayName: string) => {

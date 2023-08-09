@@ -138,7 +138,7 @@ const BoxItem = ({
             {isLike ? <SuitHeartFill size="14px" color="var(--orange)" /> : <SuitHeart size="14px" />}
             {like !== 0 && <span css={boxItemCss.subText}>{`${like} likes`}</span>}
             <button css={boxItemCss.reply} onClick={handleComment(responder)}>
-              {owner !== responder ? <Reply size="20px" /> : ''}
+              <Reply size="20px" />
             </button>
           </Flex>
         </Flex>

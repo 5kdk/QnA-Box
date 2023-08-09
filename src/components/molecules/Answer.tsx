@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { css, keyframes } from '@emotion/react';
-import { Avatar, Button, Flex, Toggler, Note } from '../atom';
+import { Avatar, Button, Flex, Note, Toggler } from '../atom';
 import loading from '../../assets/images/loading.png';
-import { useAtomValue } from 'jotai';
 import userState from '../../jotai/atom/userState';
+import { useAtomValue } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 
 const Slide = keyframes`
@@ -11,11 +11,11 @@ const Slide = keyframes`
         top : 100vh;
     }
     100%{
-        top : 80vh
+        top : 75vh
     }
 `;
 
-const questionCss = {
+const answerCss = {
   wrapper: css`
     z-index: 10;
     position: fixed;
@@ -54,37 +54,41 @@ const questionCss = {
   note: css`
     padding-left: 9px;
   `,
+  reply: css`
+    padding-left: 9px;
+  `,
 };
 
-const Question = () => {
+const Answer = ({ replyComment }: { replyComment: string }) => {
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const [question, setQuestion] = useState('');
+  const [reply, setreply] = useState('');
   const user = useAtomValue(userState);
   const navigate = useNavigate();
 
-  const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setQuestion(e.target.value);
+  const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setreply(e.target.value);
   const setAnonymous = () => setIsAnonymous(pre => !pre);
-  const createQuestion = () => console.log(question);
+  const createReply = () => console.log(reply);
   const ToSignin = () => {
     navigate('/signin');
   };
 
   return (
-    <Flex css={questionCss.wrapper} flexDirection="column">
-      <label css={questionCss.inputBox}>
+    <Flex css={answerCss.wrapper} flexDirection="column">
+      <div css={answerCss.reply}>{`reply to ${replyComment}`}</div>
+      <label css={answerCss.inputBox}>
         <Avatar src={loading} size="sm" />
-        <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={handleQustionInput} />
+        <input css={answerCss.input} placeholder="어떤 답변인가요?" onChange={handleQustionInput} />
       </label>
       <Flex justifyContent="space-between" alignItems="center">
         {user ? (
-          <Toggler selected={isAnonymous} setSelected={setAnonymous} text="익명으로 질문하기" />
+          <Toggler selected={isAnonymous} setSelected={setAnonymous} text="익명으로 답변하기" />
         ) : (
-          <Note css={questionCss.note} text="로그인 하기" onClick={ToSignin} />
+          <Note css={answerCss.note} text="로그인 하기" onClick={ToSignin} />
         )}
-        <Button text="질문 등록" color="var(--white)" bgColor="var(--black)" onClick={createQuestion} />
+        <Button text="답변 등록" color="var(--white)" bgColor="var(--black)" onClick={createReply} />
       </Flex>
     </Flex>
   );
 };
 
-export default Question;
+export default Answer;

@@ -11,7 +11,6 @@ import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
 import { getProfile, updateUserAvartar, updateUserDisplayName } from '../../services/profile';
 import reqTryCatch from '../../utils/reqTryCatch';
 import { buttonCss, visuallyHidden } from '../../styles';
-import logo from '../../assets/images/qa-logo.png';
 
 const editCss = {
   wrapper: css`
@@ -77,7 +76,7 @@ const EditAccount = () => {
   return (
     <Flex css={editCss.wrapper} flexDirection="column">
       <Flex css={editCss.account} flexDirection="column" alignItems="center">
-        <Avatar src={imgBuffer || logo} size="lg" />
+        <Avatar src={imgBuffer} size="lg" />
         {target === 'profile' && (
           <>
             <label css={[buttonCss(editCss.btnProps), editCss.button]}>

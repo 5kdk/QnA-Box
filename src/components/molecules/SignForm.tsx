@@ -33,7 +33,7 @@ const SignFormCss = {
 interface SignFormProps<T> {
   buttonText: string;
   formSchema: ZodType<T>;
-  anotherInputs?: { label: string; formKey: string; type: string }[];
+  anotherInputs?: { label: string; formkey: string; type: string }[];
   submitFunc: (data: T) => void;
   redirectTo: string;
   redirectMsg: string;
@@ -69,7 +69,7 @@ const SignForm = <T extends FieldValues>({
           register={register('password' as Path<T>)}
         />
         {anotherInputs.map((input, idx) => (
-          <FormInput key={idx} css={SignFormCss.inputstyle} {...input} register={register(input.formKey as Path<T>)} />
+          <FormInput key={idx} css={SignFormCss.inputstyle} {...input} register={register(input.formkey as Path<T>)} />
         ))}
         <div css={SignFormCss.buttons}>
           <WideButton text={buttonText} bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />

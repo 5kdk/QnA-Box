@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
 import useMyListQuery from '../../hooks/query/useMyListQuery';
-import { BoxItem, Boxes } from '.';
+import { BoxItem } from '.';
 import { MainFilter } from '../pages/BoxList';
 import { Flex, Text } from '../atom';
+import { ItemWrapper } from '../molecules';
 
 const WrapperCss = css`
   min-height: 6.25rem;
@@ -16,7 +17,7 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
   const boxList = useMyListQuery(boxFilter);
 
   return (
-    <Boxes>
+    <ItemWrapper>
       {boxList?.length !== 0 ? (
         boxList.map(({ boxId, owner, ownerUid, title, description }) => (
           <BoxItem title={title} owner={owner} text={description} ownerUid={ownerUid} key={boxId} />
@@ -26,7 +27,7 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
           <Text>{boxFilter === 'joined' ? '아직 참여한 Box가 없습니다.' : '새로운 QnA Box를 만들어 보세요!'}</Text>
         </Flex>
       )}
-    </Boxes>
+    </ItemWrapper>
   );
 };
 

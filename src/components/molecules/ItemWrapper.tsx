@@ -6,7 +6,7 @@ const boxesCss = css`
   border-top: 1px solid var(--gray);
 `;
 
-const Boxes = ({ children }: { children: ReactNode }) => {
+const ItemWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <Flex css={boxesCss} flexDirection="column">
       {children}
@@ -14,4 +14,4 @@ const Boxes = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default Boxes;
+export default ItemWrapper;

@@ -1,4 +1,4 @@
-import { FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
+import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { css } from '@emotion/react';
@@ -22,7 +22,7 @@ interface UserEditFormProps<T> {
     key: string;
     type: string;
   }[];
-  iniForm?: T;
+  iniForm?: DefaultValues<T>;
   formSchema?: ZodType<T>;
   btnSettings: {
     text: string;
@@ -44,7 +44,10 @@ const UserEditForm = <T extends FieldValues>({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<T>(formSchema ? { resolver: zodResolver(formSchema) } : iniForm);
+  } = useForm<T>({
+    resolver: formSchema && zodResolver(formSchema),
+    defaultValues: iniForm && iniForm,
+  });
   const onSubmit: SubmitHandler<T> = data => {
     submitFunc(data);
   };

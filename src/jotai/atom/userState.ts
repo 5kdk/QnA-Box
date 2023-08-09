@@ -1,10 +1,10 @@
 import { atom } from 'jotai';
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utils/localStorage';
 
 const KEY = 'user';
 
 export const getInitialValue = () => {
-  const user = localStorage.getItem(KEY);
-  return user ? JSON.parse(user) : null;
+  return getLocalStorage(KEY);
 };
 
 const baseAtom = atom(getInitialValue());
@@ -15,8 +15,8 @@ export const userState = atom(
     const currentValue = get(baseAtom);
     const nextValue = typeof update === 'function' ? update(currentValue) : update;
     set(baseAtom, nextValue);
-    if (nextValue) localStorage.setItem(KEY, JSON.stringify(nextValue));
-    else localStorage.removeItem(KEY);
+    if (nextValue) setLocalStorage(KEY, nextValue);
+    else removeLocalStorage(KEY);
   },
 );
 

@@ -1,13 +1,15 @@
-import { useState, ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
+import { useAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Filter, Flex, Search } from '../atom';
+import { searchInputState } from '../../jotai/atom';
 
 const controllerCss = css`
   padding: 10px 20px;
 `;
 
 const BoxListController = () => {
-  const [userInput, setUserInput] = useState('');
+  const [userInput, setUserInput] = useAtom(searchInputState);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.target.value);

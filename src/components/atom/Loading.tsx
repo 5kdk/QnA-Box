@@ -3,6 +3,9 @@ import loading from '../../assets/images/loading.png';
 import { Flex } from '.';
 
 const loadingCss = {
+  wrapper: css`
+    width: 100%;
+  `,
   bounce: keyframes`
     0% {
       transform : rotate(0deg)
@@ -23,7 +26,7 @@ interface LoadingProps {
 
 const Loading = ({ size }: LoadingProps) => {
   return (
-    <Flex justifyContent="center">
+    <Flex justifyContent="center" css={loadingCss.wrapper}>
       <img css={loadingCss.loading({ size })} src={loading} alt="loading" />
     </Flex>
   );

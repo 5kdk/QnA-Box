@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
+import { useAtomValue } from 'jotai';
+import { css } from '@emotion/react';
 import { Flex, Note, WideButton } from '../atom';
 import { InfoModal } from '../molecules';
 import { UserInfo } from '../User';
-
-const tmpData = {
-  imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
-  email: 'minjae3@test.com',
-  displayName: ' minjae3',
-};
+import { userState } from '../../jotai/atom';
+import { reqTryCatch } from '../../utils';
+import { deregisterUser } from '../../services/auth';
 
 const accountCss = {
   wrapper: css`
@@ -22,18 +20,19 @@ const accountCss = {
 };
 
 const Account = () => {
-  const [open, setOpen] = useState(false);
+  const [deregisterCheck, setDeregisterCheck] = useState(false);
+  const userData = useAtomValue(userState);
   const navigate = useNavigate();
 
   const toEditProfile = () => navigate('/account/profile');
   const toEditPassword = () => navigate('/account/password');
-  const openModal = () => setOpen(true);
-  const closeModal = () => setOpen(false);
-  const deleteAccount = () => {};
+  const openModal = () => setDeregisterCheck(true);
+  const closeModal = () => setDeregisterCheck(false);
+  const deleteAccount = () => reqTryCatch(deregisterUser);
 
   return (
     <Flex css={accountCss.wrapper} flexDirection="column">
-      <UserInfo {...tmpData} />
+      <UserInfo {...userData} />
       <Flex css={accountCss.buttons} flexDirection="column">
         <WideButton
           text="회원정보 수정"
@@ -45,7 +44,7 @@ const Account = () => {
         <WideButton text="비밀번호 변경" color="var(--white)" bgColor="var(--black)" onClick={toEditPassword} />
         <Note text="회원 탈퇴" onClick={openModal} />
       </Flex>
-      {open && (
+      {deregisterCheck && (
         <InfoModal
           title="정말 탈퇴하시겠습니까?"
           text="탈퇴 시 계정 복구가 불가합니다."

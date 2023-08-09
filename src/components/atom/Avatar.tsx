@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import logo from '../../assets/images/qa-logo.png';
 
 const avatarCss = (size: SizeType) => css`
   flex-shrink: 0;
@@ -17,7 +18,11 @@ interface AvatarProps {
 }
 
 const Avatar = ({ src, size = 'md' }: AvatarProps) => {
-  return <div css={avatarCss(size)}>{src && <img src={src} alt="아바타 이미지" css={avatarCss(size)} />}</div>;
+  return (
+    <div css={avatarCss(size)}>
+      <img src={src || logo} alt="아바타 이미지" css={avatarCss(size)} />
+    </div>
+  );
 };
 
 export default Avatar;

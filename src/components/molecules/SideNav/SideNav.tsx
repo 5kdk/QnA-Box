@@ -39,11 +39,7 @@ const SideNavCss = {
     text-align: center;
   `,
 };
-const UserData = {
-  src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYBLxK6kQbI7JhBGVQ_A7pZpu_U9jKIvMulQ&usqp=CAU',
-  displayName: '쬬와규',
-  email: 'asdfasf@naver.com',
-};
+
 const UserBoxData = [
   { id: 1, box: 'React-query의 모든 것' },
   { id: 2, box: 'FireBase 배워보자' },
@@ -73,9 +69,9 @@ const SideNav = ({ isOpen }: SideNavProps) => {
         {user ? (
           <>
             <UserInfo
-              src={UserData.src}
-              displayName={UserData.displayName}
-              email={UserData.email}
+              src={user.photoURL}
+              displayName={user.displayName}
+              email={user.email}
               toAccount={redirectTo('/account')}
             />
             <BoxInfo UserBoxData={UserBoxData} title="새소식" />

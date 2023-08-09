@@ -1,9 +1,13 @@
-import { FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
 import { ZodType } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
-import { Flex, Notification, WideButton } from '../atom';
+import { Flex, WideButton } from '../atom';
 import { FormInput } from '../molecules';
+import { toastErrorState } from '../../jotai/atom';
+import { errorObjToString, requiredFormValue } from '../../utils';
 
 const userEditFormCss = {
   form: css`
@@ -22,7 +26,7 @@ interface UserEditFormProps<T> {
     key: string;
     type: string;
   }[];
-  iniForm?: T;
+  iniForm?: DefaultValues<T>;
   formSchema?: ZodType<T>;
   btnSettings: {
     text: string;
@@ -44,18 +48,27 @@ const UserEditForm = <T extends FieldValues>({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<T>(formSchema ? { resolver: zodResolver(formSchema) } : iniForm);
-  const onSubmit: SubmitHandler<T> = data => {
-    submitFunc(data);
-  };
+  } = useForm<T>({
+    resolver: formSchema && zodResolver(formSchema),
+    defaultValues: iniForm && iniForm,
+  });
+  const setToastError = useSetAtom(toastErrorState);
+
+  useEffect(() => {
+    if (errors) setToastError(errorObjToString(errors));
+  }, [errors, setToastError]);
 
   return (
     <>
-      <Notification errors={errors} />
-      <form css={userEditFormCss.form} onSubmit={handleSubmit(onSubmit)}>
+      <form css={userEditFormCss.form} onSubmit={handleSubmit(submitFunc)}>
         <Flex css={userEditFormCss.account} flexDirection="column">
           {formElement.map(({ text, key, type }) => (
-            <FormInput key={key} label={text} type={type} register={register(key as Path<T>, { required: true })} />
+            <FormInput
+              key={key}
+              label={text}
+              type={type}
+              register={register(key as Path<T>, requiredFormValue(text))}
+            />
           ))}
         </Flex>
         <WideButton {...btnSettings} onClick={() => {}} />

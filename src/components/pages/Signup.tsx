@@ -17,7 +17,7 @@ const Signup = () => {
       }
     }
   };
-  const anotherInputs = [{ label: 'Password Check', formKey: 'passwordCheck', type: 'password' }];
+  const anotherInputs = [{ label: 'Password Check', formkey: 'passwordCheck', type: 'password' }];
   return (
     <SignForm<SignupSchemaType>
       buttonText="SIGNUP"

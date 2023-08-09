@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { SubmitHandler } from 'react-hook-form';
+import { useAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Avatar, Flex } from '../atom';
 import { UserEditForm } from '../molecules';
 import { InfoSubject } from '../User';
+import { userState } from '../../jotai/atom';
 import useImgFile from '../../hooks/useImgFile';
 import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
+import { getProfile, updateUserAvartar, updateUserDisplayName } from '../../services/profile';
+import { updateUserPassword } from '../../services/auth';
+import { reqTryCatch } from '../../utils';
 import { buttonCss, visuallyHidden } from '../../styles';
-
-const tmpData = {
-  imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
-  email: 'minjae3@test.com',
-  displayName: ' minjae3',
-};
 
 const editCss = {
   wrapper: css`
@@ -46,21 +46,30 @@ interface NameType {
 }
 
 const EditAccount = () => {
-  const { setNewImg, imgBuffer } = useImgFile(tmpData.imgSrc);
+  const [user, setUser] = useAtom(userState);
+  const { setNewImg, imgBuffer, imgFile } = useImgFile(user.photoURL);
   const { target } = useParams();
   const navigate = useNavigate();
 
-  const editImgName = (data: NameType) => {
-    if (tmpData.imgSrc === imgBuffer && tmpData.displayName === data.displayName) return;
-    const newData: { imgSrc: string; displayName: string } = {
-      imgSrc: imgBuffer || tmpData.imgSrc,
-      displayName: data.displayName,
-    };
-    console.log(newData);
+  const editImgName: SubmitHandler<NameType> = async data => {
+    if (user.photoURL !== imgBuffer || user.displayName !== data.displayName) {
+      reqTryCatch(async () => {
+        if (imgFile && user.photoURL !== imgBuffer) {
+          await updateUserAvartar(user.uid, imgFile);
+        }
+        if (user.displayName !== data.displayName) await updateUserDisplayName(user.uid, data.displayName);
+        const userData = await getProfile(user.uid);
+        setUser(userData);
+      });
+    }
+    navigate('/account');
   };
 
-  const editPswd = (data: editPswdSchemaType) => {
-    console.log(data, 123);
+  const editPswd: SubmitHandler<editPswdSchemaType> = data => {
+    reqTryCatch(async () => {
+      await updateUserPassword(data.prePassword, data.password);
+      navigate('/account');
+    });
   };
 
   useEffect(() => {
@@ -81,12 +90,12 @@ const EditAccount = () => {
             </label>
           </>
         )}
-        <InfoSubject title="E-mail" body={tmpData.email} />
+        <InfoSubject title="E-mail" body={user.email} />
       </Flex>
       {target === 'profile' ? (
         <UserEditForm<NameType>
           formElement={formName}
-          iniForm={{ displayName: tmpData.displayName }}
+          iniForm={{ displayName: user.displayName }}
           btnSettings={{
             text: '회원정보 수정',
             color: 'var(--black)',

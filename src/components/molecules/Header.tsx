@@ -1,10 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { ChevronLeft } from '@emotion-icons/bootstrap';
 import { Flex, Logo } from '../atom/';
 import { SideNav } from './SideNav';
-import sideNavState from '../../jotai/atom/sideNavState';
+import { sideNavState } from '../../jotai/atom';
 
 const HeaderCss = {
   wrapperStyle: css`
@@ -64,10 +64,12 @@ const HeaderCss = {
 
 const Header = () => {
   const [isOpen, setIsOpen] = useAtom(sideNavState);
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const handleBackButtonClick = () => {
     navigate(-1);
+    setIsOpen(false);
   };
 
   const handleLogoClick = () => {
@@ -83,7 +85,7 @@ const Header = () => {
       <button aria-label="GotoBack-button" css={HeaderCss.buttonStyle} onClick={handleBackButtonClick}>
         <ChevronLeft size="22px" />
       </button>
-      <Logo size="sm" css={HeaderCss.LogoStyle} onClick={handleLogoClick} />
+      {!pathname.includes('sign') && <Logo size="sm" css={HeaderCss.LogoStyle} onClick={handleLogoClick} />}
       <Flex>
         <button aria-label="Info-button" css={HeaderCss.buttonStyle} onClick={handleBurgerClick}>
           <i css={HeaderCss.iconStyle(isOpen)}></i>

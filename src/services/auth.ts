@@ -10,8 +10,8 @@ import {
 } from 'firebase/auth';
 import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from './firebase';
-import extractUsernameFromEmail from '../utils/extractUsernameFromEmail';
 import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
+import { extractUsernameFromEmail } from '../utils';
 
 const createUserDoc = async (
   uid: string,

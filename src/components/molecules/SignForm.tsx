@@ -8,8 +8,8 @@ import { css } from '@emotion/react';
 import { Flex, Logo, Note, WideButton } from '../atom';
 import { FormInput } from '.';
 import { toastErrorState } from '../../jotai/atom';
-import errorObjToString from '../../utils/errorObjToString';
 import googlelogin2 from '../../assets/images/btn_google_signin_light_normal_web.png';
+import { errorObjToString } from '../../utils';
 
 const SignFormCss = {
   container: css`

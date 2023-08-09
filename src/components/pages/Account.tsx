@@ -5,9 +5,9 @@ import { css } from '@emotion/react';
 import { Flex, Note, WideButton } from '../atom';
 import { InfoModal } from '../molecules';
 import { UserInfo } from '../User';
-import { deregisterUser } from '../../services/auth';
 import { userState } from '../../jotai/atom';
-import reqTryCatch from '../../utils/reqTryCatch';
+import { reqTryCatch } from '../../utils';
+import { deregisterUser } from '../../services/auth';
 
 const accountCss = {
   wrapper: css`

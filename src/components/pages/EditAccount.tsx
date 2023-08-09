@@ -11,7 +11,7 @@ import useImgFile from '../../hooks/useImgFile';
 import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
 import { getProfile, updateUserAvartar, updateUserDisplayName } from '../../services/profile';
 import { updateUserPassword } from '../../services/auth';
-import reqTryCatch from '../../utils/reqTryCatch';
+import { reqTryCatch } from '../../utils';
 import { buttonCss, visuallyHidden } from '../../styles';
 
 const editCss = {

@@ -12,7 +12,7 @@ const Notification = () => {
     else if (errors) toast(errors);
   }, [errors]);
 
-  return <ToastContainer newestOnTop limit={3} />;
+  return <ToastContainer newestOnTop />;
 };
 
 export default Notification;

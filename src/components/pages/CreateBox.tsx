@@ -20,7 +20,7 @@ const CreateBox = () => {
 
   const handleSubmit = (formData: FormElement) => {
     createQnaBox(formData);
-    navigate('/box');
+    navigate('/box', { replace: true });
   };
 
   return (

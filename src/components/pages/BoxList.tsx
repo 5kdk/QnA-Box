@@ -6,8 +6,8 @@ import { Buttons } from '../BoxList';
 // import { Buttons, Pagenation } from '../BoxList';
 import Controller from '../molecules/Controller';
 import Board from '../BoxList/Board';
-import { Loading } from '../atom';
 import ErrorFallback from '../molecules/ErrorFallback';
+import { ItemSkeleton } from '../molecules';
 
 export type MainFilter = 'joined' | 'my';
 
@@ -38,7 +38,7 @@ const BoxList = () => {
       />
       <Controller />
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={reset}>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<ItemSkeleton num={5} />}>
           <Board boxFilter={boxFilter} />
         </Suspense>
       </ErrorBoundary>

@@ -24,8 +24,7 @@ const createUserDoc = async (
     email,
     displayName,
     photoURL,
-    joinedRooms: [],
-    myRooms: [],
+    joinedBoxes: [],
   });
 };
 

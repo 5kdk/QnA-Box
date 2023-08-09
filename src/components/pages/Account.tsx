@@ -7,6 +7,7 @@ import { InfoModal } from '../molecules';
 import { UserInfo } from '../User';
 import { deregisterUser } from '../../services/auth';
 import { userState } from '../../jotai/atom';
+import reqTryCatch from '../../utils/reqTryCatch';
 
 const accountCss = {
   wrapper: css`
@@ -27,7 +28,7 @@ const Account = () => {
   const toEditPassword = () => navigate('/account/password');
   const openModal = () => setDeregisterCheck(true);
   const closeModal = () => setDeregisterCheck(false);
-  const deleteAccount = () => deregisterUser();
+  const deleteAccount = () => reqTryCatch(deregisterUser);
 
   return (
     <Flex css={accountCss.wrapper} flexDirection="column">

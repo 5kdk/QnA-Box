@@ -14,7 +14,7 @@ import {
 import { auth, db } from './firebase';
 import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
-interface FormElement {
+export interface FormElement {
   title: string;
   owner: string;
   description: string;

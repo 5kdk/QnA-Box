@@ -1,5 +1,7 @@
 import { atom } from 'jotai';
 
-const filterState = atom('최신순');
+type FilterType = '최신순' | '오래된순';
+
+const filterState = atom<FilterType>('최신순');
 
 export default filterState;

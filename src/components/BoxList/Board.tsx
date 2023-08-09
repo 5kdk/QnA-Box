@@ -4,6 +4,8 @@ import { BoxItem } from '.';
 import { MainFilter } from '../pages/BoxList';
 import { Flex, Text } from '../atom';
 import { ItemWrapper } from '../molecules';
+import { filterState } from '../../jotai/atom';
+import { useAtomValue } from 'jotai';
 
 const WrapperCss = css`
   min-height: 6.25rem;
@@ -15,11 +17,17 @@ interface BoxListBodyProps {
 
 const Board = ({ boxFilter }: BoxListBodyProps) => {
   const boxList = useMyListQuery(boxFilter);
+  const filter = useAtomValue(filterState);
+
+  const filteredBoxList =
+    filter === '최신순'
+      ? boxList.sort((a, b) => a.createdAt - b.createdAt)
+      : boxList.sort((a, b) => b.createdAt - a.createdAt);
 
   return (
     <ItemWrapper>
-      {boxList?.length !== 0 ? (
-        boxList.map(({ boxId, owner, ownerUid, title, description }) => (
+      {filteredBoxList?.length !== 0 ? (
+        filteredBoxList.map(({ boxId, owner, ownerUid, title, description }) => (
           <BoxItem title={title} owner={owner} text={description} ownerUid={ownerUid} key={boxId} />
         ))
       ) : (

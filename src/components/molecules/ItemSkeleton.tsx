@@ -42,8 +42,8 @@ interface ItemSkeletonProps {
 const ItemSkeleton = ({ num }: ItemSkeletonProps) => {
   return (
     <>
-      {Array.from({ length: num }, () => (
-        <Flex css={itemSkeletonCss.wrapper} justifyContent="space-between">
+      {Array.from({ length: num }, (_, i) => (
+        <Flex key={i} css={itemSkeletonCss.wrapper} justifyContent="space-between">
           <Avatar size="sm" />
           <Flex flexDirection="column" css={itemSkeletonCss.question}>
             <div css={itemSkeletonCss.text} />

@@ -29,6 +29,8 @@ const BoxListCss = {
   `,
 };
 
+const staleTime = 3000;
+
 interface BoxListItemProps {
   ownerUid: string;
   title: string;
@@ -42,6 +44,7 @@ const BoxItem = ({ title, owner, ownerUid, text }: BoxListItemProps) => {
   const { data: userData } = useQuery({
     queryKey: ['user', ownerUid],
     queryFn: () => getProfile(ownerUid),
+    staleTime,
   });
 
   const editPost = () => {

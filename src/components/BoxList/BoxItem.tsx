@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
 import { EditBox } from '.';
+import { useQuery } from '@tanstack/react-query';
+import { getProfile } from '../../services/profile';
 
 const BoxListCss = {
   wrapperStyle: css`
@@ -28,14 +30,19 @@ const BoxListCss = {
 };
 
 interface BoxListItemProps {
-  ownerId: string;
+  ownerUid: string;
   title: string;
   owner: string;
   text: string;
 }
 
-const BoxItem = ({ title, owner, text }: BoxListItemProps) => {
+const BoxItem = ({ title, owner, ownerUid, text }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
+
+  const { data: userData } = useQuery({
+    queryKey: ['user', ownerUid],
+    queryFn: () => getProfile(ownerUid),
+  });
 
   const editPost = () => {
     console.log('edit');
@@ -51,7 +58,7 @@ const BoxItem = ({ title, owner, text }: BoxListItemProps) => {
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
       {editMode && <EditBox boxInfo={{ title, owner, desc: text }} closeEdit={closeEdit} />}
-      <Avatar size="sm" src={''} />
+      <Avatar size="sm" src={userData ? userData.photoURL : ''} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Flex justifyContent="space-between" alignItems="flex-start">
           <Flex flexDirection="column">

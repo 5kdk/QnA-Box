@@ -1,10 +1,9 @@
 import { ChangeEvent, useState } from 'react';
-import { css, keyframes } from '@emotion/react';
-import { Avatar, Button, Flex, Toggler, Note } from '../atom';
-import loading from '../../assets/images/loading.png';
+import { useNavigate } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import userState from '../../jotai/atom/userState';
-import { useNavigate } from 'react-router-dom';
+import { Avatar, Button, Flex, Toggler, Note } from '../atom';
+import { css, keyframes } from '@emotion/react';
 
 const Slide = keyframes`
     0%{
@@ -72,7 +71,7 @@ const Question = () => {
   return (
     <Flex css={questionCss.wrapper} flexDirection="column">
       <label css={questionCss.inputBox}>
-        <Avatar src={loading} size="sm" />
+        <Avatar src={user.photoURL} size="sm" />
         <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={handleQustionInput} />
       </label>
       <Flex justifyContent="space-between" alignItems="center">

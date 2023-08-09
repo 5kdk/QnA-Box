@@ -1,10 +1,8 @@
+import { Dispatch, SetStateAction } from 'react';
+import { Avatar, Edit, Flex, Text } from '../atom';
 import { css } from '@emotion/react';
 import { SuitHeart, SuitHeartFill } from '@emotion-icons/bootstrap';
 import { Reply } from '@emotion-icons/boxicons-regular/Reply';
-import { Avatar, Edit, Flex, Text } from '../atom';
-import { Dispatch, SetStateAction } from 'react';
-import { useAtomValue } from 'jotai';
-import userState from '../../jotai/atom/userState';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -115,7 +113,6 @@ const BoxItem = ({
     if (responder === replyComment) return setReplyComment('');
     setReplyComment(responder);
   };
-  const user = useAtomValue(userState);
 
   return (
     <>
@@ -141,7 +138,7 @@ const BoxItem = ({
             {isLike ? <SuitHeartFill size="14px" color="var(--orange)" /> : <SuitHeart size="14px" />}
             {like !== 0 && <span css={boxItemCss.subText}>{`${like} likes`}</span>}
             <button css={boxItemCss.reply} onClick={handleComment(responder)}>
-              {owner !== responder && user ? <Reply size="20px" /> : ''}
+              {owner !== responder ? <Reply size="20px" /> : ''}
             </button>
           </Flex>
         </Flex>

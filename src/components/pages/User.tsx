@@ -1,13 +1,32 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import UserInfo from '../User/UserInfo';
+import useReqTryCatch from '../../hooks/useReqTryCatch';
+import { getProfile } from '../../services/profile';
 
-const tmpData = {
-  imgSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/09/09152804/ricky-kharawala-adK3Vu70DEQ-unsplash.jpg',
-  email: 'minjae3@test.com',
-  displayName: ' minjae3',
-};
+export interface Profile {
+  displayName: string;
+  email: string;
+  photoURL: string;
+}
 
 const User = () => {
-  return <UserInfo {...tmpData} />;
+  const { uid } = useParams();
+  const [user, setUser] = useState<Profile>({ displayName: '', email: '', photoURL: '' });
+  const reqTryCatch = useReqTryCatch();
+
+  useEffect(() => {
+    if (uid)
+      reqTryCatch(async () => {
+        const user = await getProfile(uid);
+        if (user && user.displayName && user.email && user.photoURL) {
+          const { displayName, email, photoURL } = user;
+          setUser({ displayName, email, photoURL });
+        }
+      });
+  }, [uid, reqTryCatch]);
+
+  return <UserInfo {...user} />;
 };
 
 export default User;

@@ -14,6 +14,7 @@ import {
   User,
 } from './components/pages';
 import AuthenticationGuard from './guards/AuthenticationGuard';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -73,6 +74,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <GlobalStyle />
       <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

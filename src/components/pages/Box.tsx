@@ -5,6 +5,7 @@ import { Flex, Text } from '../atom';
 import { Question, Controller } from '../molecules';
 import BoxItem from '../Box/BoxItem';
 import { Boxes } from '../BoxList';
+import Answer from '../molecules/Answer';
 
 type Box = {
   id: string;
@@ -109,6 +110,7 @@ const boxCss = {
 
 const Box = () => {
   const [moreInfo, setMoreInfo] = useState(false);
+  const [replyComment, setReplyComment] = useState('');
 
   return (
     <div>
@@ -139,11 +141,13 @@ const Box = () => {
               responderAvatarUrl={responderAvatarUrl}
               like={like}
               answer={answer}
+              setReplyComment={setReplyComment}
+              replyComment={replyComment}
             />
           </Flex>
         ))}
       </Boxes>
-      <Question />
+      {replyComment ? <Answer replyComment={replyComment} /> : <Question />}
     </div>
   );
 };

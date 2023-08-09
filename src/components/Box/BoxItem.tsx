@@ -1,13 +1,16 @@
+import { Dispatch, SetStateAction } from 'react';
+import { Avatar, Edit, Flex, Text } from '../atom';
 import { css } from '@emotion/react';
 import { SuitHeart, SuitHeartFill } from '@emotion-icons/bootstrap';
-import { Avatar, Edit, Flex, Text } from '../atom';
+import { Reply } from '@emotion-icons/boxicons-regular/Reply';
 
 const boxItemCss = {
-  wrapper: css`
+  wrapper: (reply: boolean) => css`
     width: var(--app_width);
     min-height: 100px;
     padding: 12px 24px;
     gap: 15px;
+    background-color: ${reply ? 'var(--gray)' : 'white'};
   `,
   line: css`
     width: 1.5px;
@@ -40,6 +43,10 @@ const boxItemCss = {
     margin: 10px 0 12px 0;
     gap: 5px;
   `,
+  reply: css`
+    rotate: 180deg;
+    padding-bottom: 3px;
+  `,
 };
 
 type Post = {
@@ -53,6 +60,8 @@ type Post = {
 
 type BoxItemProps = Post & {
   owner: string;
+  setReplyComment: Dispatch<SetStateAction<string>>;
+  replyComment: string;
 };
 
 const displayTimeAgo = (postTimestamp: string): string => {
@@ -80,7 +89,17 @@ const displayTimeAgo = (postTimestamp: string): string => {
     return `${Math.floor(timeDifferenceInSeconds / SECONDS_IN_YEAR)}y`;
   }
 };
-const BoxItem = ({ owner, responder, postTime, content, responderAvatarUrl, like, answer }: BoxItemProps) => {
+const BoxItem = ({
+  setReplyComment,
+  replyComment,
+  owner,
+  responder,
+  postTime,
+  content,
+  responderAvatarUrl,
+  like,
+  answer,
+}: BoxItemProps) => {
   // temp
   const isLike = true;
 
@@ -90,10 +109,14 @@ const BoxItem = ({ owner, responder, postTime, content, responderAvatarUrl, like
   const removePost = () => {
     console.log('delete');
   };
+  const handleComment = (responder: string) => () => {
+    if (responder === replyComment) return setReplyComment('');
+    setReplyComment(responder);
+  };
 
   return (
     <>
-      <Flex css={boxItemCss.wrapper} justifyContent="space-between">
+      <Flex css={boxItemCss.wrapper(replyComment === responder)} justifyContent="space-between">
         <Flex alignItems="center" flexDirection="column">
           <Avatar size="sm" src={responderAvatarUrl} />
           {answer.length !== 0 && <div css={boxItemCss.line}></div>}
@@ -114,6 +137,9 @@ const BoxItem = ({ owner, responder, postTime, content, responderAvatarUrl, like
           <Flex alignItems="center" css={boxItemCss.like}>
             {isLike ? <SuitHeartFill size="14px" color="var(--orange)" /> : <SuitHeart size="14px" />}
             {like !== 0 && <span css={boxItemCss.subText}>{`${like} likes`}</span>}
+            <button css={boxItemCss.reply} onClick={handleComment(responder)}>
+              <Reply size="20px" />
+            </button>
           </Flex>
         </Flex>
       </Flex>
@@ -128,6 +154,8 @@ const BoxItem = ({ owner, responder, postTime, content, responderAvatarUrl, like
             like={like}
             answer={answer}
             key={`answer ${responder} ${i}`}
+            setReplyComment={setReplyComment}
+            replyComment={replyComment}
           />
         ))}
     </>

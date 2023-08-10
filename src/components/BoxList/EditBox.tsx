@@ -31,9 +31,9 @@ interface EditBoxProps {
     title: string;
     owner: string;
     description: string;
-  };
-  // closed: boolean;
-  // anonymous: boolean;
+    activation: boolean;
+    anonymous: boolean;
+  };  
   closeEdit: () => void;
 }
 

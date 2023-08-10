@@ -15,12 +15,12 @@ const itemSkeletonCss = {
     width: var(--app_width);
     min-height: 100px;
     padding: 12px 24px;
-    border: 1px solid var(--gray);
+    border-bottom: 1px solid var(--gray);
     gap: 15px;
   `,
   question: css`
-    width: '100%';
-    gap: '5px';
+    width: 100%;
+    gap: 5px;
   `,
   text: css`
     width: 100px;
@@ -35,16 +35,20 @@ const itemSkeletonCss = {
   `,
 };
 
-const ItemSkeleton = () => {
+interface ItemSkeletonProps {
+  num: number;
+}
+
+const ItemSkeleton = ({ num }: ItemSkeletonProps) => {
   return (
     <>
-      {Array.from({ length: 5 }, () => (
-        <Flex css={itemSkeletonCss.wrapper} justifyContent="space-between">
+      {Array.from({ length: num }, (_, i) => (
+        <Flex key={`wrapper ${i}`} css={itemSkeletonCss.wrapper} justifyContent="space-between">
           <Avatar size="sm" />
           <Flex flexDirection="column" css={itemSkeletonCss.question}>
             <div css={itemSkeletonCss.text} />
-            {Array.from({ length: 3 }, () => (
-              <div css={[itemSkeletonCss.text, itemSkeletonCss.detail]} />
+            {Array.from({ length: 3 }, (_, j) => (
+              <div css={[itemSkeletonCss.text, itemSkeletonCss.detail]} key={`text ${i}-${j}`} />
             ))}
           </Flex>
         </Flex>

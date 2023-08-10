@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import { Flex, Title } from '../atom';
 import { BoxForm } from '../molecules';
-
-const tmpData = {
-  displayName: 'minjae3',
-};
+import { useAtomValue } from 'jotai';
+import { userState } from '../../jotai/atom';
+import { createQnaBox } from '../../services/boxes';
+import { useNavigate } from 'react-router-dom';
+import { FormElement } from '../molecules/BoxForm';
 
 const createBoxCss = {
   wrapper: css`
@@ -14,13 +15,21 @@ const createBoxCss = {
 };
 
 const CreateBox = () => {
+  const user = useAtomValue(userState);
+  const navigate = useNavigate();
+
+  const handleSubmit = (formData: FormElement) => {
+    createQnaBox(formData);
+    navigate('/box', { replace: true });
+  };
+
   return (
     <Flex css={createBoxCss.wrapper} flexDirection="column" justifyContent="center" alignItems="center">
       <Title text="QA Box 만들기" />
       <BoxForm
-        defaultValues={{ owner: tmpData.displayName, closed: false, anonymous: true }}
+        defaultValues={{ owner: user.displayName, activation: false, anonymous: true }}
         btnOpt={{ text: '등록하기', color: 'var(--white)', bgColor: 'var(--blue)' }}
-        submitFunc={() => {}}
+        submitFunc={handleSubmit}
       />
     </Flex>
   );

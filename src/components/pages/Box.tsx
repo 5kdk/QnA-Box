@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { InfoCircle } from '@emotion-icons/bootstrap';
 import { css } from '@emotion/react';
 import { Flex, Text } from '../atom';
-import { Question, Controller } from '../molecules';
+import { Question, Controller, ItemWrapper } from '../molecules';
 import BoxItem from '../Box/BoxItem';
-import { Boxes } from '../BoxList';
 import Answer from '../molecules/Answer';
 
 type Box = {
@@ -130,7 +129,7 @@ const Box = () => {
         <Text>마지막 답변 날짜: 2023.07.31</Text>
       </Flex>
       <Controller />
-      <Boxes>
+      <ItemWrapper>
         {boxData.questions.map(({ responder, responderAvatarUrl, postTime, content, like, answer }, i) => (
           <Flex css={boxCss.border} flexDirection="column" key={`${responder} ${i}`}>
             <BoxItem
@@ -146,7 +145,7 @@ const Box = () => {
             />
           </Flex>
         ))}
-      </Boxes>
+      </ItemWrapper>
       {replyComment ? <Answer replyComment={replyComment} /> : <Question />}
     </div>
   );

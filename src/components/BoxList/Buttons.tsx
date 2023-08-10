@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { PlusSm } from '@emotion-icons/heroicons-solid/';
 import { Button, Flex } from '../atom';
+import { MainFilter } from '../pages/BoxList';
 
 const buttonCss = {
   wrapper: css`
@@ -11,28 +12,34 @@ const buttonCss = {
   `,
 };
 
-const Buttons = () => {
+interface ButtonsProps {
+  boxFilter: MainFilter;
+  handleClickJoinedBox: () => void;
+  handleClickMyBox: () => void;
+  handleClickNewBox: () => void;
+}
+
+const Buttons = ({ boxFilter, handleClickJoinedBox, handleClickMyBox, handleClickNewBox }: ButtonsProps) => {
+  const selected = boxFilter === 'joined';
+
   return (
     <Flex justifyContent="space-between" css={buttonCss.wrapper}>
       <Flex css={buttonCss.tap}>
         <Button
           text="참여 중인 BOX"
-          onClick={() => {
-            console.log('hi');
-          }}
-          bgColor="var(--black)"
-          color="var(--white)"
+          onClick={handleClickJoinedBox}
+          borderColor={selected ? 'var(--black)' : 'var(--gray)'}
+          bgColor={selected ? 'var(--black)' : 'var(--white)'}
+          color={selected ? 'var(--white)' : 'var(--black)'}
           fontWeight={300}
           minWidth="102px"
         />
         <Button
           text="내 BOX"
-          onClick={() => {
-            console.log('hi');
-          }}
-          borderColor="var(--gray)"
-          bgColor="var(--white)"
-          color="var(--black)"
+          onClick={handleClickMyBox}
+          borderColor={!selected ? 'var(--black)' : 'var(--gray)'}
+          bgColor={!selected ? 'var(--black)' : 'var(--white)'}
+          color={!selected ? 'var(--white)' : 'var(--black)'}
           fontWeight={300}
           minWidth="102px"
         />
@@ -40,9 +47,7 @@ const Buttons = () => {
       <Button
         text="새로운 BOX"
         icon={<PlusSm size="16px" />}
-        onClick={() => {
-          console.log('hi');
-        }}
+        onClick={handleClickNewBox}
         bgColor="var(--blue)"
         color="var(--white)"
         fontWeight={300}

@@ -2,6 +2,7 @@ import { Flex } from '../atom';
 import { modalCss } from '../../styles';
 import { BoxForm } from '../molecules';
 import { css } from '@emotion/react';
+import { useUpdateMyBoxMutation } from '../../hooks/mutation';
 
 const editBoxCss = {
   wrapper: css`
@@ -25,24 +26,27 @@ const editBoxCss = {
 };
 
 interface EditBoxProps {
+  boxId: string;
   boxInfo: {
     title: string;
     owner: string;
-    desc: string;
-  };
-  // closed: boolean;
-  // anonymous: boolean;
+    description: string;
+    activation: boolean;
+    anonymous: boolean;
+  };  
   closeEdit: () => void;
 }
 
-const EditBox = ({ boxInfo, closeEdit }: EditBoxProps) => {
+const EditBox = ({ boxId, boxInfo, closeEdit }: EditBoxProps) => {
+  const { mutate: update } = useUpdateMyBoxMutation();
+
   return (
     <Flex css={modalCss} justifyContent="center" alignItems="flex-end" onClick={closeEdit}>
       <Flex css={editBoxCss.wrapper} justifyContent="center" onClick={e => e.stopPropagation()}>
         <BoxForm
           defaultValues={boxInfo}
           btnOpt={{ text: '수정하기', color: 'var(--white)', bgColor: 'var(--black)' }}
-          submitFunc={() => {}}
+          submitFunc={formData => update({ boxId: boxId, editFormData: formData })}
         />
       </Flex>
     </Flex>

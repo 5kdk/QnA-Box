@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { UseMutateFunction, useQuery } from '@tanstack/react-query';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
 import { EditBox } from '.';
+import { getProfile } from '../../services/profile';
+import { Box } from '../../services/boxes';
 
 const BoxListCss = {
   wrapperStyle: css`
@@ -27,30 +30,50 @@ const BoxListCss = {
   `,
 };
 
+const staleTime = 3000;
+
 interface BoxListItemProps {
-  imgUrl?: string;
+  ownerUid: string;
+  boxId: string;
   title: string;
   owner: string;
   text: string;
+  remove: UseMutateFunction<
+    unknown,
+    Error,
+    string,
+    {
+      previous: Box[] | undefined;
+    }
+  >;
 }
 
-const BoxListItem = ({ title, imgUrl, owner, text }: BoxListItemProps) => {
+const BoxItem = ({ boxId, title, owner, ownerUid, text, remove }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
+
+  const { data: userData } = useQuery({
+    queryKey: ['user', ownerUid],
+    queryFn: () => getProfile(ownerUid),
+    staleTime,
+  });
+
   const editPost = () => {
     console.log('edit');
     setEditMode(true);
   };
+
   const removePost = () => {
-    console.log('delete');
+    remove(boxId);
   };
+
   const closeEdit = () => {
     setEditMode(false);
   };
 
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
-      {editMode && <EditBox boxInfo={{ title, owner, desc: text }} closeEdit={closeEdit} />}
-      <Avatar size="sm" src={imgUrl} />
+      {editMode && <EditBox boxId={boxId} boxInfo={{ title, owner, description: text }} closeEdit={closeEdit} />}
+      <Avatar size="sm" src={userData ? userData.photoURL : ''} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Flex justifyContent="space-between" alignItems="flex-start">
           <Flex flexDirection="column">
@@ -67,4 +90,4 @@ const BoxListItem = ({ title, imgUrl, owner, text }: BoxListItemProps) => {
   );
 };
 
-export default BoxListItem;
+export default BoxItem;

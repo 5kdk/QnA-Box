@@ -1,7 +1,11 @@
 import { css, keyframes } from '@emotion/react';
 import loading from '../../assets/images/loading.png';
+import { Flex } from '.';
 
 const loadingCss = {
+  wrapper: css`
+    width: 100%;
+  `,
   bounce: keyframes`
     0% {
       transform : rotate(0deg)
@@ -21,6 +25,10 @@ interface LoadingProps {
 }
 
 const Loading = ({ size }: LoadingProps) => {
-  return <img css={loadingCss.loading({ size })} src={loading} alt="loading" />;
+  return (
+    <Flex justifyContent="center" css={loadingCss.wrapper}>
+      <img css={loadingCss.loading({ size })} src={loading} alt="loading" />
+    </Flex>
+  );
 };
 export default Loading;

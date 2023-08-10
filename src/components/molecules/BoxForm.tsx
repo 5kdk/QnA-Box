@@ -25,12 +25,12 @@ const boxFormCss = {
   `,
 };
 
-interface FormElement {
+export interface FormElement {
   [key: string]: boolean | string;
   title: string;
   owner: string;
-  desc: string;
-  closed: boolean;
+  description: string;
+  activation: boolean;
   anonymous: boolean;
 }
 
@@ -38,8 +38,8 @@ interface BoxFormProps {
   defaultValues: {
     title?: string;
     owner: string;
-    desc?: string;
-    closed: boolean;
+    description?: string;
+    activation: boolean;
     anonymous: boolean;
   };
   btnOpt: {
@@ -86,14 +86,14 @@ const BoxForm = ({ defaultValues, btnOpt, submitFunc }: BoxFormProps) => {
           <FormInput
             label="Description"
             type="text"
-            register={register('desc' as Path<FormElement>, requiredFormValue('Description'))}
+            register={register('description' as Path<FormElement>, requiredFormValue('Description'))}
           />
         </Flex>
         <Flex css={boxFormCss.toggles} flexDirection="column">
           <FormToggler
-            selected={watch('closed')}
+            selected={watch('activation')}
             text="질문 기능 비활성화"
-            register={register('closed' as Path<FormElement>)}
+            register={register('activation' as Path<FormElement>)}
           />
           <FormToggler
             selected={watch('anonymous')}

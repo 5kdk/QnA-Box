@@ -12,7 +12,7 @@ export interface cssProps {
 }
 export interface ButtonProps extends cssProps {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Button = ({ minWidth, padding, text, color, bgColor, borderColor, fontWeight, icon, onClick }: ButtonProps) => {

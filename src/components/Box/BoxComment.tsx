@@ -1,12 +1,12 @@
-import { Controller, ItemWrapper } from '../molecules';
-import { Flex, Text } from '../atom';
-import { css } from '@emotion/react';
-import { InfoCircle } from '@emotion-icons/bootstrap';
-import BoxItem from './BoxItem';
 import { useState, SetStateAction, Dispatch } from 'react';
-import { getQnaBoxesById } from '../../services/boxes';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { Flex, Text } from '../atom';
+import { getQnaBoxesById } from '../../services/boxes';
+import { Controller, ItemWrapper } from '../molecules';
+import BoxItem from './BoxItem';
+import { css } from '@emotion/react';
+import { InfoCircle } from '@emotion-icons/bootstrap';
 type Box2 = {
   id: string;
   owner: string;

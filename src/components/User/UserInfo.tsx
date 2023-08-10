@@ -13,12 +13,14 @@ const userCss = {
 };
 
 interface InfoProps {
-  photoURL: string;
-  email: string;
-  displayName: string;
+  photoURL?: string | null;
+  email?: string;
+  displayName?: string;
 }
 
 const UserInfo = ({ photoURL, email, displayName }: InfoProps) => {
+  if (!email || !displayName) return;
+
   return (
     <Flex css={userCss.wrapper} flexDirection="column" alignItems="center">
       <Avatar src={photoURL} size="lg" />

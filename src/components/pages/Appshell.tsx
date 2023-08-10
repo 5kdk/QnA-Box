@@ -1,11 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Header } from '../molecules';
 import { Notification } from '../atom';
-import { useSetAtom } from 'jotai';
-import { userState } from '../../jotai/atom';
-import { getMyProfile } from '../../services/profile';
 
 const appShellCss = {
   wrapper: css`
@@ -20,34 +16,13 @@ const appShellCss = {
 };
 
 const Appshell = () => {
-  const [isLoading, setLoading] = useState(true);
-  const setUser = useSetAtom(userState);
-  const params = useParams();
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        setLoading(true);
-        const data = await getMyProfile();
-        if (data) {
-          setUser(data);
-        } else {
-          setUser(null);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getUser();
-  }, [params, setUser]);
-
   return (
     <div css={appShellCss.wrapper}>
       <Notification />
       <Header />
-      <main css={appShellCss.main}>{isLoading || <Outlet />}</main>
+      <main css={appShellCss.main}>
+        <Outlet />
+      </main>
     </div>
   );
 };

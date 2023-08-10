@@ -2,12 +2,16 @@ import { useNavigate } from 'react-router-dom';
 import { SignForm } from '../molecules';
 import { SigninSchemaType, signinSchema } from '../../registerSchema';
 import { loginUser } from '../../services/auth';
+import { useSetAtom } from 'jotai';
+import userState from '../../jotai/atom/userState';
 
 const Signin = () => {
+  const setUser = useSetAtom(userState);
   const navigate = useNavigate();
   const reqSignin = async (data: SigninSchemaType) => {
     try {
-      await loginUser(data.email, data.password);
+      const userData = await loginUser(data.email, data.password);
+      setUser(userData);
       navigate('/box', { replace: true });
     } catch (error) {
       console.error(error);

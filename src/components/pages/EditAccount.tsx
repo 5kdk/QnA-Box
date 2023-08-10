@@ -1,18 +1,15 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { SubmitHandler } from 'react-hook-form';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Avatar, Flex } from '../atom';
-import { UserEditForm } from '../molecules';
 import { InfoSubject } from '../User';
+import { AttachFile, UserEditForm } from '../Account';
 import { userState } from '../../jotai/atom';
 import useImgFile from '../../hooks/useImgFile';
 import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
-import { getProfile, updateUserAvartar, updateUserDisplayName } from '../../services/profile';
+import { updateUserAvartar, updateUserDisplayName } from '../../services/profile';
 import { updateUserPassword } from '../../services/auth';
-import useReqTryCatch from '../../hooks/useReqTryCatch';
-import { buttonCss, visuallyHidden } from '../../styles';
 
 const editCss = {
   wrapper: css`
@@ -22,15 +19,6 @@ const editCss = {
   `,
   account: css`
     gap: 22px;
-  `,
-  btnProps: {
-    color: 'var(--black)',
-    bgColor: 'var(--white)',
-    borderColor: 'var(--gray)',
-  },
-  button: css`
-    cursor: pointer;
-    font-size: 12px;
   `,
 };
 
@@ -46,32 +34,16 @@ interface NameType {
 }
 
 const EditAccount = () => {
-  const [user, setUser] = useAtom(userState);
-  const { setNewImg, imgBuffer, imgFile } = useImgFile(user.photoURL);
+  const user = useAtomValue(userState);
+  const { setNewImg, imgBuffer, imgFile } = useImgFile(user!.photoURL);
   const { target } = useParams();
   const navigate = useNavigate();
-  const reqTryCatch = useReqTryCatch();
-
-  const editImgName: SubmitHandler<NameType> = async data => {
-    if (user.photoURL !== imgBuffer || user.displayName !== data.displayName) {
-      reqTryCatch(async () => {
-        if (imgFile && user.photoURL !== imgBuffer) {
-          await updateUserAvartar(user.uid, imgFile);
-        }
-        if (user.displayName !== data.displayName) await updateUserDisplayName(user.uid, data.displayName);
-        const userData = await getProfile(user.uid);
-        setUser(userData);
-      });
-    }
-    navigate('/account');
+  const editImgName = async (data: NameType) => {
+    if (imgFile && user!.photoURL !== imgBuffer) await updateUserAvartar(user!.uid, imgFile);
+    if (user!.displayName !== data.displayName) await updateUserDisplayName(user!.uid, data.displayName);
   };
 
-  const editPswd: SubmitHandler<editPswdSchemaType> = data => {
-    reqTryCatch(async () => {
-      await updateUserPassword(data.prePassword, data.password);
-      navigate('/account');
-    });
-  };
+  const editPswd = (data: editPswdSchemaType) => updateUserPassword(data.prePassword, data.password);
 
   useEffect(() => {
     if (target && target !== 'profile' && target !== 'password') {
@@ -83,20 +55,13 @@ const EditAccount = () => {
     <Flex css={editCss.wrapper} flexDirection="column">
       <Flex css={editCss.account} flexDirection="column" alignItems="center">
         <Avatar src={imgBuffer} size="lg" />
-        {target === 'profile' && (
-          <>
-            <label css={[buttonCss(editCss.btnProps), editCss.button]}>
-              <input css={visuallyHidden} type="file" onChange={setNewImg} />
-              이미지 수정
-            </label>
-          </>
-        )}
-        <InfoSubject title="E-mail" body={user.email} />
+        {target === 'profile' && <AttachFile onChange={setNewImg} />}
+        <InfoSubject title="E-mail" body={user!.email} />
       </Flex>
       {target === 'profile' ? (
         <UserEditForm<NameType>
           formElement={formName}
-          defaultValues={{ displayName: user.displayName }}
+          defaultValues={{ displayName: user!.displayName }}
           btnSettings={{
             text: '회원정보 수정',
             color: 'var(--black)',

@@ -41,17 +41,7 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
     <ItemWrapper>
       {boxList?.length !== 0 ? (
         filteredBoxList().length !== 0 ? (
-          filteredBoxList().map(({ boxId, owner, ownerUid, title, description }) => (
-            <BoxItem
-              boxId={boxId}
-              title={title}
-              owner={owner}
-              text={description}
-              ownerUid={ownerUid}
-              key={boxId}
-              remove={remove}
-            />
-          ))
+          filteredBoxList().map(box => <BoxItem boxInfo={box} key={box.boxId} remove={remove} />)
         ) : (
           <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
             <Text>검색 결과가 없습니다.</Text>

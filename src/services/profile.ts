@@ -1,5 +1,5 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { auth, db, storage } from './firebase';
+import { db, storage } from './firebase';
 import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
@@ -12,15 +12,6 @@ export interface UserData {
 }
 
 export const getUserRef = (uid: string) => doc(db, USERS_COLLECTION_NAME, uid);
-
-export const getMyProfile = async (): Promise<UserData | undefined> => {
-  const user = auth.currentUser;
-
-  if (!user) return;
-  const snapshot = await getDoc(getUserRef(user.uid));
-
-  return snapshot.data() as UserData | undefined;
-};
 
 export const getProfile = async (uid: string): Promise<UserData | undefined> => {
   const snapshot = await getDoc(getUserRef(uid));

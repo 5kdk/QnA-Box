@@ -26,7 +26,7 @@ const UserInfoCss = {
 };
 
 interface User {
-  src: string;
+  src: string | null;
   displayName: string;
   email: string;
   toAccount: () => void;

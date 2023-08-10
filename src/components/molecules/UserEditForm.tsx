@@ -1,13 +1,10 @@
-import { useEffect } from 'react';
-import { DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
+import { DefaultValues, FieldValues, SubmitHandler } from 'react-hook-form';
 import { ZodType } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Flex, WideButton } from '../atom';
 import { FormInput } from '../molecules';
-import { toastErrorState } from '../../jotai/atom';
-import { errorObjToString, requiredFormValue } from '../../utils';
+import useCustomForm from '../../hooks/useCustomForm';
+import { requiredFormValue } from '../../utils';
 
 const userEditFormCss = {
   form: css`
@@ -20,55 +17,38 @@ const userEditFormCss = {
   `,
 };
 
-interface UserEditFormProps<T> {
+interface UserEditFormProps<T extends FieldValues> {
+  submitFunc: SubmitHandler<T>;
+  defaultValues?: DefaultValues<T>;
+  formSchema?: ZodType<T>;
   formElement: {
     text: string;
     key: string;
     type: string;
   }[];
-  iniForm?: DefaultValues<T>;
-  formSchema?: ZodType<T>;
   btnSettings: {
     text: string;
     color: string;
     bgColor: string;
     borderColor?: string;
   };
-  submitFunc: (data: T) => void;
 }
 
 const UserEditForm = <T extends FieldValues>({
-  formElement,
-  iniForm,
-  formSchema,
-  btnSettings,
   submitFunc,
+  defaultValues,
+  formSchema,
+  formElement,
+  btnSettings,
 }: UserEditFormProps<T>) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<T>({
-    resolver: formSchema && zodResolver(formSchema),
-    defaultValues: iniForm && iniForm,
-  });
-  const setToastError = useSetAtom(toastErrorState);
-
-  useEffect(() => {
-    if (errors) setToastError(errorObjToString(errors));
-  }, [errors, setToastError]);
+  const { registerKey, onSubmit } = useCustomForm<T>(submitFunc, defaultValues, formSchema);
 
   return (
     <>
-      <form css={userEditFormCss.form} onSubmit={handleSubmit(submitFunc)}>
+      <form css={userEditFormCss.form} onSubmit={onSubmit}>
         <Flex css={userEditFormCss.account} flexDirection="column">
           {formElement.map(({ text, key, type }) => (
-            <FormInput
-              key={key}
-              label={text}
-              type={type}
-              register={register(key as Path<T>, requiredFormValue(text))}
-            />
+            <FormInput key={key} label={text} type={type} register={registerKey(key, requiredFormValue(text))} />
           ))}
         </Flex>
         <WideButton {...btnSettings} onClick={() => {}} />

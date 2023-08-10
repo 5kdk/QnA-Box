@@ -3,6 +3,7 @@ import { modalCss } from '../../styles';
 import { BoxForm } from '../molecules';
 import { css } from '@emotion/react';
 import { useUpdateMyBoxMutation } from '../../hooks/mutation';
+import { Box } from '../../services/boxes';
 
 const editBoxCss = {
   wrapper: css`
@@ -27,13 +28,7 @@ const editBoxCss = {
 
 interface EditBoxProps {
   boxId: string;
-  boxInfo: {
-    title: string;
-    owner: string;
-    description: string;
-    activation: boolean;
-    anonymous: boolean;
-  };  
+  boxInfo: Box;
   closeEdit: () => void;
 }
 

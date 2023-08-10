@@ -1,15 +1,11 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { ZodType } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Flex, Logo, Note, WideButton } from '../atom';
 import { FormInput } from '.';
-import { toastErrorState } from '../../jotai/atom';
+import useCustomForm from '../../hooks/useCustomForm';
 import googlelogin2 from '../../assets/images/btn_google_signin_light_normal_web.png';
-import { errorObjToString } from '../../utils';
 
 const SignFormCss = {
   container: css`
@@ -34,50 +30,35 @@ const SignFormCss = {
   `,
 };
 
-interface SignFormProps<T> {
-  buttonText: string;
+interface SignFormProps<T extends FieldValues> {
+  submitFunc: SubmitHandler<T>;
   formSchema: ZodType<T>;
-  anotherInputs?: { label: string; formkey: string; type: string }[];
-  submitFunc: (data: T) => void;
   redirectTo: string;
+  anotherInputs?: { label: string; formkey: string; type: string }[];
+  buttonText: string;
   redirectMsg: string;
 }
 
 const SignForm = <T extends FieldValues>({
-  buttonText,
-  formSchema,
-  anotherInputs = [],
   submitFunc,
+  formSchema,
   redirectTo,
+  anotherInputs = [],
+  buttonText,
   redirectMsg,
 }: SignFormProps<T>) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<T>({ resolver: zodResolver(formSchema) });
-  const onSubmit: SubmitHandler<T> = submitFunc;
+  const { registerKey, onSubmit } = useCustomForm<T>(submitFunc, undefined, formSchema);
   const navigate = useNavigate();
   const toOtherPage = () => navigate(redirectTo);
-  const setToastError = useSetAtom(toastErrorState);
-
-  useEffect(() => {
-    if (errors) setToastError(errorObjToString(errors));
-  }, [errors, setToastError]);
 
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">
       <Logo css={SignFormCss.logostyle} size="lg" />
-      <form css={SignFormCss.form} onSubmit={handleSubmit(onSubmit)}>
-        <FormInput css={SignFormCss.inputstyle} label="E-mail" type="text" register={register('email' as Path<T>)} />
-        <FormInput
-          css={SignFormCss.inputstyle}
-          label="Password"
-          type="password"
-          register={register('password' as Path<T>)}
-        />
+      <form css={SignFormCss.form} onSubmit={onSubmit}>
+        <FormInput css={SignFormCss.inputstyle} label="E-mail" type="text" register={registerKey('email')} />
+        <FormInput css={SignFormCss.inputstyle} label="Password" type="password" register={registerKey('password')} />
         {anotherInputs.map((input, idx) => (
-          <FormInput key={idx} css={SignFormCss.inputstyle} {...input} register={register(input.formkey as Path<T>)} />
+          <FormInput key={idx} css={SignFormCss.inputstyle} {...input} register={registerKey(input.formkey)} />
         ))}
         <div css={SignFormCss.buttons}>
           <WideButton text={buttonText} bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />

@@ -21,7 +21,7 @@ const accountCss = {
 
 const Account = () => {
   const [deregisterCheck, setDeregisterCheck] = useState(false);
-  const userData = useAtomValue(userState);
+  const user = useAtomValue(userState);
   const navigate = useNavigate();
   const reqTryCatch = useReqTryCatch();
 
@@ -33,7 +33,7 @@ const Account = () => {
 
   return (
     <Flex css={accountCss.wrapper} flexDirection="column">
-      <UserInfo {...userData} />
+      <UserInfo {...user} />
       <Flex css={accountCss.buttons} flexDirection="column">
         <WideButton
           text="회원정보 수정"

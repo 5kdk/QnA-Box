@@ -44,19 +44,18 @@ const UserEditForm = <T extends FieldValues>({
   btnSettings,
   submitFunc,
 }: UserEditFormProps<T>) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<T>({
+  const { register, handleSubmit, clearErrors, formState } = useForm<T>({
     resolver: formSchema && zodResolver(formSchema),
     defaultValues: iniForm && iniForm,
   });
   const setToastError = useSetAtom(toastErrorState);
 
   useEffect(() => {
-    if (errors) setToastError(errorObjToString(errors));
-  }, [errors, setToastError]);
+    if (Object.keys(formState.errors).length) {
+      setToastError(errorObjToString(formState.errors));
+      clearErrors();
+    }
+  }, [formState, setToastError, clearErrors]);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Path, SubmitHandler, useForm } from 'react-hook-form';
+import { Path, useForm } from 'react-hook-form';
 import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Flex, FormToggler, WideButton } from '../atom';
@@ -51,27 +51,21 @@ interface BoxFormProps {
 }
 
 const BoxForm = ({ defaultValues, btnOpt, submitFunc }: BoxFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FormElement>({
+  const { register, handleSubmit, watch, clearErrors, formState } = useForm<FormElement>({
     defaultValues,
   });
   const setToastError = useSetAtom(toastErrorState);
-  const onSubmit: SubmitHandler<FormElement> = data => {
-    submitFunc(data);
-    console.log({ ...data });
-  };
 
   useEffect(() => {
-    if (errors) setToastError(errorObjToString(errors));
-  }, [errors, setToastError]);
+    if (Object.keys(formState.errors).length) {
+      setToastError(errorObjToString(formState.errors));
+      clearErrors();
+    }
+  }, [formState, setToastError, clearErrors]);
 
   return (
     <Flex css={boxFormCss.wrapper} flexDirection="column">
-      <form css={boxFormCss.form} onSubmit={handleSubmit(onSubmit)}>
+      <form css={boxFormCss.form} onSubmit={handleSubmit(submitFunc)}>
         <Flex css={boxFormCss.inputs} flexDirection="column">
           <FormInput
             label="Title"

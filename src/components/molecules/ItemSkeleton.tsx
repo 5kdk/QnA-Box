@@ -43,12 +43,12 @@ const ItemSkeleton = ({ num }: ItemSkeletonProps) => {
   return (
     <>
       {Array.from({ length: num }, (_, i) => (
-        <Flex key={i} css={itemSkeletonCss.wrapper} justifyContent="space-between">
+        <Flex key={`wrapper ${i}`} css={itemSkeletonCss.wrapper} justifyContent="space-between">
           <Avatar size="sm" />
           <Flex flexDirection="column" css={itemSkeletonCss.question}>
             <div css={itemSkeletonCss.text} />
-            {Array.from({ length: 3 }, () => (
-              <div css={[itemSkeletonCss.text, itemSkeletonCss.detail]} />
+            {Array.from({ length: 3 }, (_, j) => (
+              <div css={[itemSkeletonCss.text, itemSkeletonCss.detail]} key={`text ${i}-${j}`} />
             ))}
           </Flex>
         </Flex>

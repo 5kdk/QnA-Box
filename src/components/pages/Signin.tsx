@@ -1,28 +1,23 @@
-import { useNavigate } from 'react-router-dom';
-import { SignForm } from '../molecules';
-import { SigninSchemaType, signinSchema } from '../../registerSchema';
-import { loginUser } from '../../services/auth';
+import { atom } from 'jotai';
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utils/localStorage';
 
-const Signin = () => {
-  const navigate = useNavigate();
-  const reqSignin = async (data: SigninSchemaType) => {
-    try {
-      await loginUser(data.email, data.password);
-      navigate('/box', { replace: true });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const KEY = 'user';
 
-  return (
-    <SignForm<SigninSchemaType>
-      buttonText="LOGIN"
-      formSchema={signinSchema}
-      submitFunc={reqSignin}
-      redirectTo="/signup"
-      redirectMsg="계정이 없으신가요?"
-    />
-  );
+export const getInitialValue = () => {
+  return getLocalStorage(KEY);
 };
 
-export default Signin;
+const baseAtom = atom(getInitialValue());
+
+export const userState = atom(
+  get => get(baseAtom),
+  (get, set, update) => {
+    const currentValue = get(baseAtom);
+    const nextValue = typeof update === 'function' ? update(currentValue) : update;
+    set(baseAtom, nextValue);
+    if (nextValue) setLocalStorage(KEY, nextValue);
+    else removeLocalStorage(KEY);
+  },
+);
+
+export default userState;

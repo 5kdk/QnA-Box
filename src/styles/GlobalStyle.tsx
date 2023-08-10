@@ -80,6 +80,7 @@ const style = css`
     --shadow: rgba(0, 0, 0, 0.2);
     --modal: rgba(0, 0, 0, 0.5);
     --app_width: 448px;
+    --toastify-color-progress-light: #000000;
   }
 `;
 

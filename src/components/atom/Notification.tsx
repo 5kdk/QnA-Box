@@ -8,11 +8,11 @@ const Notification = () => {
   const errors = useAtomValue(toastErrorState);
 
   useEffect(() => {
-    if (Array.isArray(errors)) errors.forEach(error => error && toast(error));
-    else if (errors) toast(errors);
+    if (Array.isArray(errors)) errors.forEach(error => error && toast.info(error));
+    else if (errors) toast.info(errors);
   }, [errors]);
 
-  return <ToastContainer newestOnTop />;
+  return <ToastContainer newestOnTop style={{ fontSize: 14 }} />;
 };
 
 export default Notification;

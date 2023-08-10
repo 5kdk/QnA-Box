@@ -6,7 +6,7 @@ import { Flex, Note, WideButton } from '../atom';
 import { InfoModal } from '../molecules';
 import { UserInfo } from '../User';
 import { userState } from '../../jotai/atom';
-import { reqTryCatch } from '../../utils';
+import useReqTryCatch from '../../hooks/useReqTryCatch';
 import { deregisterUser } from '../../services/auth';
 
 const accountCss = {
@@ -23,6 +23,7 @@ const Account = () => {
   const [deregisterCheck, setDeregisterCheck] = useState(false);
   const userData = useAtomValue(userState);
   const navigate = useNavigate();
+  const reqTryCatch = useReqTryCatch();
 
   const toEditProfile = () => navigate('/account/profile');
   const toEditPassword = () => navigate('/account/password');

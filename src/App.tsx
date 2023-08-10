@@ -46,7 +46,7 @@ const router = createBrowserRouter([
         element: <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} />,
       },
       {
-        path: 'user/:username',
+        path: 'user/:uid',
         element: <User />,
       },
       {

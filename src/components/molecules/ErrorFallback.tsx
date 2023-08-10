@@ -5,7 +5,7 @@ const FlexCss = css`
   min-height: 100px;
 `;
 
-interface ErrorFallbackProps {
+export interface ErrorFallbackProps {
   error: Error;
   resetErrorBoundary: () => void;
 }

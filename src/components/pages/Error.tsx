@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Button, Flex } from '../atom';
+import { ErrorFallbackProps } from '../molecules/ErrorFallback';
 
 const errorCss = {
   wrapper: css`
@@ -23,13 +24,7 @@ const errorCss = {
   `,
 };
 
-interface ErrorProps {
-  status?: number;
-  message?: string;
-  retryFunc?: () => void;
-}
-
-const Error = ({ status = 404, message = '요청하신 페이지를 찾을 수 없습니다', retryFunc }: ErrorProps) => {
+const Error = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
   const navigate = useNavigate();
   const toMainPage = () => navigate('/');
 
@@ -37,7 +32,7 @@ const Error = ({ status = 404, message = '요청하신 페이지를 찾을 수 �
     <Flex css={errorCss.wrapper} flexDirection="column" alignItems="center" justifyContent="center">
       <p css={errorCss.msg}>Opps..!</p>
       <p css={errorCss.code}>{status}</p>
-      <p>{message}</p>
+      <p>{error.message}</p>
       <Flex css={errorCss.buttons}>
         <Button
           text="메인으로"
@@ -46,7 +41,9 @@ const Error = ({ status = 404, message = '요청하신 페이지를 찾을 수 �
           borderColor="var(--gray)"
           onClick={toMainPage}
         />
-        {retryFunc && <Button text="Retry" color="var(--white)" bgColor="var(--black)" onClick={retryFunc} />}
+        {resetErrorBoundary && (
+          <Button text="Retry" color="var(--white)" bgColor="var(--black)" onClick={resetErrorBoundary} />
+        )}
       </Flex>
     </Flex>
   );

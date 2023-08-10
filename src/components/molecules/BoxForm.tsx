@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
-import { Path, useForm } from 'react-hook-form';
-import { useSetAtom } from 'jotai';
+import { DefaultValues, SubmitHandler } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { Flex, FormToggler, WideButton } from '../atom';
 import { FormInput } from '../molecules';
-import { toastErrorState } from '../../jotai/atom';
-import { errorObjToString, requiredFormValue } from '../../utils';
+import useCustomForm from '../../hooks/useCustomForm';
+import { requiredFormValue } from '../../utils';
 
 const boxFormCss = {
   wrapper: css`
@@ -35,64 +33,36 @@ export interface FormElement {
 }
 
 interface BoxFormProps {
-  defaultValues: {
-    title?: string;
-    owner: string;
-    description?: string;
-    activation: boolean;
-    anonymous: boolean;
-  };
+  submitFunc: SubmitHandler<FormElement>;
+  defaultValues: DefaultValues<FormElement>;
   btnOpt: {
     text: string;
     color: string;
     bgColor: string;
   };
-  submitFunc: (data: FormElement) => void;
 }
 
-const BoxForm = ({ defaultValues, btnOpt, submitFunc }: BoxFormProps) => {
-  const { register, handleSubmit, watch, clearErrors, formState } = useForm<FormElement>({
-    defaultValues,
-  });
-  const setToastError = useSetAtom(toastErrorState);
-
-  useEffect(() => {
-    if (Object.keys(formState.errors).length) {
-      setToastError(errorObjToString(formState.errors));
-      clearErrors();
-    }
-  }, [formState, setToastError, clearErrors]);
+const BoxForm = ({ submitFunc, defaultValues, btnOpt }: BoxFormProps) => {
+  const { registerKey, onSubmit, watch } = useCustomForm<FormElement>(submitFunc, defaultValues);
 
   return (
     <Flex css={boxFormCss.wrapper} flexDirection="column">
-      <form css={boxFormCss.form} onSubmit={handleSubmit(submitFunc)}>
+      <form css={boxFormCss.form} onSubmit={onSubmit}>
         <Flex css={boxFormCss.inputs} flexDirection="column">
-          <FormInput
-            label="Title"
-            type="text"
-            register={register('title' as Path<FormElement>, requiredFormValue('Title'))}
-          />
-          <FormInput
-            label="Owner"
-            type="text"
-            register={register('owner' as Path<FormElement>, requiredFormValue('Owner'))}
-          />
+          <FormInput label="Title" type="text" register={registerKey('title', requiredFormValue('Title'))} />
+          <FormInput label="Owner" type="text" register={registerKey('owner', requiredFormValue('Owner'))} />
           <FormInput
             label="Description"
             type="text"
-            register={register('description' as Path<FormElement>, requiredFormValue('Description'))}
+            register={registerKey('description', requiredFormValue('Description'))}
           />
         </Flex>
         <Flex css={boxFormCss.toggles} flexDirection="column">
-          <FormToggler
-            selected={watch('activation')}
-            text="질문 기능 비활성화"
-            register={register('activation' as Path<FormElement>)}
-          />
+          <FormToggler selected={watch('activation')} text="질문 기능 비활성화" register={registerKey('activation')} />
           <FormToggler
             selected={watch('anonymous')}
             text="익명 질문을 허용합니다."
-            register={register('anonymous' as Path<FormElement>)}
+            register={registerKey('anonymous')}
           />
         </Flex>
         <WideButton {...btnOpt} onClick={() => {}} />

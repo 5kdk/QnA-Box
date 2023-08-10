@@ -96,7 +96,7 @@ const EditAccount = () => {
       {target === 'profile' ? (
         <UserEditForm<NameType>
           formElement={formName}
-          iniForm={{ displayName: user.displayName }}
+          defaultValues={{ displayName: user.displayName }}
           btnSettings={{
             text: '회원정보 수정',
             color: 'var(--black)',

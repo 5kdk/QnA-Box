@@ -1,4 +1,4 @@
-import { useCallback, useState, MouseEvent } from 'react';
+import { useCallback, useState, MouseEvent, Dispatch, SetStateAction } from 'react';
 import { css } from '@emotion/react';
 import { Pencil, ThreeDots, Trash } from 'emotion-icons/bootstrap';
 import useClickOutside from '../../hooks/useClickOutside';
@@ -26,16 +26,20 @@ const editCss = {
 };
 
 interface EditProps {
-  edit: () => void;
+  setIsEdit: Dispatch<SetStateAction<boolean>>;
   remove: () => void;
 }
 
-const Edit = ({ edit, remove }: EditProps) => {
+const Edit = ({ setIsEdit, remove }: EditProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useClickOutside(useCallback(() => setIsOpen(false), []));
 
   const handleClickMenuButton = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    setIsOpen(prev => !prev);
+  };
+  const handleEdit = () => {
+    setIsEdit(true);
     setIsOpen(prev => !prev);
   };
 
@@ -46,7 +50,7 @@ const Edit = ({ edit, remove }: EditProps) => {
       </button>
       {isOpen && (
         <div css={editCss.modal} ref={ref}>
-          <button css={editCss.button} onClick={edit}>
+          <button css={editCss.button} onClick={handleEdit}>
             <Pencil size="12px" />
             {' 수정'}
           </button>

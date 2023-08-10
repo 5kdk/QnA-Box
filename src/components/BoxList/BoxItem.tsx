@@ -72,7 +72,7 @@ const BoxItem = ({ boxId, title, owner, ownerUid, text, remove }: BoxListItemPro
 
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
-      {editMode && <EditBox boxInfo={{ title, owner, desc: text }} closeEdit={closeEdit} />}
+      {editMode && <EditBox boxId={boxId} boxInfo={{ title, owner, description: text }} closeEdit={closeEdit} />}
       <Avatar size="sm" src={userData ? userData.photoURL : ''} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Flex justifyContent="space-between" alignItems="flex-start">

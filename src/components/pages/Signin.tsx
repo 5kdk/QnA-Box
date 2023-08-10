@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { SignForm } from '../molecules';
-import { SigninSchemaType, signinSchema } from '../../registerSchema';
+import { SigninSchemaType, signinSchema } from '../../schema';
 import { loginUser } from '../../services/auth';
 
 const Signin = () => {

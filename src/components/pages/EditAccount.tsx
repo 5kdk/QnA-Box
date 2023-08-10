@@ -7,7 +7,7 @@ import { InfoSubject } from '../User';
 import { AttachFile, UserEditForm } from '../Account';
 import { userState } from '../../jotai/atom';
 import useImgFile from '../../hooks/useImgFile';
-import { editPswdSchemaType, editPswdSchema } from '../../registerSchema';
+import { editPswdSchemaType, editPswdSchema } from '../../schema';
 import { updateUserAvartar, updateUserDisplayName } from '../../services/profile';
 import { updateUserPassword } from '../../services/auth';
 

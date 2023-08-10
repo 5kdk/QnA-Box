@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Button, Flex } from '../atom';
-import { ErrorFallbackProps } from '../molecules/ErrorFallback';
 
 const errorCss = {
   wrapper: css`
@@ -24,6 +23,11 @@ const errorCss = {
   `,
 };
 
+interface ErrorFallbackProps {
+  error?: Error;
+  resetErrorBoundary?: () => void;
+}
+
 const Error = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
   const navigate = useNavigate();
   const toMainPage = () => navigate('/');
@@ -31,8 +35,8 @@ const Error = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
   return (
     <Flex css={errorCss.wrapper} flexDirection="column" alignItems="center" justifyContent="center">
       <p css={errorCss.msg}>Opps..!</p>
-      <p css={errorCss.code}>{status}</p>
-      <p>{error.message}</p>
+      {!error && <p css={errorCss.code}>404</p>}
+      <p>{error?.message || '요청하신 페이지를 찾을 수 없습니다'}</p>
       <Flex css={errorCss.buttons}>
         <Button
           text="메인으로"

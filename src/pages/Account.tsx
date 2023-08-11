@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
-import { Flex, Note, WideButton } from '../atom';
-import { InfoModal } from '../molecules';
-import { UserInfo } from '../User';
-import { userState } from '../../jotai/atom';
-import useReqTryCatch from '../../hooks/useReqTryCatch';
-import { deregisterUser } from '../../services/auth';
+import { Flex, Note, WideButton } from '../components/atom';
+import { InfoModal } from '../components/molecules';
+import { UserInfo } from '../components/User';
+import { userState } from '../jotai/atom';
+import useReqTryCatch from '../hooks/useReqTryCatch';
+import { deregisterUser } from '../services/auth';
 
 const accountCss = {
   wrapper: css`

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { SignForm } from '../molecules';
-import { SignupSchemaType, signupSchema } from '../../schema';
-import { registerUser } from '../../services/auth';
+import { SignForm } from '../components/molecules';
+import { SignupSchemaType, signupSchema } from '../schema';
+import { registerUser } from '../services/auth';
 import { FirebaseError } from 'firebase/app';
 
 const Signup = () => {

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { PlusSm } from '@emotion-icons/heroicons-solid/';
 import { Button, Flex } from '../atom';
-import { MainFilter } from '../pages/BoxList';
+import { MainFilter } from '../../pages/BoxList';
 
 const buttonCss = {
   wrapper: css`

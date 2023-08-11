@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import useMyListQuery from '../../hooks/query/useMyListQuery';
 import { BoxItem } from '.';
-import { MainFilter } from '../pages/BoxList';
+import { MainFilter } from '../../pages/BoxList';
 import { Flex, Text } from '../atom';
 import { ItemWrapper } from '../molecules';
 import { filterState, searchInputState } from '../../jotai/atom';

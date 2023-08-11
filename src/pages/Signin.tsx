@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { SignForm } from '../molecules';
-import { SigninSchemaType, signinSchema } from '../../schema';
-import { loginUser } from '../../services/auth';
+import { SignForm } from '../components/molecules';
+import { SigninSchemaType, signinSchema } from '../schema';
+import { loginUser } from '../services/auth';
 import { useSetAtom } from 'jotai';
-import userState from '../../jotai/atom/userState';
+import userState from '../jotai/atom/userState';
 
 const Signin = () => {
   const setUser = useSetAtom(userState);

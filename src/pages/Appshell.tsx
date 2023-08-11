@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
-import { Header } from '../molecules';
-import { Notification } from '../atom';
+import { Header } from '../components/molecules';
+import { Notification } from '../components/atom';
 
 const appShellCss = {
   wrapper: css`

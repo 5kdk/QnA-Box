@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { MainFilter } from '../../components/pages/BoxList';
+import { MainFilter } from '../../pages/BoxList';
 import { useAtomValue } from 'jotai';
 import { userState } from '../../jotai/atom';
 import { getMyQnaBoxes, getQnaBoxesById } from '../../services/boxes';

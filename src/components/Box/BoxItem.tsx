@@ -135,7 +135,7 @@ const BoxItem = ({
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
               <span css={boxItemCss.subText}>{displayTimeAgo(postTime)}</span>
-              <Edit setIsEdit={setIsEdit} remove={removePost} />
+              <Edit edit={handleModify} remove={removePost} />
             </Flex>
           </Flex>
           {isEdit ? (

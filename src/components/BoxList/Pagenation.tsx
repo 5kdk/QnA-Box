@@ -3,6 +3,10 @@ import { Flex } from '../atom';
 import { Dispatch, SetStateAction } from 'react';
 
 const PagenationCss = {
+  containerFlex: css`
+    padding: 30px 24px 30px 24px;
+    height: 100%;
+  `,
   buttonStyle: css`
     width: 30px;
     height: 40px;
@@ -12,11 +16,6 @@ const PagenationCss = {
   selectedButtonStyle: css`
     background-color: var(--black);
     color: var(--white);
-  `,
-  containerFlex: css`
-    margin: 0 20px;
-    padding: 20px 0 30px 0;
-    height: 100%;
   `,
   buttonFlex: css`
     gap: 5px;
@@ -44,7 +43,7 @@ const Pagenation = ({ itemsLen, currentPage, setPage }: PagenationProps) => {
   };
 
   return (
-    <Flex justifyContent="space-between" css={PagenationCss.containerFlex}>
+    <Flex justifyContent="space-between" alignItems="center" css={PagenationCss.containerFlex}>
       <button
         css={PagenationCss.buttonStyle}
         aria-label="첫 페이지"

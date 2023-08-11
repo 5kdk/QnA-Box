@@ -7,8 +7,12 @@ const TitleCss = {
   `,
 };
 
-const Title = ({ text }: { text: string }) => {
-  return <div css={TitleCss.TitleStyle}>{text}</div>;
+const Title = ({ text, ...rest }: { text: string }) => {
+  return (
+    <div css={TitleCss.TitleStyle} {...rest}>
+      {text}
+    </div>
+  );
 };
 
 export default Title;

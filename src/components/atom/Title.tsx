@@ -7,10 +7,10 @@ const TitleCss = {
   `,
 };
 
-const Title = ({ text, ...rest }: { text: string }) => {
+const Title = ({ text, ...rest }: { text: string | undefined }) => {
   return (
     <div css={TitleCss.TitleStyle} {...rest}>
-      {text}
+      {text && text}
     </div>
   );
 };

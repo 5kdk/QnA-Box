@@ -3,7 +3,6 @@ import { Navigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import userState from '../jotai/atom/userState';
 import { auth } from '../services/firebase';
-import { Flex, Loading } from '../components/atom';
 
 interface AuthenticationGuardProps {
   redirectTo: string;
@@ -25,19 +24,11 @@ const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) 
     };
   }, [setUser]);
 
-  if (isLoading) {
-    return (
-      <Flex alignItems="center">
-        <Loading />
-      </Flex>
-    );
-  }
-
   if (!user) {
     return <Navigate to={redirectTo} replace />;
   }
 
-  return element;
+  return !isLoading && element;
 };
 
 export default AuthenticationGuard;

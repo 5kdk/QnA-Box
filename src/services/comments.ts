@@ -12,9 +12,10 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { auth, db } from './firebase';
-import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
+import { db } from './firebase';
 import { getUserRef } from './profile';
+import { verifiedUid } from './auth';
+import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
 
@@ -29,8 +30,8 @@ interface CommentData {
 }
 
 export const createComment = async (boxId: string, content: string, commentId?: string) => {
-  const user = auth.currentUser;
-  if (!user) return;
+  const uid = verifiedUid();
+  if (!uid) return;
 
   const commentsCollectionRef = collection(db, COMMENTS_COLLECTION_NAME);
   const commentDocRef = doc(commentsCollectionRef);
@@ -38,7 +39,7 @@ export const createComment = async (boxId: string, content: string, commentId?: 
   const newComment: CommentData = {
     commentId: commentDocRef.id,
     boxId,
-    authorId: user.uid,
+    authorId: uid,
     content,
     likes: 0,
     createdAt: Date.now(),
@@ -73,9 +74,10 @@ export const deleteComment = async (commentId: string) => {
 };
 
 export const increaseCommentLikes = async (commentId: string) => {
-  const user = auth.currentUser;
-  if (!user) return;
-  await updateDoc(getUserRef(user.uid), { likedComments: arrayUnion(commentId) });
+  const uid = verifiedUid();
+  if (!uid) return;
+
+  await updateDoc(getUserRef(uid), { likedComments: arrayUnion(commentId) });
 
   const commentRef = getCommentRef(commentId);
   const commentData = await getDoc(commentRef);
@@ -86,9 +88,10 @@ export const increaseCommentLikes = async (commentId: string) => {
 };
 
 export const decreaseCommentLikes = async (commentId: string) => {
-  const user = auth.currentUser;
-  if (!user) return;
-  await updateDoc(getUserRef(user.uid), { likedComments: arrayRemove(commentId) });
+  const uid = verifiedUid();
+  if (!uid) return;
+
+  await updateDoc(getUserRef(uid), { likedComments: arrayRemove(commentId) });
 
   const commentRef = getCommentRef(commentId);
   const commentData = await getDoc(commentRef);

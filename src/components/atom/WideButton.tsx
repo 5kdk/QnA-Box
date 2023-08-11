@@ -1,9 +1,9 @@
 import Button, { ButtonProps } from './Button';
 
-const WideButton = ({ text, color, bgColor, borderColor, icon, type, onClick }: ButtonProps) => {
+const WideButton = ({ minWidth, color, bgColor, borderColor, icon, text, type, onClick }: ButtonProps) => {
   return (
     <Button
-      minWidth="320px"
+      minWidth={minWidth || '320px'}
       padding="16px"
       color={color}
       bgColor={bgColor}

@@ -20,11 +20,11 @@ const Buttons = () => {
   const selected = filter.mainFilter === 'joined';
 
   const handleClickJoinedBox = () => {
-    setFilter(prev => ({ ...prev, mainFilter: 'joined' }));
+    setFilter({ ...filter, mainFilter: 'joined' });
   };
 
   const handleClickMyBox = () => {
-    setFilter(prev => ({ ...prev, mainFilter: 'my' }));
+    setFilter({ ...filter, mainFilter: 'my' });
   };
 
   const handleClickNewBox = () => {

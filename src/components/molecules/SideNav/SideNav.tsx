@@ -87,7 +87,7 @@ const SideNav = ({ isOpen }: SideNavProps) => {
         </Flex>
         {user && (
           <Flex flexDirection="column" alignItems="center">
-            <WideButton text="로그아웃" color="var(--white)" bgColor="var(--black)" onClick={handleSignOutClick} />
+            <WideButton text="Sign out" color="var(--white)" bgColor="var(--black)" onClick={handleSignOutClick} />
           </Flex>
         )}
       </Flex>

@@ -3,7 +3,7 @@ import { modalCss } from '../../styles';
 import { BoxForm } from '../molecules';
 import { css } from '@emotion/react';
 import { useUpdateMyBoxMutation } from '../../hooks/mutation';
-import { Box } from '../../services/boxes';
+import { FormElement } from '../../services/boxes';
 
 const editBoxCss = {
   wrapper: css`
@@ -28,7 +28,7 @@ const editBoxCss = {
 
 interface EditBoxProps {
   boxId: string;
-  boxInfo: Box;
+  boxInfo: FormElement;
   closeEdit: () => void;
 }
 

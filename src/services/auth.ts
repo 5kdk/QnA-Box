@@ -12,15 +12,7 @@ import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from './firebase';
 import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 import { extractUsernameFromEmail } from '../utils';
-
-interface UserData {
-  uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string | null;
-  joinedBoxes: string[];
-  likedComments: string[];
-}
+import { UserData } from './profile';
 
 const createUserDoc = async (
   uid: string,
@@ -58,22 +50,21 @@ export const loginWithGoogle = async () => {
 export const loginUser = async (email: string, password: string) => {
   await signInWithEmailAndPassword(auth, email, password);
   const user = auth.currentUser;
+  if (!user) return;
 
-  if (user) {
-    const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
-    const userData = await getDoc(userDocRef);
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+  const userData = await getDoc(userDocRef);
 
-    return userData.data();
-  }
-};
+  return userData.data();
+}
 
 export const deregisterUser = async () => {
   const user = auth.currentUser;
-  if (user) {
-    const docRef = doc(db, USERS_COLLECTION_NAME, user.uid);
-    await deleteDoc(docRef);
-    await deleteUser(user);
-  }
+  if (!user) return;
+
+  const docRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+  await deleteDoc(docRef);
+  await deleteUser(user);
 };
 
 export const logoutUser = async (): Promise<void> => {

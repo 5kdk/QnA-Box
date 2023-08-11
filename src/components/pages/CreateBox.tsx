@@ -3,9 +3,8 @@ import { Flex, Title } from '../atom';
 import { BoxForm } from '../molecules';
 import { useAtomValue } from 'jotai';
 import { userState } from '../../jotai/atom';
-import { createQnaBox } from '../../services/boxes';
+import { Box, createQnaBox } from '../../services/boxes';
 import { useNavigate } from 'react-router-dom';
-import { FormElement } from '../molecules/BoxForm';
 
 const createBoxCss = {
   wrapper: css`
@@ -18,7 +17,7 @@ const CreateBox = () => {
   const user = useAtomValue(userState);
   const navigate = useNavigate();
 
-  const handleSubmit = (formData: FormElement) => {
+  const handleSubmit = (formData: Box) => {
     createQnaBox(formData);
     navigate('/box', { replace: true });
   };

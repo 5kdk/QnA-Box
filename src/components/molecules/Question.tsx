@@ -7,10 +7,11 @@ import { css, keyframes } from '@emotion/react';
 
 const Slide = keyframes`
     0%{
-        top : 100vh;
+        transform : translateX(-50%) translateY(100%);
+        
     }
     100%{
-        top : 80vh
+        transform : translateX(-50%) translateY(0);
     }
 `;
 
@@ -71,7 +72,7 @@ const Question = () => {
   return (
     <Flex css={questionCss.wrapper} flexDirection="column">
       <label css={questionCss.inputBox}>
-        <Avatar src={user.photoURL} size="sm" />
+        <Avatar src={user?.photoURL} size="sm" />
         <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={handleQustionInput} />
       </label>
       <Flex justifyContent="space-between" alignItems="center">

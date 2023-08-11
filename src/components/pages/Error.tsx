@@ -23,21 +23,20 @@ const errorCss = {
   `,
 };
 
-interface ErrorProps {
-  status?: number;
-  message?: string;
-  retryFunc?: () => void;
+interface ErrorFallbackProps {
+  error?: Error;
+  resetErrorBoundary?: () => void;
 }
 
-const Error = ({ status = 404, message = '요청하신 페이지를 찾을 수 없습니다', retryFunc }: ErrorProps) => {
+const Error = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
   const navigate = useNavigate();
   const toMainPage = () => navigate('/');
 
   return (
     <Flex css={errorCss.wrapper} flexDirection="column" alignItems="center" justifyContent="center">
       <p css={errorCss.msg}>Opps..!</p>
-      <p css={errorCss.code}>{status}</p>
-      <p>{message}</p>
+      {!error && <p css={errorCss.code}>404</p>}
+      <p>{error?.message || '요청하신 페이지를 찾을 수 없습니다'}</p>
       <Flex css={errorCss.buttons}>
         <Button
           text="메인으로"
@@ -46,7 +45,9 @@ const Error = ({ status = 404, message = '요청하신 페이지를 찾을 수 �
           borderColor="var(--gray)"
           onClick={toMainPage}
         />
-        {retryFunc && <Button text="Retry" color="var(--white)" bgColor="var(--black)" onClick={retryFunc} />}
+        {resetErrorBoundary && (
+          <Button text="Retry" color="var(--white)" bgColor="var(--black)" onClick={resetErrorBoundary} />
+        )}
       </Flex>
     </Flex>
   );

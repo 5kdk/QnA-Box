@@ -13,7 +13,7 @@ const avatarCss = (size: SizeType) => css`
 type SizeType = 'lg' | 'md' | 'sm';
 
 interface AvatarProps {
-  src?: string;
+  src?: string | null;
   size?: SizeType;
 }
 

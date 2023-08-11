@@ -29,6 +29,7 @@ const boxItemCss = {
     margin-bottom: 5px;
     font-weight: 700;
     font-size: 14px;
+    color: var(--deep_gray);
   `,
   ownerName: css`
     color: var(--blue);
@@ -58,7 +59,8 @@ type Post = {
   content: string;
   createdAt: string;
   likes: number;
-  replies: Post[];
+  parentId: null | string;
+  replies?: Post[];
 };
 
 type BoxItemProps = Post & {
@@ -111,7 +113,8 @@ const BoxItem = ({
   content,
   likes,
   createdAt,
-  replies,
+  parentId,
+  replies = [],
 }: BoxItemProps) => {
   // temp
   const [isEdit, setIsEdit] = useState(false);
@@ -146,10 +149,11 @@ const BoxItem = ({
         </Flex>
         <Flex flexDirection="column" css={boxItemCss.question}>
           <Flex justifyContent="space-between" alignItems="flex-start">
-            <Flex flexDirection="column">
+            <Flex>
               <span css={owner === data?.displayName ? [boxItemCss.name, boxItemCss.ownerName] : boxItemCss.name}>
                 {data?.displayName}
               </span>
+              {parentId ? <span css={boxItemCss.name}>'s reply</span> : ''}
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
               <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
@@ -165,26 +169,27 @@ const BoxItem = ({
             {isLike ? <SuitHeartFill size="14px" color="var(--orange)" /> : <SuitHeart size="14px" />}
             {likes !== 0 && <span css={boxItemCss.subText}>{`${likes} likes`}</span>}
             <button css={boxItemCss.reply} onClick={handleReplyComment(commentId, data.displayName)}>
-              {isEdit ? '' : <Reply size="20px" />}
+              {isEdit || parentId !== null ? '' : <Reply size="20px" />}
             </button>
           </Flex>
         </Flex>
       </Flex>
-      {/* {answer.length !== 0 &&
-        answer.map(({ responder, responderAvatarUrl, postTime, content, like, answer }, i) => (
+      {replies.length !== 0 &&
+        replies.map(({ commentId, authorId, createdAt, content, likes, parentId }, i) => (
           <BoxItem
             owner={owner}
-            responder={responder}
+            commentId={commentId}
+            authorId={authorId}
+            createdAt={createdAt}
             content={content}
-            postTime={postTime}
-            responderAvatarUrl={responderAvatarUrl}
-            like={like}
-            answer={answer}
-            key={`answer ${responder} ${i}`}
+            likes={likes}
+            parentId={parentId}
+            key={`answer ${commentId} ${i}`}
+            setReplyUser={setReplyUser}
             setReplyComment={setReplyComment}
             replyComment={replyComment}
           />
-        ))} */}
+        ))}
     </>
   );
 };

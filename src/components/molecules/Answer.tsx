@@ -4,6 +4,7 @@ import { useAtomValue } from 'jotai';
 import userState from '../../jotai/atom/userState';
 import { Avatar, Button, Flex, Note, Toggler } from '../atom';
 import { css, keyframes } from '@emotion/react';
+import { createComment } from '../../services/comments';
 
 const Slide = keyframes`
     0%{
@@ -59,7 +60,7 @@ const answerCss = {
   `,
 };
 
-const Answer = ({ replyUser }: { replyUser: string }) => {
+const Answer = ({ replyUser, replyComment, BoxId }: { replyUser: string; replyComment: string; BoxId: string }) => {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [reply, setreply] = useState('');
   const user = useAtomValue(userState);
@@ -67,7 +68,9 @@ const Answer = ({ replyUser }: { replyUser: string }) => {
 
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setreply(e.target.value);
   const setAnonymous = () => setIsAnonymous(pre => !pre);
-  const createReply = () => console.log(reply);
+  const createReply = () => {
+    createComment(BoxId, reply, replyComment);
+  };
   const ToSignin = () => {
     navigate('/signin');
   };

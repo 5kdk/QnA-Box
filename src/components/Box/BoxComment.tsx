@@ -2,12 +2,12 @@ import { useState, SetStateAction, Dispatch } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Flex, Text } from '../atom';
+import { getComments } from '../../services/comments';
 import { getQnaBoxesById } from '../../services/boxes';
 import { Controller, ItemWrapper } from '../molecules';
 import BoxItem from './BoxItem';
 import { css } from '@emotion/react';
 import { InfoCircle } from '@emotion-icons/bootstrap';
-import { Comments } from '../../pages/Box';
 
 const boxCss = {
   wrapper: css`
@@ -24,30 +24,46 @@ const boxCss = {
   `,
 };
 
+export type Comments = {
+  authorId: string;
+  boxId: string;
+  commentId: string;
+  content: string;
+  createdAt: string;
+  likes: number;
+  parentId: null | string;
+  replies: [];
+};
+
 const BoxComment = ({
   replyComment,
   setReplyComment,
   setReplyUser,
-  comments,
 }: {
   replyComment: string;
   setReplyComment: Dispatch<SetStateAction<string>>;
   setReplyUser: Dispatch<SetStateAction<string>>;
-  comments: Comments[];
 }) => {
   const [moreInfo, setMoreInfo] = useState(false);
   const { id } = useParams() as { id: string };
   const staleTime = 3000;
-  const { data } = useQuery({
+
+  const { data: boxdetail } = useQuery({
     queryKey: ['boxdetail', id],
     queryFn: () => getQnaBoxesById([id]),
     staleTime,
   });
-  if (data !== undefined)
+  const { data: boxcomments } = useQuery({
+    queryKey: ['boxcomments', id],
+    queryFn: () => getComments(id),
+    staleTime,
+  }) as { data: Comments[] };
+
+  if (boxdetail !== undefined)
     return (
       <div css={boxCss.container}>
         <Flex justifyContent="space-between" alignItems="center" css={boxCss.wrapper}>
-          <h2>{data && data[0].title}</h2>
+          <h2>{boxdetail && boxdetail[0].title}</h2>
           <button aria-label="더 많은 정보 보기">
             <InfoCircle size="16px" onClick={() => setMoreInfo(prev => !prev)} />
           </button>
@@ -55,24 +71,25 @@ const BoxComment = ({
         <Flex flexDirection="column" css={[boxCss.wrapper, boxCss.info]}>
           {moreInfo && (
             <>
-              <Text>{data && data[0].owner}</Text>
-              <Text>{data && data[0].description}</Text>
+              <Text>{boxdetail && boxdetail[0].owner}</Text>
+              <Text>{boxdetail && boxdetail[0].description}</Text>
             </>
           )}
           <Text>마지막 답변 날짜: 2023.07.31</Text>
         </Flex>
         <Controller />
         <ItemWrapper>
-          {comments.map(({ authorId, commentId, content, likes, replies, createdAt }: Comments, i: number) => (
+          {boxcomments.map(({ authorId, commentId, content, likes, replies, createdAt, parentId }, i) => (
             <Flex css={boxCss.border} flexDirection="column" key={`${commentId} ${i}`}>
               <BoxItem
-                owner={data[0].owner}
+                owner={boxdetail[0].owner}
                 authorId={authorId}
                 content={content}
                 createdAt={createdAt}
                 commentId={commentId}
                 likes={likes}
                 replies={replies}
+                parentId={parentId}
                 setReplyComment={setReplyComment}
                 replyComment={replyComment}
                 setReplyUser={setReplyUser}

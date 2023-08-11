@@ -4,6 +4,8 @@ import { css } from '@emotion/react';
 import { SuitHeart, SuitHeartFill } from '@emotion-icons/bootstrap';
 import { Reply } from '@emotion-icons/boxicons-regular/Reply';
 import EditCommentForm from './EditCommentForm';
+import { useQuery } from '@tanstack/react-query';
+import { getProfile } from '../../services/profile';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -27,6 +29,7 @@ const boxItemCss = {
     margin-bottom: 5px;
     font-weight: 700;
     font-size: 14px;
+    color: var(--deep_gray);
   `,
   ownerName: css`
     color: var(--blue);
@@ -51,18 +54,28 @@ const boxItemCss = {
 };
 
 type Post = {
-  responder: string;
-  responderAvatarUrl: string;
+  authorId: string;
+  commentId: string;
   content: string;
-  postTime: string;
-  like: number;
-  answer: Post[];
+  createdAt: string;
+  likes: number;
+  parentId: null | string;
+  replies?: Post[];
 };
 
 type BoxItemProps = Post & {
   owner: string;
   setReplyComment: Dispatch<SetStateAction<string>>;
+  setReplyUser: Dispatch<SetStateAction<string>>;
   replyComment: string;
+};
+type Profile = {
+  displayName: string;
+  email: string;
+  joinedBoxes: [];
+  likedComments: [];
+  photoURL: null | string;
+  uid: string;
 };
 
 const displayTimeAgo = (postTimestamp: string): string => {
@@ -92,18 +105,25 @@ const displayTimeAgo = (postTimestamp: string): string => {
 };
 const BoxItem = ({
   setReplyComment,
+  setReplyUser,
   replyComment,
   owner,
-  responder,
-  postTime,
+  authorId,
+  commentId,
   content,
-  responderAvatarUrl,
-  like,
-  answer,
+  likes,
+  createdAt,
+  parentId,
+  replies = [],
 }: BoxItemProps) => {
   // temp
   const [isEdit, setIsEdit] = useState(false);
   const isLike = true;
+
+  const { data } = useQuery({
+    queryKey: ['getAuthor', authorId],
+    queryFn: () => getProfile(authorId),
+  }) as { data: Profile };
 
   const handleModify = () => {
     setIsEdit(prev => !prev);
@@ -114,27 +134,29 @@ const BoxItem = ({
   const removePost = () => {
     console.log('delete');
   };
-  const handleComment = (responder: string) => () => {
-    if (responder === replyComment) return setReplyComment('');
-    setReplyComment(responder);
+  const handleReplyComment = (commentId: string, name: string) => () => {
+    if (commentId === replyComment) return setReplyComment('');
+    setReplyComment(commentId);
+    setReplyUser(name);
   };
 
   return (
     <>
-      <Flex css={boxItemCss.wrapper(replyComment === responder)} justifyContent="space-between">
+      <Flex css={boxItemCss.wrapper(replyComment === commentId)} justifyContent="space-between">
         <Flex alignItems="center" flexDirection="column">
-          <Avatar size="sm" src={responderAvatarUrl} />
-          {answer.length !== 0 && <div css={boxItemCss.line}></div>}
+          <Avatar size="sm" src={data?.photoURL} />
+          {replies.length !== 0 && <div css={boxItemCss.line}></div>}
         </Flex>
         <Flex flexDirection="column" css={boxItemCss.question}>
           <Flex justifyContent="space-between" alignItems="flex-start">
-            <Flex flexDirection="column">
-              <span css={owner === responder ? [boxItemCss.name, boxItemCss.ownerName] : boxItemCss.name}>
-                {responder}
+            <Flex>
+              <span css={owner === data?.displayName ? [boxItemCss.name, boxItemCss.ownerName] : boxItemCss.name}>
+                {data?.displayName}
               </span>
+              {parentId ? <span css={boxItemCss.name}>'s reply</span> : ''}
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
-              <span css={boxItemCss.subText}>{displayTimeAgo(postTime)}</span>
+              <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
               <Edit edit={handleModify} remove={removePost} />
             </Flex>
           </Flex>
@@ -145,24 +167,25 @@ const BoxItem = ({
           )}
           <Flex alignItems="center" css={boxItemCss.like}>
             {isLike ? <SuitHeartFill size="14px" color="var(--orange)" /> : <SuitHeart size="14px" />}
-            {like !== 0 && <span css={boxItemCss.subText}>{`${like} likes`}</span>}
-            <button css={boxItemCss.reply} onClick={handleComment(responder)}>
-              {isEdit ? '' : <Reply size="20px" />}
+            {likes !== 0 && <span css={boxItemCss.subText}>{`${likes} likes`}</span>}
+            <button css={boxItemCss.reply} onClick={handleReplyComment(commentId, data.displayName)}>
+              {isEdit || parentId !== null ? '' : <Reply size="20px" />}
             </button>
           </Flex>
         </Flex>
       </Flex>
-      {answer.length !== 0 &&
-        answer.map(({ responder, responderAvatarUrl, postTime, content, like, answer }, i) => (
+      {replies.length !== 0 &&
+        replies.map(({ commentId, authorId, createdAt, content, likes, parentId }, i) => (
           <BoxItem
             owner={owner}
-            responder={responder}
+            commentId={commentId}
+            authorId={authorId}
+            createdAt={createdAt}
             content={content}
-            postTime={postTime}
-            responderAvatarUrl={responderAvatarUrl}
-            like={like}
-            answer={answer}
-            key={`answer ${responder} ${i}`}
+            likes={likes}
+            parentId={parentId}
+            key={`answer ${commentId} ${i}`}
+            setReplyUser={setReplyUser}
             setReplyComment={setReplyComment}
             replyComment={replyComment}
           />

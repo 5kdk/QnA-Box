@@ -32,9 +32,10 @@ interface BoxFormProps {
     color: string;
     bgColor: string;
   };
+  closeEdit?: () => void;
 }
 
-const BoxForm = ({ submitFunc, defaultValues, btnOpt }: BoxFormProps) => {
+const BoxForm = ({ submitFunc, defaultValues, btnOpt, closeEdit }: BoxFormProps) => {
   const { registerKey, onSubmit, watch } = useCustomForm<FormElement>(submitFunc, defaultValues);
 
   return (
@@ -57,7 +58,7 @@ const BoxForm = ({ submitFunc, defaultValues, btnOpt }: BoxFormProps) => {
             register={registerKey('anonymous')}
           />
         </Flex>
-        <WideButton {...btnOpt} onClick={() => {}} />
+        <WideButton {...btnOpt} onClick={closeEdit || (() => {})} />
       </form>
     </Flex>
   );

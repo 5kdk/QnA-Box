@@ -41,6 +41,7 @@ const EditBox = ({ boxId, boxInfo, closeEdit }: EditBoxProps) => {
         <BoxForm
           defaultValues={boxInfo}
           btnOpt={{ text: '수정하기', color: 'var(--white)', bgColor: 'var(--black)' }}
+          closeEdit={closeEdit}
           submitFunc={formData => update({ boxId: boxId, editFormData: formData })}
         />
       </Flex>

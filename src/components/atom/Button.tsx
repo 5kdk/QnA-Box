@@ -7,6 +7,7 @@ export interface cssProps {
   color: string;
   bgColor: string;
   borderColor?: string;
+  fontSize?: string;
   fontWeight?: number;
   icon?: ReactNode;
 }
@@ -15,10 +16,21 @@ export interface ButtonProps extends cssProps {
   onClick?: () => void;
 }
 
-const Button = ({ minWidth, padding, text, color, bgColor, borderColor, fontWeight, icon, onClick }: ButtonProps) => {
+const Button = ({
+  minWidth,
+  padding,
+  text,
+  fontSize,
+  color,
+  bgColor,
+  borderColor,
+  fontWeight,
+  icon,
+  onClick,
+}: ButtonProps) => {
   return (
     <button
-      css={buttonCss({ minWidth, padding, color, bgColor, borderColor, fontWeight, icon })}
+      css={buttonCss({ minWidth, padding, fontSize, color, bgColor, borderColor, fontWeight, icon })}
       aria-label={text}
       onClick={onClick}>
       {icon}

@@ -6,6 +6,7 @@ import { EditBox } from '.';
 import { getProfile } from '../../services/profile';
 import { Box } from '../../services/boxes';
 import { useRemoveMyBoxMutation } from '../../hooks/mutation';
+import { useNavigate } from 'react-router-dom';
 
 const BoxListCss = {
   wrapperStyle: css`
@@ -19,6 +20,7 @@ const BoxListCss = {
     margin-bottom: 5px;
     font-size: 16px;
     font-weight: 700;
+    text-align: left;
   `,
   nameStyle: css`
     font-size: 13px;
@@ -40,12 +42,17 @@ interface BoxListItemProps {
 const BoxItem = ({ boxInfo }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
   const { mutate: remove } = useRemoveMyBoxMutation();
+  const navigate = useNavigate();
 
   const { data: userData } = useQuery({
     queryKey: ['user', boxInfo.ownerUid],
     queryFn: () => getProfile(boxInfo.ownerUid),
     staleTime,
   });
+
+  const navigateToDetail = () => {
+    navigate(boxInfo.boxId);
+  };
 
   const editPost = () => {
     console.log('edit');
@@ -67,7 +74,9 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Flex justifyContent="space-between" alignItems="flex-start">
           <Flex flexDirection="column">
-            <span css={BoxListCss.titleStyle}>{boxInfo.title}</span>
+            <button css={BoxListCss.titleStyle} onClick={navigateToDetail}>
+              {boxInfo.title}
+            </button>
             <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{boxInfo.owner}</span>
           </Flex>
           <Flex alignItems="center" css={BoxListCss.menuWrapperStyle}>

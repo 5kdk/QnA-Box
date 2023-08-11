@@ -11,7 +11,7 @@ const User = () => {
   return (
     <ErrorBoundary FallbackComponent={Error} onReset={reset}>
       <Suspense fallback={<Loading />}>
-        <UserProfile />;
+        <UserProfile />
       </Suspense>
     </ErrorBoundary>
   );

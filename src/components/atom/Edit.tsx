@@ -39,6 +39,16 @@ const Edit = ({ edit, remove }: EditProps) => {
     setIsOpen(prev => !prev);
   };
 
+  const handleEditClick = () => {
+    edit();
+    setIsOpen(false);
+  };
+
+  const handleRemoveClick = () => {
+    remove();
+    setIsOpen(false);
+  };
+
   return (
     <div>
       <button aria-label="Edit-button" onClick={handleClickMenuButton}>
@@ -46,11 +56,11 @@ const Edit = ({ edit, remove }: EditProps) => {
       </button>
       {isOpen && (
         <div css={editCss.modal} ref={ref}>
-          <button css={editCss.button} onClick={edit}>
+          <button css={editCss.button} onClick={handleEditClick}>
             <Pencil size="12px" />
             {' 수정'}
           </button>
-          <button css={editCss.button} onClick={remove}>
+          <button css={editCss.button} onClick={handleRemoveClick}>
             <Trash size="12px" />
             {' 삭제'}
           </button>

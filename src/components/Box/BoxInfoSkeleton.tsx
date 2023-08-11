@@ -1,5 +1,4 @@
 import { Flex } from '../atom';
-import { ItemSkeleton } from '.';
 import { css, keyframes } from '@emotion/react';
 import { InfoCircle } from '@emotion-icons/bootstrap';
 
@@ -13,6 +12,9 @@ const blink = keyframes`
 `;
 
 const BoxSkeletonCss = {
+  titleWrapper: css`
+    padding: 20px 0;
+  `,
   text: css`
     width: 100px;
     height: 18px;
@@ -23,9 +25,6 @@ const BoxSkeletonCss = {
   detail: css`
     width: 340px;
     height: 15px;
-  `,
-  titleWrapper: css`
-    padding: 10px 20px 0 20px;
   `,
   title: css`
     width: 150px;
@@ -47,7 +46,6 @@ const BoxSkeleton = () => {
         </Flex>
         <InfoCircle size="16px" />
       </Flex>
-      <ItemSkeleton num={5} />
     </>
   );
 };

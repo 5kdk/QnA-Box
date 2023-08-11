@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { Flex, Title } from '../atom';
-import { BoxForm } from '../molecules';
+import { Flex, Title } from '../components/atom';
+import { BoxForm } from '../components/molecules';
 import { useAtomValue } from 'jotai';
-import { userState } from '../../jotai/atom';
-import { Box, createQnaBox } from '../../services/boxes';
+import { userState } from '../jotai/atom';
+import { FormElement, createQnaBox } from '../services/boxes';
 import { useNavigate } from 'react-router-dom';
 
 const createBoxCss = {
@@ -17,7 +17,7 @@ const CreateBox = () => {
   const user = useAtomValue(userState);
   const navigate = useNavigate();
 
-  const handleSubmit = (formData: Box) => {
+  const handleSubmit = (formData: FormElement) => {
     createQnaBox(formData);
     navigate('/box', { replace: true });
   };

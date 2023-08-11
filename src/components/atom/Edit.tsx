@@ -1,4 +1,4 @@
-import { useCallback, useState, MouseEvent, Dispatch, SetStateAction } from 'react';
+import { useCallback, useState, MouseEvent } from 'react';
 import { css } from '@emotion/react';
 import { Pencil, ThreeDots, Trash } from 'emotion-icons/bootstrap';
 import useClickOutside from '../../hooks/useClickOutside';

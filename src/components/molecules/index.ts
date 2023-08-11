@@ -8,5 +8,4 @@ export { default as ItemSkeleton } from './ItemSkeleton';
 export { default as ItemWrapper } from './ItemWrapper';
 export { default as Question } from './Question';
 export { default as SignForm } from './SignForm';
-export { default as UserEditForm } from './UserEditForm';
 export { default as Answer } from './Answer';

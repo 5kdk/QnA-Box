@@ -2,13 +2,13 @@ import { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Buttons } from '../BoxList';
+import { Buttons } from '../components/BoxList';
 // import { Buttons, Pagenation } from '../BoxList';
-import Controller from '../molecules/Controller';
-import Board from '../BoxList/Board';
-import ErrorFallback from '../molecules/ErrorFallback';
-import { ItemSkeleton } from '../molecules';
-import { getLocalStorage, setLocalStorage } from '../../utils/localStorage';
+import Controller from '../components/molecules/Controller';
+import Board from '../components/BoxList/Board';
+import ErrorFallback from '../components/molecules/ErrorFallback';
+import { ItemSkeleton } from '../components/molecules';
+import { getLocalStorage, setLocalStorage } from '../utils/localStorage';
 
 const key = 'filter';
 

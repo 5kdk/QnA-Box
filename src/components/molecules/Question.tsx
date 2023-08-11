@@ -7,10 +7,11 @@ import { css, keyframes } from '@emotion/react';
 
 const Slide = keyframes`
     0%{
-        top : 100vh;
+        transform : translateX(-50%) translateY(100%);
+        
     }
     100%{
-        top : 80vh
+        transform : translateX(-50%) translateY(0);
     }
 `;
 

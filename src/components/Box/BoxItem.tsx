@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { css } from '@emotion/react';
 import { SuitHeart, SuitHeartFill } from '@emotion-icons/bootstrap';
 import { Reply } from '@emotion-icons/boxicons-regular/Reply';
+import EditCommentForm from './EditCommentForm';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -101,10 +102,14 @@ const BoxItem = ({
   answer,
 }: BoxItemProps) => {
   // temp
+  const [isEdit, setIsEdit] = useState(false);
   const isLike = true;
 
-  const editPost = () => {
-    console.log('edit');
+  const handleModify = () => {
+    setIsEdit(prev => !prev);
+  };
+  const handleCancle = () => {
+    setIsEdit(prev => !prev);
   };
   const removePost = () => {
     console.log('delete');
@@ -130,15 +135,19 @@ const BoxItem = ({
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
               <span css={boxItemCss.subText}>{displayTimeAgo(postTime)}</span>
-              <Edit edit={editPost} remove={removePost} />
+              <Edit setIsEdit={setIsEdit} remove={removePost} />
             </Flex>
           </Flex>
-          <Text>{content}</Text>
+          {isEdit ? (
+            <EditCommentForm text={content} handleModify={handleModify} handleCancle={handleCancle} />
+          ) : (
+            <Text>{content}</Text>
+          )}
           <Flex alignItems="center" css={boxItemCss.like}>
             {isLike ? <SuitHeartFill size="14px" color="var(--orange)" /> : <SuitHeart size="14px" />}
             {like !== 0 && <span css={boxItemCss.subText}>{`${like} likes`}</span>}
             <button css={boxItemCss.reply} onClick={handleComment(responder)}>
-              <Reply size="20px" />
+              {isEdit ? '' : <Reply size="20px" />}
             </button>
           </Flex>
         </Flex>

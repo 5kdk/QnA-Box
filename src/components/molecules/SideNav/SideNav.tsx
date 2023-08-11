@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
-import { Flex, Logo, Note, WideButton } from '../../atom';
-import { UserInfo, BoxInfo } from '.';
+import { Flex, Logo, WideButton } from '../../atom';
+import { UserInfo } from '.';
 import { logoutUser } from '../../../services/auth';
 import { sideNavState, userState } from '../../../jotai/atom';
+import { CopyLight } from '..';
 
 const SideNavCss = {
   navContainer: (isOpen: boolean) => css`
@@ -18,19 +19,41 @@ const SideNavCss = {
     overflow: hidden;
     white-space: nowrap;
     background-color: var(--white);
-    box-shadow: -1px 5px 5px 0px var(--shadow);
+    border: 0.2px solid var(--gray);
   `,
   wrapper: css`
     width: var(--app_width);
     height: 100%;
   `,
+  subWrapper: css`
+    width: var(--app_width);
+    flex: 2;
+    padding: 10px 30px;
+  `,
+  listWrapper: (isLogin: boolean) => css`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    align-items: ${isLogin ? 'flex-start' : 'center'};
+  `,
   logostyle: css`
-    flex-grow: 0.4;
+    flex: 2;
   `,
   notestyle: css`
-    margin: 15px 20px 0 20px;
     font-weight: bold;
     color: var(--black);
+    cursor: pointer;
+
+    & a {
+      text-decoration: none;
+      color: var(--black);
+    }
+  `,
+  buttonWrapper: css`
+    width: var(--app_width);
+    flex: 1;
+    padding: 10px 30px;
   `,
   teamstyle: css`
     display: flex;
@@ -39,11 +62,6 @@ const SideNavCss = {
     text-align: center;
   `,
 };
-
-const UserBoxData = [
-  { id: 1, box: 'React-query의 모든 것' },
-  { id: 2, box: 'FireBase 배워보자' },
-];
 
 interface SideNavProps {
   isOpen: boolean;
@@ -63,33 +81,63 @@ const SideNav = ({ isOpen }: SideNavProps) => {
     setSideNavState(false);
   };
 
+  const handleSignInClick = () => {
+    navigate('/signin');
+    setSideNavState(false);
+  };
+
+  const handleMyBoxClick = () => {
+    navigate('/box');
+    setSideNavState(false);
+  };
+
+  const handleSignUpClick = () => {};
+
   return (
     <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
-      <Flex css={SideNavCss.wrapper} flexDirection="column" alignItems={user ? 'stretch' : 'center'}>
+      <Flex
+        css={SideNavCss.wrapper}
+        flexDirection="column"
+        alignItems={user ? 'stretch' : 'center'}
+        justifyContent="space-between">
         {user ? (
-          <>
-            <UserInfo
-              src={user.photoURL}
-              displayName={user.displayName}
-              email={user.email}
-              toAccount={redirectTo('/account')}
-            />
-            <BoxInfo UserBoxData={UserBoxData} title="새소식" />
-            <BoxInfo UserBoxData={UserBoxData} title="최근 살펴본 Box" />
-          </>
+          <UserInfo
+            src={user.photoURL}
+            displayName={user.displayName}
+            email={user.email}
+            toAccount={redirectTo('/account')}
+          />
         ) : (
           <Logo css={SideNavCss.logostyle} size="lg" />
         )}
-        <Flex flexDirection="column" alignItems="flex-start">
-          <Note css={SideNavCss.notestyle} text="서비스 소개" onClick={() => {}} />
-          <Note css={SideNavCss.notestyle} text="서비스 문의" onClick={() => {}} />
-          <Note css={SideNavCss.teamstyle} text="by Team 쬬와규" onClick={() => {}} />
+        <Flex css={SideNavCss.subWrapper} flexDirection="column" alignItems="center">
+          <div css={SideNavCss.listWrapper(user)}>
+            {user ? (
+              <button css={SideNavCss.notestyle} onClick={handleMyBoxClick} aria-label="">
+                내 Box 목록 바로가기
+              </button>
+            ) : (
+              <button css={SideNavCss.notestyle} onClick={handleSignUpClick}>
+                회원가입
+              </button>
+            )}
+            <div css={SideNavCss.notestyle}>서비스 약관</div>
+            <div css={SideNavCss.notestyle}>
+              <a href="mailto:5kdk.code@gmail.com">서비스 문의</a>
+            </div>
+          </div>
         </Flex>
-        {user && (
-          <Flex flexDirection="column" alignItems="center">
-            <WideButton text="Sign out" color="var(--white)" bgColor="var(--black)" onClick={handleSignOutClick} />
-          </Flex>
-        )}
+        <Flex css={SideNavCss.buttonWrapper} flexDirection="column" alignItems="center">
+          <WideButton
+            text={user ? 'Sign out' : 'Sign In'}
+            color="var(--white)"
+            bgColor="var(--black)"
+            minWidth="100%"
+            onClick={user ? handleSignOutClick : handleSignInClick}
+          />
+          <br />
+          <CopyLight black />
+        </Flex>
       </Flex>
     </Flex>
   );

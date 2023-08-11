@@ -4,14 +4,13 @@ import { Note, Flex } from '../../atom';
 const BoxInfoCss = {
   flexstyle: css`
     margin-top: 10px;
-    margin-left: 20px;
   `,
   newsstyle: css`
-    margin: 10px 20px 0 20px;
     font-size: 16px;
     font-weight: bold;
   `,
   container: css`
+    padding: 10px 30px 30px 30px;
     padding-bottom: 30px;
     border-bottom: 0.5px solid var(--gray);
   `,

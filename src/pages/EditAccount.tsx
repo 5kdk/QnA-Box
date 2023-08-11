@@ -39,8 +39,8 @@ const EditAccount = () => {
   const { target } = useParams();
   const navigate = useNavigate();
   const editImgName = async (data: NameType) => {
-    if (imgFile && user!.photoURL !== imgBuffer) await updateUserAvartar(user!.uid, imgFile);
-    if (user!.displayName !== data.displayName) await updateUserDisplayName(user!.uid, data.displayName);
+    if (imgFile && user!.photoURL !== imgBuffer) await updateUserAvartar(imgFile);
+    if (user!.displayName !== data.displayName) await updateUserDisplayName(data.displayName);
   };
 
   const editPswd = (data: editPswdSchemaType) => updateUserPassword(data.prePassword, data.password);

@@ -1,7 +1,7 @@
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { UserInfo } from '.';
 import { getProfile } from '../../services/profile';
-import { useParams } from 'react-router-dom';
 
 const UserProfile = () => {
   const { uid } = useParams();

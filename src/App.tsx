@@ -56,7 +56,7 @@ const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <Error />,
+        element: <Error status={404} message="요청하신 페이지를 찾을 수 없습니다" />,
       },
     ],
   },

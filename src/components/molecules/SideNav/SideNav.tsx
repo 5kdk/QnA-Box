@@ -112,7 +112,7 @@ const SideNav = ({ isOpen }: SideNavProps) => {
           <Logo css={SideNavCss.logostyle} size="lg" />
         )}
         <Flex css={SideNavCss.subWrapper} flexDirection="column" alignItems="center">
-          <div css={SideNavCss.listWrapper(user)}>
+          <div css={SideNavCss.listWrapper(!!user)}>
             {user ? (
               <button css={SideNavCss.notestyle} onClick={handleMyBoxClick} aria-label="">
                 나의 QnA Box목록

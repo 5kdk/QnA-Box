@@ -13,23 +13,26 @@ export interface cssProps {
 }
 export interface ButtonProps extends cssProps {
   text: string;
+  type?: 'submit' | 'reset' | 'button';
   onClick?: () => void;
 }
 
 const Button = ({
   minWidth,
   padding,
-  text,
-  fontSize,
   color,
   bgColor,
   borderColor,
+  fontSize,
   fontWeight,
   icon,
+  text,
+  type = 'button',
   onClick,
 }: ButtonProps) => {
   return (
     <button
+      type={type}
       css={buttonCss({ minWidth, padding, fontSize, color, bgColor, borderColor, fontWeight, icon })}
       aria-label={text}
       onClick={onClick}>

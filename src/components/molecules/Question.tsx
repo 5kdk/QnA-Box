@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import userState from '../../jotai/atom/userState';
 import { Avatar, Button, Flex, Toggler, Note } from '../atom';
 import { css, keyframes } from '@emotion/react';
+import { createComment } from '../../services/comments';
 
 const Slide = keyframes`
     0%{
@@ -61,10 +62,14 @@ const Question = () => {
   const [question, setQuestion] = useState('');
   const user = useAtomValue(userState);
   const navigate = useNavigate();
+  const { id } = useParams() as { id: string };
 
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setQuestion(e.target.value);
   const setAnonymous = () => setIsAnonymous(pre => !pre);
-  const createQuestion = () => console.log(question);
+  const createQuestion = () => {
+    createComment(id, question);
+    setQuestion('');
+  };
   const ToSignin = () => {
     navigate('/signin');
   };
@@ -73,7 +78,12 @@ const Question = () => {
     <Flex css={questionCss.wrapper} flexDirection="column">
       <label css={questionCss.inputBox}>
         <Avatar src={user?.photoURL} size="sm" />
-        <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={handleQustionInput} />
+        <input
+          css={questionCss.input}
+          placeholder="무엇이 궁금한가요?"
+          value={question}
+          onChange={handleQustionInput}
+        />
       </label>
       <Flex justifyContent="space-between" alignItems="center">
         {user ? (

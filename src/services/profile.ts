@@ -1,7 +1,8 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, storage } from './firebase';
-import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { verifiedUid } from './auth';
+import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export interface UserData {
   uid: string;
@@ -23,11 +24,17 @@ export const getProfile = async (uid?: string): Promise<UserData | undefined | n
   else return result as Promise<UserData>;
 };
 
-export const updateUserDisplayName = async (uid: string, displayName: string) => {
+export const updateUserDisplayName = async (displayName: string) => {
+  const uid = verifiedUid();
+  if (!uid) return;
+
   await updateDoc(getUserRef(uid), { displayName });
 };
 
-export const updateUserAvartar = async (uid: string, imageFile: Blob) => {
+export const updateUserAvartar = async (imageFile: Blob) => {
+  const uid = verifiedUid();
+  if (!uid) return;
+
   const imageRef = ref(storage, `avartar/${uid}/${imageFile.name}`);
   await uploadBytes(imageRef, imageFile);
   const photoURL = await getDownloadURL(imageRef);

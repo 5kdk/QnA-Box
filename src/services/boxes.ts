@@ -11,7 +11,8 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { auth, db } from './firebase';
+import { db } from './firebase';
+import { verifiedUid } from './auth';
 import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export interface FormElement {
@@ -36,15 +37,15 @@ export interface Box {
 const OWNER_UID = 'ownerUid';
 
 export const createQnaBox = async (formData: FormElement) => {
-  const user = auth.currentUser;
-  if (!user) return;
+  const uid = verifiedUid();
+  if (!uid) return;
 
   const qnaBoxesCollection = collection(db, BOXES_COLLECTION_NAME);
   const newDocRef = doc(qnaBoxesCollection);
 
   const newData = {
     boxId: newDocRef.id,
-    ownerUid: user.uid,
+    ownerUid: uid,
     createdAt: Date.now(),
     ...formData,
   };
@@ -53,11 +54,11 @@ export const createQnaBox = async (formData: FormElement) => {
 };
 
 export const getMyQnaBoxes = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
+  const uid = verifiedUid();
+  if (!uid) return;
 
   const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
-  const ownerUidFilter = where(OWNER_UID, '==', user.uid);
+  const ownerUidFilter = where(OWNER_UID, '==', uid);
   const q = query(qnaBoxesCollectionRef, ownerUidFilter);
   const querySnapshot = await getDocs(q);
 
@@ -84,8 +85,7 @@ export const getQnaBoxesById = async (boxIds: string[]): Promise<Box[] | undefin
 };
 
 export const updateQnaBox = async (boxId: string, editFormData: FormElement): Promise<void> => {
-  const user = auth.currentUser;
-  if (!user) return;
+  verifiedUid();
 
   const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
   const qnaBoxDocRef = doc(qnaBoxesCollectionRef, boxId);
@@ -102,18 +102,17 @@ export const updateQnaBox = async (boxId: string, editFormData: FormElement): Pr
 };
 
 export const deleteQnaBox = async (boxId: string): Promise<void> => {
-  const user = auth.currentUser;
-  if (!user) return;
+  verifiedUid();
 
   const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
   await deleteDoc(qnaBoxDocRef);
 };
 
 export const joinQnaBox = async (boxId: string) => {
-  const user = auth.currentUser;
-  if (!user) return;
+  const uid = verifiedUid();
+  if (!uid) return;
 
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
 
   await updateDoc(userDocRef, {
     joinedBoxes: arrayUnion(boxId),
@@ -121,10 +120,10 @@ export const joinQnaBox = async (boxId: string) => {
 };
 
 export const exitQnaBox = async (boxId: string) => {
-  const user = auth.currentUser;
-  if (!user) return;
+  const uid = verifiedUid();
+  if (!uid) return;
 
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
+  const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
 
   await updateDoc(userDocRef, {
     joinedBoxes: arrayRemove(boxId),

@@ -1,13 +1,9 @@
 import { atom } from 'jotai';
-import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utils/localStorage';
+import { removeLocalStorage, setLocalStorage } from '../../utils/localStorage';
+import { UserData } from '../../services/profile';
 
-const KEY = 'user';
-
-export const getInitialValue = () => {
-  return getLocalStorage(KEY);
-};
-
-const baseAtom = atom(getInitialValue());
+const KEY = 'uid';
+const baseAtom = atom<UserData | null>(null);
 
 export const userState = atom(
   get => get(baseAtom),
@@ -15,7 +11,7 @@ export const userState = atom(
     const currentValue = get(baseAtom);
     const nextValue = typeof update === 'function' ? update(currentValue) : update;
     set(baseAtom, nextValue);
-    if (nextValue) setLocalStorage(KEY, nextValue);
+    if (nextValue) setLocalStorage(KEY, nextValue.uid);
     else removeLocalStorage(KEY);
   },
 );

@@ -1,6 +1,6 @@
 import { Flex } from '../atom';
 import { css, keyframes } from '@emotion/react';
-import { InfoCircle } from '@emotion-icons/bootstrap';
+import { ItemSkeleton } from '../molecules';
 
 const blink = keyframes`
   0%, 100% {
@@ -13,12 +13,12 @@ const blink = keyframes`
 
 const BoxSkeletonCss = {
   titleWrapper: css`
-    padding: 20px 0;
+    padding: 20px;
   `,
   text: css`
     width: 100px;
     height: 18px;
-    border-radius: 10px;
+    border-radius: 16px;
     animation: ${blink} 2s ease-in-out infinite;
     background-color: var(--gray);
   `,
@@ -44,8 +44,8 @@ const BoxSkeleton = () => {
           <div css={BoxSkeletonCss.title}></div>
           <div css={[BoxSkeletonCss.text, BoxSkeletonCss.detail]}></div>
         </Flex>
-        <InfoCircle size="16px" />
       </Flex>
+      <ItemSkeleton num={5} />
     </>
   );
 };

@@ -1,5 +1,4 @@
-import { Box, updateQnaBox } from '../../services/boxes';
-import { FormElement } from '../../components/molecules/BoxForm';
+import { Box, FormElement, updateQnaBox } from '../../services/boxes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface UpdateMyBoxMutationProps {

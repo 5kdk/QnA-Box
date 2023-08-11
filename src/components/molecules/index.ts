@@ -1,5 +1,6 @@
 export { default as BoxForm } from './BoxForm';
 export { default as Controller } from './Controller';
+export { default as CopyLight } from './CopyLight';
 export { default as FormInput } from './FormInput';
 export { default as Header } from './Header';
 export { default as InfoModal } from './InfoModal';

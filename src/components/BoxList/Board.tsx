@@ -5,19 +5,22 @@ import { Flex, Text } from '../atom';
 import { ItemWrapper } from '../molecules';
 import { filterState, searchInputState } from '../../jotai/atom';
 import { useAtomValue } from 'jotai';
+import { useState } from 'react';
 
 const WrapperCss = css`
   min-height: 6.25rem;
 `;
 
 const Board = () => {
+  const [page, setPage] = useState(1);
   const boxList = useMyListQuery();
   const filter = useAtomValue(filterState);
   const searchInput = useAtomValue(searchInputState);
 
-  const switchPage = () => console.log('hi');
+  const startIndex = (page - 1) * 5;
+  const endIndex = startIndex + 5;
 
-  const filteredBoxList = () => {
+  const filterBoxList = () => {
     const sorted =
       filter.subFilter !== '최신순'
         ? boxList.sort((a, b) => a.createdAt - b.createdAt)
@@ -32,12 +35,15 @@ const Board = () => {
     return sorted;
   };
 
+  const filteredBoxList = filterBoxList();
+  const slicedBoxList = filteredBoxList.slice(startIndex, endIndex);
+
   return (
     <>
       <ItemWrapper>
-        {boxList?.length !== 0 ? (
-          filteredBoxList().length !== 0 ? (
-            filteredBoxList().map(box => <BoxItem boxInfo={box} key={box.boxId} />)
+        {boxList.length !== 0 ? (
+          filteredBoxList.length !== 0 ? (
+            slicedBoxList.map(box => <BoxItem boxInfo={box} key={box.boxId} />)
           ) : (
             <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
               <Text>검색 결과가 없습니다.</Text>
@@ -51,7 +57,9 @@ const Board = () => {
           </Flex>
         )}
       </ItemWrapper>
-      <Pagenation currentPage={1} maxPage={5} onClickPageButton={switchPage} />
+      {filteredBoxList.length > 5 && (
+        <Pagenation itemsLen={filteredBoxList.length} currentPage={page} setPage={setPage} />
+      )}
     </>
   );
 };

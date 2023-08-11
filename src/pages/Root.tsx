@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Flex, Logo, Title, WideButton } from '../components/atom';
+import { Flex, Logo, Text, Title, WideButton } from '../components/atom';
 import { useNavigate } from 'react-router-dom';
 
 const rootPageCss = {
@@ -22,11 +22,15 @@ const rootPageCss = {
     padding: 0 50px 0 60px;
     font-size: 24px;
   `,
-  buttons: css``,
+  text: css`
+    color: var(--gray);
+  `,
 };
 
 const Root = () => {
   const navigate = useNavigate();
+
+  const year = new Date().getFullYear();
 
   const handleButtonClick = () => {
     navigate('/box');
@@ -36,15 +40,10 @@ const Root = () => {
     <Flex css={rootPageCss.container} flexDirection="column" alignItems="center">
       <Flex css={rootPageCss.subContainer} flexDirection="column" alignItems="center" justifyContent="center">
         <Logo css={rootPageCss.logostyle} size="xl" reverse />
-        <Title css={rootPageCss.title} text={'The best answers in one question! Share knowledge with QnA Box! 🧠'} />
-        <WideButton
-          css={rootPageCss.buttons}
-          text="Get Started!"
-          bgColor="var(--white)"
-          color="var(--black)"
-          onClick={handleButtonClick}
-        />
+        <Title css={rootPageCss.title} text={'The best answers in one question! Share knowledge with QnA Box! 📦💬'} />
+        <WideButton text="Get Started!" bgColor="var(--white)" color="var(--black)" onClick={handleButtonClick} />
       </Flex>
+      <Text css={rootPageCss.text}>{`Copyright © ${year} 쬬와규. Built with React TS ⚛️. `}</Text>
     </Flex>
   );
 };

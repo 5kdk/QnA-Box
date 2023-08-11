@@ -41,6 +41,7 @@ const SideNavCss = {
     flex: 2;
   `,
   notestyle: css`
+    font-size: 16px;
     font-weight: bold;
     color: var(--black);
     cursor: pointer;
@@ -114,7 +115,7 @@ const SideNav = ({ isOpen }: SideNavProps) => {
           <div css={SideNavCss.listWrapper(user)}>
             {user ? (
               <button css={SideNavCss.notestyle} onClick={handleMyBoxClick} aria-label="">
-                내 Box 목록 바로가기
+                나의 QnA Box목록
               </button>
             ) : (
               <button css={SideNavCss.notestyle} onClick={handleSignUpClick}>

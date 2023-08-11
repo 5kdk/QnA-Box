@@ -61,7 +61,7 @@ const SignForm = <T extends FieldValues>({
           <FormInput key={idx} css={SignFormCss.inputstyle} {...input} register={registerKey(input.formkey)} />
         ))}
         <div css={SignFormCss.buttons}>
-          <WideButton text={buttonText} bgColor="var(--blue)" color="var(--white)" onClick={() => {}} />
+          <WideButton type="submit" text={buttonText} bgColor="var(--blue)" color="var(--white)" />
           <button aria-label="구글 로그인">
             <img css={SignFormCss.googlelogin} src={googlelogin2} alt="google" />
           </button>

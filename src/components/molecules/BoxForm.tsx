@@ -1,3 +1,4 @@
+import { FormEvent } from 'react';
 import { DefaultValues, SubmitHandler } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { Flex, FormToggler, WideButton } from '../atom';
@@ -37,10 +38,15 @@ interface BoxFormProps {
 
 const BoxForm = ({ submitFunc, defaultValues, btnOpt, closeEdit }: BoxFormProps) => {
   const { registerKey, onSubmit, watch } = useCustomForm<FormElement>(submitFunc, defaultValues);
+  const handleOnSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit();
+    if (closeEdit) closeEdit();
+  };
 
   return (
     <Flex css={boxFormCss.wrapper} flexDirection="column">
-      <form css={boxFormCss.form} onSubmit={onSubmit}>
+      <form css={boxFormCss.form} onSubmit={handleOnSubmit}>
         <Flex css={boxFormCss.inputs} flexDirection="column">
           <FormInput label="Title" type="text" register={registerKey('title', requiredFormValue('Title'))} />
           <FormInput label="Owner" type="text" register={registerKey('owner', requiredFormValue('Owner'))} />
@@ -58,7 +64,7 @@ const BoxForm = ({ submitFunc, defaultValues, btnOpt, closeEdit }: BoxFormProps)
             register={registerKey('anonymous')}
           />
         </Flex>
-        <WideButton {...btnOpt} onClick={closeEdit || (() => {})} />
+        <WideButton {...btnOpt} type="submit" />
       </form>
     </Flex>
   );

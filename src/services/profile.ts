@@ -14,11 +14,13 @@ export interface UserData {
 
 export const getUserRef = (uid: string) => doc(db, USERS_COLLECTION_NAME, uid);
 
-export const getProfile = async (uid?: string): Promise<UserData | undefined> => {
+export const getProfile = async (uid?: string): Promise<UserData | undefined | null> => {
   if (!uid) return;
 
   const snapshot = await getDoc(getUserRef(uid));
-  return snapshot.data() as UserData | undefined;
+  const result = snapshot.data();
+  if (!result) throw new ReferenceError('해당 유저가 존재하지 않습니다');
+  else return result as Promise<UserData>;
 };
 
 export const updateUserDisplayName = async (uid: string, displayName: string) => {

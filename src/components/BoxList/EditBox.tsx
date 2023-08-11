@@ -4,6 +4,7 @@ import { BoxForm } from '../molecules';
 import { css } from '@emotion/react';
 import { useUpdateMyBoxMutation } from '../../hooks/mutation';
 import { Box } from '../../services/boxes';
+import { DefaultValues } from 'react-hook-form';
 
 const editBoxCss = {
   wrapper: css`
@@ -28,7 +29,7 @@ const editBoxCss = {
 
 interface EditBoxProps {
   boxId: string;
-  boxInfo: Box;
+  boxInfo: DefaultValues<Box>;
   closeEdit: () => void;
 }
 

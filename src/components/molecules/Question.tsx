@@ -72,7 +72,7 @@ const Question = () => {
   return (
     <Flex css={questionCss.wrapper} flexDirection="column">
       <label css={questionCss.inputBox}>
-        <Avatar src={user.photoURL} size="sm" />
+        <Avatar src={user?.photoURL} size="sm" />
         <input css={questionCss.input} placeholder="무엇이 궁금한가요?" onChange={handleQustionInput} />
       </label>
       <Flex justifyContent="space-between" alignItems="center">

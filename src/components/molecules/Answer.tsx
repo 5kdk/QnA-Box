@@ -76,7 +76,7 @@ const Answer = ({ replyComment }: { replyComment: string }) => {
     <Flex css={answerCss.wrapper} flexDirection="column">
       <div css={answerCss.reply}>{`reply to ${replyComment}`}</div>
       <label css={answerCss.inputBox}>
-        <Avatar src={user.photoURL} size="sm" />
+        <Avatar src={user!.photoURL} size="sm" />
         <input css={answerCss.input} placeholder="어떤 답변인가요?" onChange={handleQustionInput} />
       </label>
       <Flex justifyContent="space-between" alignItems="center">

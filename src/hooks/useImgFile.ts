@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-const useImgFile = (initialImg: string) => {
+const useImgFile = (initialImg: string | null) => {
   const [imgFile, setImgFile] = useState<Blob | undefined>();
-  const [imgBuffer, setImgBuffer] = useState<string | undefined>(initialImg);
+  const [imgBuffer, setImgBuffer] = useState<string | undefined | null>(initialImg);
 
   const setNewImg = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) setImgFile(e.target.files[0]);

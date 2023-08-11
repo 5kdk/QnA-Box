@@ -4,6 +4,7 @@ import { Flex, FormToggler, WideButton } from '../atom';
 import { FormInput } from '../molecules';
 import useCustomForm from '../../hooks/useCustomForm';
 import { requiredFormValue } from '../../utils';
+import { Box } from '../../services/boxes';
 
 const boxFormCss = {
   wrapper: css`
@@ -23,18 +24,9 @@ const boxFormCss = {
   `,
 };
 
-export interface FormElement {
-  [key: string]: boolean | string;
-  title: string;
-  owner: string;
-  description: string;
-  activation: boolean;
-  anonymous: boolean;
-}
-
 interface BoxFormProps {
-  submitFunc: SubmitHandler<FormElement>;
-  defaultValues: DefaultValues<FormElement>;
+  submitFunc: SubmitHandler<Box>;
+  defaultValues: DefaultValues<Box>;
   btnOpt: {
     text: string;
     color: string;
@@ -43,7 +35,7 @@ interface BoxFormProps {
 }
 
 const BoxForm = ({ submitFunc, defaultValues, btnOpt }: BoxFormProps) => {
-  const { registerKey, onSubmit, watch } = useCustomForm<FormElement>(submitFunc, defaultValues);
+  const { registerKey, onSubmit, watch } = useCustomForm<Box>(submitFunc, defaultValues);
 
   return (
     <Flex css={boxFormCss.wrapper} flexDirection="column">

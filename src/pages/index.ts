@@ -5,6 +5,7 @@ export { default as BoxList } from './BoxList';
 export { default as CreateBox } from './CreateBox';
 export { default as EditAccount } from './EditAccount';
 export { default as Error } from './Error';
+export { default as Root } from './Root';
 export { default as Signin } from './Signin';
 export { default as Signup } from './Signup';
 export { default as User } from './User';

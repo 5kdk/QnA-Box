@@ -20,7 +20,7 @@ const Signin = () => {
 
   return (
     <SignForm<SigninSchemaType>
-      buttonText="LOGIN"
+      buttonText="Sign In"
       formSchema={signinSchema}
       submitFunc={reqSignin}
       redirectTo="/signup"

@@ -8,8 +8,12 @@ interface TextProps {
   children: React.ReactNode;
 }
 
-const Text = ({ children }: TextProps) => {
-  return <p css={textCss}>{children}</p>;
+const Text = ({ children, ...rest }: TextProps) => {
+  return (
+    <p css={textCss} {...rest}>
+      {children}
+    </p>
+  );
 };
 
 export default Text;

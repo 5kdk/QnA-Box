@@ -7,7 +7,7 @@ import { SideNav } from './SideNav';
 import { sideNavState } from '../../jotai/atom';
 
 const HeaderCss = {
-  wrapperStyle: css`
+  wrapperStyle: (isRoot: boolean) => css`
     position: fixed;
     z-index: 990;
     top: 0;
@@ -15,7 +15,7 @@ const HeaderCss = {
     transform: translateX(-50%);
     width: var(--app_width);
     padding: 10px;
-    background-color: var(--white);
+    background-color: ${isRoot ? 'var(--black)' : 'var(--white)'};
   `,
   buttonStyle: css`
     height: 36px;
@@ -24,12 +24,12 @@ const HeaderCss = {
     margin-top: 5px;
     cursor: pointer;
   `,
-  iconStyle: (isopen: boolean) => css`
+  iconStyle: (isopen: boolean, isRoot: boolean) => css`
     position: relative;
     display: flex;
     width: 22px;
     height: 2px;
-    background-color: ${isopen ? 'transparent' : 'var(--black)'};
+    background-color: ${isopen ? 'transparent' : isRoot ? 'var(--white)' : 'var(--black)'};
     border-radius: 1px;
     &::before {
       position: absolute;
@@ -39,7 +39,7 @@ const HeaderCss = {
       width: 22px;
       height: 2px;
       border-radius: 1px;
-      background-color: var(--black);
+      background-color: ${isRoot ? 'var(--white)' : 'var(--black)'};
       transform: ${isopen ? 'rotate(-45deg)' : undefined};
       transition: top, transform;
       transition-duration: 0.1s;
@@ -52,7 +52,7 @@ const HeaderCss = {
       top: ${!isopen ? '5px' : undefined};
       width: 22px;
       height: 2px;
-      background-color: var(--black);
+      background-color: ${isRoot ? 'var(--white)' : 'var(--black)'};
       transform: ${isopen ? 'rotate(45deg)' : undefined};
       transition: top, transform;
       transition-duration: 0.1s;
@@ -66,6 +66,9 @@ const Header = () => {
   const [isOpen, setIsOpen] = useAtom(sideNavState);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  const isRoot = pathname === '/';
+  const logoDisplay = !isRoot && !pathname.includes('sign');
 
   const handleBackButtonClick = () => {
     navigate(-1);
@@ -81,14 +84,14 @@ const Header = () => {
   };
 
   return (
-    <Flex css={HeaderCss.wrapperStyle} justifyContent="space-between" alignItems="center">
+    <Flex css={HeaderCss.wrapperStyle(isRoot)} justifyContent="space-between" alignItems="center">
       <button aria-label="GotoBack-button" css={HeaderCss.buttonStyle} onClick={handleBackButtonClick}>
-        <ChevronLeft size="22px" />
+        <ChevronLeft size="22px" color={isRoot ? 'white' : undefined} />
       </button>
-      {!pathname.includes('sign') && <Logo size="sm" css={HeaderCss.LogoStyle} onClick={handleLogoClick} />}
+      {logoDisplay && <Logo size="sm" css={HeaderCss.LogoStyle} onClick={handleLogoClick} />}
       <Flex>
         <button aria-label="Info-button" css={HeaderCss.buttonStyle} onClick={handleBurgerClick}>
-          <i css={HeaderCss.iconStyle(isOpen)}></i>
+          <i css={HeaderCss.iconStyle(isOpen, isRoot)}></i>
         </button>
       </Flex>
       <SideNav isOpen={isOpen} />

@@ -4,8 +4,9 @@ const WideButton = ({ text, color, bgColor, borderColor, icon, onClick }: Button
   return (
     <Button
       minWidth="320px"
-      padding="19.2px"
+      padding="16px"
       text={text}
+      fontSize="16px"
       color={color}
       bgColor={bgColor}
       borderColor={borderColor}

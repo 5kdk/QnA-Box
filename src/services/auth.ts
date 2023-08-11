@@ -63,7 +63,7 @@ export const loginUser = async (email: string, password: string) => {
     const userDocRef = doc(db, USERS_COLLECTION_NAME, user.uid);
     const userData = await getDoc(userDocRef);
 
-    return userData.data() as UserData | undefined;
+    return userData.data();
   }
 };
 

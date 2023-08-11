@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { UseMutateFunction, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
 import { EditBox } from '.';
 import { getProfile } from '../../services/profile';
 import { Box } from '../../services/boxes';
+import { useRemoveMyBoxMutation } from '../../hooks/mutation';
 
 const BoxListCss = {
   wrapperStyle: css`
@@ -34,18 +35,11 @@ const staleTime = 3000;
 
 interface BoxListItemProps {
   boxInfo: Box;
-  remove: UseMutateFunction<
-    unknown,
-    Error,
-    string,
-    {
-      previous: Box[] | undefined;
-    }
-  >;
 }
 
-const BoxItem = ({ boxInfo, remove }: BoxListItemProps) => {
+const BoxItem = ({ boxInfo }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
+  const { mutate: remove } = useRemoveMyBoxMutation();
 
   const { data: userData } = useQuery({
     queryKey: ['user', boxInfo.ownerUid],

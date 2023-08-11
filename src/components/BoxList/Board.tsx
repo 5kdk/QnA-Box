@@ -6,7 +6,6 @@ import { Flex, Text } from '../atom';
 import { ItemWrapper } from '../molecules';
 import { filterState, searchInputState } from '../../jotai/atom';
 import { useAtomValue } from 'jotai';
-import { useRemoveMyBoxMutation } from '../../hooks/mutation';
 
 const WrapperCss = css`
   min-height: 6.25rem;
@@ -20,7 +19,6 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
   const boxList = useMyListQuery(boxFilter);
   const filter = useAtomValue(filterState);
   const searchInput = useAtomValue(searchInputState);
-  const { mutate: remove } = useRemoveMyBoxMutation();
 
   const filteredBoxList = () => {
     const sorted =
@@ -41,7 +39,7 @@ const Board = ({ boxFilter }: BoxListBodyProps) => {
     <ItemWrapper>
       {boxList?.length !== 0 ? (
         filteredBoxList().length !== 0 ? (
-          filteredBoxList().map(box => <BoxItem boxInfo={box} key={box.boxId} remove={remove} />)
+          filteredBoxList().map(box => <BoxItem boxInfo={box} key={box.boxId} />)
         ) : (
           <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
             <Text>검색 결과가 없습니다.</Text>

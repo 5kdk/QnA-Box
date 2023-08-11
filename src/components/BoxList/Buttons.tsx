@@ -26,20 +26,20 @@ const Buttons = ({ boxFilter, handleClickJoinedBox, handleClickMyBox, handleClic
     <Flex justifyContent="space-between" css={buttonCss.wrapper}>
       <Flex css={buttonCss.tap}>
         <Button
-          text="참여 중인 BOX"
-          onClick={handleClickJoinedBox}
-          borderColor={selected ? 'var(--black)' : 'var(--gray)'}
-          bgColor={selected ? 'var(--black)' : 'var(--white)'}
-          color={selected ? 'var(--white)' : 'var(--black)'}
-          fontWeight={300}
-          minWidth="102px"
-        />
-        <Button
           text="내 BOX"
           onClick={handleClickMyBox}
           borderColor={!selected ? 'var(--black)' : 'var(--gray)'}
           bgColor={!selected ? 'var(--black)' : 'var(--white)'}
           color={!selected ? 'var(--white)' : 'var(--black)'}
+          fontWeight={300}
+          minWidth="102px"
+        />
+        <Button
+          text="참여 중인 BOX"
+          onClick={handleClickJoinedBox}
+          borderColor={selected ? 'var(--black)' : 'var(--gray)'}
+          bgColor={selected ? 'var(--black)' : 'var(--white)'}
+          color={selected ? 'var(--white)' : 'var(--black)'}
           fontWeight={300}
           minWidth="102px"
         />

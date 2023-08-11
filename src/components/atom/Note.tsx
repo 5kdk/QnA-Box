@@ -9,8 +9,9 @@ interface NoteProps {
   text: string;
   type?: 'button' | 'reset';
   fs?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
+
 const Note = ({ text, type, fs, onClick, ...rest }: NoteProps) => {
   return (
     <button css={style({ fs })} aria-label={text} type={type} {...rest} onClick={onClick}>

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
-import { Flex, Logo, Text, Title, WideButton } from '../components/atom';
+import { Flex, Logo, Title, WideButton } from '../components/atom';
 import { useNavigate } from 'react-router-dom';
+import { CopyLight } from '../components/molecules';
 
 const rootPageCss = {
   container: css`
@@ -22,15 +23,10 @@ const rootPageCss = {
     padding: 0 50px 0 60px;
     font-size: 24px;
   `,
-  text: css`
-    color: var(--gray);
-  `,
 };
 
 const Root = () => {
   const navigate = useNavigate();
-
-  const year = new Date().getFullYear();
 
   const handleButtonClick = () => {
     navigate('/box');
@@ -43,7 +39,7 @@ const Root = () => {
         <Title css={rootPageCss.title} text={'The best answers in one question! Share knowledge with QnA Box! 📦💬'} />
         <WideButton text="Get Started!" bgColor="var(--white)" color="var(--black)" onClick={handleButtonClick} />
       </Flex>
-      <Text css={rootPageCss.text}>{`Copyright © ${year} 쬬와규. Built with React TS ⚛️. `}</Text>
+      <CopyLight />
     </Flex>
   );
 };

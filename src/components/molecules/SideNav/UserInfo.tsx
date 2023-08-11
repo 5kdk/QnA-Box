@@ -1,16 +1,16 @@
 import { css } from '@emotion/react';
-import { Avatar, Flex } from '../../atom';
+import { Avatar, Flex, Title } from '../../atom';
 import { IosArrowRight } from '@emotion-icons/fluentui-system-filled/IosArrowRight';
 
 const UserInfoCss = {
   container: css`
-    padding: 10px;
+    padding: 16px 30px;
     border-top: 0.5px solid var(--gray);
     border-bottom: 0.5px solid var(--gray);
     cursor: pointer;
   `,
   namestyle: css`
-    margin-bottom: 10px;
+    margin: 0 0 5px 0;
     font-size: 18px;
   `,
   emailstyle: css`
@@ -38,7 +38,7 @@ const UserInfo = ({ src, displayName, email, toAccount }: User) => {
       <Flex css={UserInfoCss.flexStyle} justifyContent="space-between" alignItems="center">
         <Avatar src={src} size="md" />
         <Flex css={UserInfoCss.infoStyle} flexDirection="column">
-          <div css={UserInfoCss.namestyle}>{displayName}</div>
+          <Title css={UserInfoCss.namestyle} text={displayName} />
           <div css={UserInfoCss.emailstyle}>{email}</div>
         </Flex>
         <IosArrowRight size="20px" />

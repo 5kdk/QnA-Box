@@ -26,7 +26,7 @@ const CreateBox = () => {
     <Flex css={createBoxCss.wrapper} flexDirection="column" justifyContent="center" alignItems="center">
       <Title text="QA Box 만들기" />
       <BoxForm
-        defaultValues={{ owner: user!.displayName, activation: false, anonymous: true }}
+        defaultValues={{ owner: user.displayName, activation: false, anonymous: true }}
         btnOpt={{ text: '등록하기', color: 'var(--white)', bgColor: 'var(--blue)' }}
         submitFunc={handleSubmit}
       />

@@ -3,8 +3,7 @@ import { modalCss } from '../../styles';
 import { BoxForm } from '../molecules';
 import { css } from '@emotion/react';
 import { useUpdateMyBoxMutation } from '../../hooks/mutation';
-import { Box } from '../../services/boxes';
-import { DefaultValues } from 'react-hook-form';
+import { FormElement } from '../../services/boxes';
 
 const editBoxCss = {
   wrapper: css`
@@ -29,7 +28,7 @@ const editBoxCss = {
 
 interface EditBoxProps {
   boxId: string;
-  boxInfo: DefaultValues<Box>;
+  boxInfo: FormElement;
   closeEdit: () => void;
 }
 
@@ -42,6 +41,7 @@ const EditBox = ({ boxId, boxInfo, closeEdit }: EditBoxProps) => {
         <BoxForm
           defaultValues={boxInfo}
           btnOpt={{ text: '수정하기', color: 'var(--white)', bgColor: 'var(--black)' }}
+          closeEdit={closeEdit}
           submitFunc={formData => update({ boxId: boxId, editFormData: formData })}
         />
       </Flex>

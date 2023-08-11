@@ -26,11 +26,11 @@ const editCss = {
 };
 
 interface EditProps {
-  setIsEdit: Dispatch<SetStateAction<boolean>>;
+  edit: () => void;
   remove: () => void;
 }
 
-const Edit = ({ setIsEdit, remove }: EditProps) => {
+const Edit = ({ edit, remove }: EditProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useClickOutside(useCallback(() => setIsOpen(false), []));
 
@@ -38,9 +38,15 @@ const Edit = ({ setIsEdit, remove }: EditProps) => {
     e.stopPropagation();
     setIsOpen(prev => !prev);
   };
-  const handleEdit = () => {
-    setIsEdit(true);
-    setIsOpen(prev => !prev);
+
+  const handleEditClick = () => {
+    edit();
+    setIsOpen(false);
+  };
+
+  const handleRemoveClick = () => {
+    remove();
+    setIsOpen(false);
   };
 
   return (
@@ -50,11 +56,11 @@ const Edit = ({ setIsEdit, remove }: EditProps) => {
       </button>
       {isOpen && (
         <div css={editCss.modal} ref={ref}>
-          <button css={editCss.button} onClick={handleEdit}>
+          <button css={editCss.button} onClick={handleEditClick}>
             <Pencil size="12px" />
             {' 수정'}
           </button>
-          <button css={editCss.button} onClick={remove}>
+          <button css={editCss.button} onClick={handleRemoveClick}>
             <Trash size="12px" />
             {' 삭제'}
           </button>

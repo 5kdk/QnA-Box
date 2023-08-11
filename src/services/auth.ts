@@ -58,7 +58,6 @@ export const loginUser = async (email: string, password: string) => {
   return userData.data();
 }
 
-
 export const deregisterUser = async () => {
   const user = auth.currentUser;
   if (!user) return;

@@ -4,7 +4,7 @@ import { Flex, FormToggler, WideButton } from '../atom';
 import { FormInput } from '../molecules';
 import useCustomForm from '../../hooks/useCustomForm';
 import { requiredFormValue } from '../../utils';
-import { Box } from '../../services/boxes';
+import { FormElement } from '../../services/boxes';
 
 const boxFormCss = {
   wrapper: css`
@@ -25,17 +25,18 @@ const boxFormCss = {
 };
 
 interface BoxFormProps {
-  submitFunc: SubmitHandler<Box>;
-  defaultValues: DefaultValues<Box>;
+  submitFunc: SubmitHandler<FormElement>;
+  defaultValues: DefaultValues<FormElement>;
   btnOpt: {
     text: string;
     color: string;
     bgColor: string;
   };
+  closeEdit?: () => void;
 }
 
-const BoxForm = ({ submitFunc, defaultValues, btnOpt }: BoxFormProps) => {
-  const { registerKey, onSubmit, watch } = useCustomForm<Box>(submitFunc, defaultValues);
+const BoxForm = ({ submitFunc, defaultValues, btnOpt, closeEdit }: BoxFormProps) => {
+  const { registerKey, onSubmit, watch } = useCustomForm<FormElement>(submitFunc, defaultValues);
 
   return (
     <Flex css={boxFormCss.wrapper} flexDirection="column">
@@ -57,7 +58,7 @@ const BoxForm = ({ submitFunc, defaultValues, btnOpt }: BoxFormProps) => {
             register={registerKey('anonymous')}
           />
         </Flex>
-        <WideButton {...btnOpt} onClick={() => {}} />
+        <WideButton {...btnOpt} onClick={closeEdit || (() => {})} />
       </form>
     </Flex>
   );

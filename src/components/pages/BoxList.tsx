@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -8,14 +8,14 @@ import Controller from '../molecules/Controller';
 import Board from '../BoxList/Board';
 import ErrorFallback from '../molecules/ErrorFallback';
 import { ItemSkeleton } from '../molecules';
-import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utils/localStorage';
+import { getLocalStorage, setLocalStorage } from '../../utils/localStorage';
 
 const key = 'filter';
 
 export type MainFilter = 'joined' | 'my';
 
 const BoxList = () => {
-  const [boxFilter, setBoxFilter] = useState<MainFilter>(getLocalStorage(key));
+  const [boxFilter, setBoxFilter] = useState<MainFilter>(getLocalStorage(key) || 'my');
   const navigate = useNavigate();
   const { reset } = useQueryErrorResetBoundary();
   // const switchPage = () => console.log('hi');
@@ -32,12 +32,6 @@ const BoxList = () => {
   const handleClickNewBox = () => {
     navigate('create');
   };
-
-  useEffect(() => {
-    return () => {
-      removeLocalStorage(key);
-    };
-  }, []);
 
   return (
     <>

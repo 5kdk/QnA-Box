@@ -1,34 +1,21 @@
-import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAtom } from 'jotai';
-import userState from '../jotai/atom/userState';
-import { auth } from '../services/firebase';
+import { useAtomValue } from 'jotai';
+import { userState } from '../jotai/atom';
 
 interface AuthenticationGuardProps {
   redirectTo: string;
   element: React.ReactNode;
+  isAuthenticated: boolean;
 }
 
-const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-  const [user, setUser] = useAtom(userState);
-  const [isLoading, setIsLoading] = useState(true);
+const AuthenticationGuard = ({ redirectTo, element, isAuthenticated }: AuthenticationGuardProps) => {
+  const user = useAtomValue(userState);
 
-  useEffect(() => {
-    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
-      setIsLoading(false);
-      if (!user) setUser(null);
-    });
-
-    return () => {
-      unregisterAuthObserver();
-    };
-  }, [setUser]);
-
-  if (!user) {
+  if (!user === isAuthenticated) {
     return <Navigate to={redirectTo} replace />;
   }
 
-  return !isLoading && element;
+  return element;
 };
 
 export default AuthenticationGuard;

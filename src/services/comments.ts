@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { getUserRef } from './profile';
-import { verifiedUid } from './auth';
+import { getUid } from './auth';
 import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
@@ -30,7 +30,7 @@ export interface CommentData {
 }
 
 export const createComment = async (boxId: string, content: string, commentId?: string) => {
-  const uid = verifiedUid();
+  const uid = getUid();
   if (!uid) return;
 
   const commentsCollectionRef = collection(db, COMMENTS_COLLECTION_NAME);
@@ -74,7 +74,7 @@ export const deleteComment = async (commentId: string) => {
 };
 
 export const increaseCommentLikes = async (commentId: string) => {
-  const uid = verifiedUid();
+  const uid = getUid();
   if (!uid) return;
 
   await updateDoc(getUserRef(uid), { likedComments: arrayUnion(commentId) });
@@ -88,7 +88,7 @@ export const increaseCommentLikes = async (commentId: string) => {
 };
 
 export const decreaseCommentLikes = async (commentId: string) => {
-  const uid = verifiedUid();
+  const uid = getUid();
   if (!uid) return;
 
   await updateDoc(getUserRef(uid), { likedComments: arrayRemove(commentId) });

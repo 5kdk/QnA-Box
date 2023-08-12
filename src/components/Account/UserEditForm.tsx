@@ -58,7 +58,7 @@ const UserEditForm = <T extends FieldValues>({
             <FormInput key={key} label={text} type={type} register={registerKey(key, requiredFormValue(text))} />
           ))}
         </Flex>
-        <WideButton {...btnSettings} />
+        <WideButton type="submit" {...btnSettings} />
       </form>
     </>
   );

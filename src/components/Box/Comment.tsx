@@ -6,6 +6,8 @@ import { Reply } from '@emotion-icons/boxicons-regular/Reply';
 import EditCommentForm from './EditCommentForm';
 import { useQuery } from '@tanstack/react-query';
 import { getProfile } from '../../services/profile';
+import { displayTimeAgo } from '../../utils';
+import { CommentData, deleteComment } from '../../services/comments';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -53,22 +55,13 @@ const boxItemCss = {
   `,
 };
 
-type Post = {
-  authorId: string;
-  commentId: string;
-  content: string;
-  createdAt: number;
-  likes: number;
-  parentId: null | string;
-  replies?: Post[];
-};
-
-type CommentProps = Post & {
+export interface Comments extends CommentData {
+  replies?: [];
   owner: string;
   setReplyComment: Dispatch<SetStateAction<string>>;
   setReplyUser: Dispatch<SetStateAction<string>>;
   replyComment: string;
-};
+}
 
 type Profile = {
   displayName: string;
@@ -79,31 +72,6 @@ type Profile = {
   uid: string;
 };
 
-const displayTimeAgo = (postTimestamp: number): string => {
-  const currentTime = new Date();
-  const postTime = new Date(postTimestamp);
-  const timeDifferenceInSeconds = Math.floor((currentTime.getTime() - postTime.getTime()) / 1000);
-
-  const SECONDS_IN_MINUTE = 60;
-  const SECONDS_IN_HOUR = 3600;
-  const SECONDS_IN_DAY = 86400;
-  const SECONDS_IN_WEEK = 604800;
-  const SECONDS_IN_YEAR = 31536000;
-
-  if (timeDifferenceInSeconds < SECONDS_IN_MINUTE) {
-    return `${timeDifferenceInSeconds}s`;
-  } else if (timeDifferenceInSeconds < SECONDS_IN_HOUR) {
-    return `${Math.floor(timeDifferenceInSeconds / SECONDS_IN_MINUTE)}m`;
-  } else if (timeDifferenceInSeconds < SECONDS_IN_DAY) {
-    return `${Math.floor(timeDifferenceInSeconds / SECONDS_IN_HOUR)}h`;
-  } else if (timeDifferenceInSeconds < SECONDS_IN_WEEK) {
-    return `${Math.floor(timeDifferenceInSeconds / SECONDS_IN_DAY)}d`;
-  } else if (timeDifferenceInSeconds < SECONDS_IN_YEAR) {
-    return `${Math.floor(timeDifferenceInSeconds / SECONDS_IN_WEEK)}w`;
-  } else {
-    return `${Math.floor(timeDifferenceInSeconds / SECONDS_IN_YEAR)}y`;
-  }
-};
 const Comment = ({
   setReplyComment,
   setReplyUser,
@@ -116,7 +84,7 @@ const Comment = ({
   createdAt,
   parentId,
   replies = [],
-}: CommentProps) => {
+}: Comments) => {
   const [isEdit, setIsEdit] = useState(false);
   const isLike = true;
 
@@ -128,11 +96,8 @@ const Comment = ({
   const handleModify = () => {
     setIsEdit(prev => !prev);
   };
-  const handleCancle = () => {
-    setIsEdit(prev => !prev);
-  };
   const removePost = () => {
-    console.log('delete');
+    deleteComment(commentId);
   };
   const handleReplyComment = (commentId: string, name: string) => () => {
     if (commentId === replyComment) return setReplyComment('');
@@ -161,7 +126,7 @@ const Comment = ({
             </Flex>
           </Flex>
           {isEdit ? (
-            <EditCommentForm text={content} handleModify={handleModify} handleCancle={handleCancle} />
+            <EditCommentForm text={content} commnetId={commentId} setIsEdit={setIsEdit} handleCancle={handleModify} />
           ) : (
             <Text>{content}</Text>
           )}
@@ -175,7 +140,7 @@ const Comment = ({
         </Flex>
       </Flex>
       {replies.length !== 0 &&
-        replies.map(({ commentId, authorId, createdAt, content, likes, parentId }, i) => (
+        replies.map(({ commentId, authorId, createdAt, content, likes, parentId, boxId }, i) => (
           <Comment
             owner={owner}
             commentId={commentId}
@@ -183,6 +148,7 @@ const Comment = ({
             createdAt={createdAt}
             content={content}
             likes={likes}
+            boxId={boxId}
             parentId={parentId}
             key={`answer ${commentId} ${i}`}
             setReplyUser={setReplyUser}

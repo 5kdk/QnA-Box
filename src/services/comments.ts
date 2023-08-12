@@ -19,7 +19,7 @@ import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
 
-interface CommentData {
+export interface CommentData {
   commentId: string;
   boxId: string;
   authorId: string;

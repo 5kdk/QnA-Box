@@ -12,7 +12,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { verifiedUid } from './auth';
+import { getUid } from './auth';
 import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export interface FormElement {
@@ -37,7 +37,7 @@ export interface Box {
 const OWNER_UID = 'ownerUid';
 
 export const createQnaBox = async (formData: FormElement) => {
-  const uid = verifiedUid();
+  const uid = getUid();
   if (!uid) return;
 
   const qnaBoxesCollection = collection(db, BOXES_COLLECTION_NAME);
@@ -54,7 +54,7 @@ export const createQnaBox = async (formData: FormElement) => {
 };
 
 export const getMyQnaBoxes = async () => {
-  const uid = verifiedUid();
+  const uid = getUid();
   if (!uid) return;
 
   const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
@@ -106,7 +106,7 @@ export const getQnaBoxesById = async (boxIds: string[]): Promise<Box[] | undefin
 };
 
 export const updateQnaBox = async (boxId: string, editFormData: FormElement): Promise<void> => {
-  verifiedUid();
+  if (!getUid()) return;
 
   const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
   const qnaBoxDocRef = doc(qnaBoxesCollectionRef, boxId);
@@ -123,14 +123,14 @@ export const updateQnaBox = async (boxId: string, editFormData: FormElement): Pr
 };
 
 export const deleteQnaBox = async (boxId: string): Promise<void> => {
-  verifiedUid();
+  if (!getUid()) return;
 
   const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
   await deleteDoc(qnaBoxDocRef);
 };
 
 export const joinQnaBox = async (boxId: string) => {
-  const uid = verifiedUid();
+  const uid = getUid();
   if (!uid) return;
 
   const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
@@ -141,7 +141,7 @@ export const joinQnaBox = async (boxId: string) => {
 };
 
 export const exitQnaBox = async (boxId: string) => {
-  const uid = verifiedUid();
+  const uid = getUid();
   if (!uid) return;
 
   const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);

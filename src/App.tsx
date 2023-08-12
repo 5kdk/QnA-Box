@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import GlobalStyle from './styles/GlobalStyle';
 import { Account, Appshell, Box, BoxList, CreateBox, EditAccount, Error, Root, Signin, Signup, User } from './pages';
-import AuthenticationGuard from './guards/AuthenticationGuard';
+import { AuthenticationGuard, ConditionalRouteGuard } from './guards';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = new QueryClient({
@@ -36,7 +36,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'account/:target',
-        element: <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} />,
+        element: (
+          <ConditionalRouteGuard target="target" access={['profile', 'password']} redirectTo="/error">
+            <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} />
+          </ConditionalRouteGuard>
+        ),
       },
       {
         path: 'user/:uid',

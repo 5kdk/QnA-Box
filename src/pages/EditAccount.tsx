@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Avatar, Flex } from '../components/atom';
@@ -37,19 +36,12 @@ const EditAccount = () => {
   const user = useAtomValue(userState);
   const { setNewImg, imgBuffer, imgFile } = useImgFile(user!.photoURL);
   const { target } = useParams();
-  const navigate = useNavigate();
   const editImgName = async (data: NameType) => {
     if (imgFile && user!.photoURL !== imgBuffer) await updateUserAvartar(imgFile);
     if (user!.displayName !== data.displayName) await updateUserDisplayName(data.displayName);
   };
 
   const editPswd = (data: editPswdSchemaType) => updateUserPassword(data.prePassword, data.password);
-
-  useEffect(() => {
-    if (target && target !== 'profile' && target !== 'password') {
-      navigate('/error');
-    }
-  }, [target, navigate]);
 
   return (
     <Flex css={editCss.wrapper} flexDirection="column">

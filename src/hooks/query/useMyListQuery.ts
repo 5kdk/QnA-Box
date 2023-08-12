@@ -1,23 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { MainFilter } from '../../pages/BoxList';
 import { useAtomValue } from 'jotai';
-import { userState } from '../../jotai/atom';
-import { getMyQnaBoxes, getQnaBoxesById } from '../../services/boxes';
+import { filterState, userState } from '../../jotai/atom';
+import { Box, getMyQnaBoxes, getQnaBoxesById } from '../../services/boxes';
 
 const staleTime = 3000;
 
-const useMyListQuery = (boxFilter: MainFilter) => {
+const useMyListQuery = () => {
   const { joinedBoxes } = useAtomValue(userState);
+  const filter = useAtomValue(filterState);
 
-  const queryFn = boxFilter === 'joined' ? () => getQnaBoxesById(joinedBoxes) : () => getMyQnaBoxes();
+  const queryFn = filter.mainFilter === 'joined' ? () => getQnaBoxesById(joinedBoxes) : () => getMyQnaBoxes();
 
   const { data } = useQuery({
-    queryKey: ['box', boxFilter],
+    queryKey: ['box', filter.mainFilter],
     queryFn,
     staleTime,
   });
 
-  return data || [];
+  return (data as Box[]) || [];
 };
 
 export default useMyListQuery;

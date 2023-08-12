@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
 import { PlusSm } from '@emotion-icons/heroicons-solid/';
 import { Button, Flex } from '../atom';
-import { MainFilter } from '../../pages/BoxList';
+import { useAtom } from 'jotai';
+import { filterState } from '../../jotai/atom';
+import { useNavigate } from 'react-router-dom';
 
 const buttonCss = {
   wrapper: css`
@@ -12,15 +14,22 @@ const buttonCss = {
   `,
 };
 
-interface ButtonsProps {
-  boxFilter: MainFilter;
-  handleClickJoinedBox: () => void;
-  handleClickMyBox: () => void;
-  handleClickNewBox: () => void;
-}
+const Buttons = () => {
+  const navigate = useNavigate();
+  const [filter, setFilter] = useAtom(filterState);
+  const selected = filter.mainFilter === 'joined';
 
-const Buttons = ({ boxFilter, handleClickJoinedBox, handleClickMyBox, handleClickNewBox }: ButtonsProps) => {
-  const selected = boxFilter === 'joined';
+  const handleClickJoinedBox = () => {
+    setFilter({ ...filter, mainFilter: 'joined' });
+  };
+
+  const handleClickMyBox = () => {
+    setFilter({ ...filter, mainFilter: 'my' });
+  };
+
+  const handleClickNewBox = () => {
+    navigate('create');
+  };
 
   return (
     <Flex justifyContent="space-between" css={buttonCss.wrapper}>

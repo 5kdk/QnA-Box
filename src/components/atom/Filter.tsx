@@ -1,4 +1,4 @@
-import { useState, useCallback, MouseEvent } from 'react';
+import { useState, useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { filterState } from '../../jotai/atom';
@@ -58,18 +58,16 @@ const FilterCss = {
 type FilterType = '최신순' | '오래된순';
 
 const Filter = () => {
-  const [curValue, setCurValue] = useAtom(filterState);
+  const [filter, setFilter] = useAtom(filterState);
   const [isShow, setIsShow] = useState(false);
 
   const ref = useClickOutside(useCallback(() => setIsShow(false), []));
 
-  const handleCurValue = (filter: FilterType) => (e: MouseEvent) => {
-    e.stopPropagation();
-    setCurValue(filter);
+  const handleValue = (value: FilterType) => () => {
+    setFilter(prev => ({ ...prev, subFilter: value }));
   };
 
-  const handleShow = (e: MouseEvent) => {
-    e.stopPropagation();
+  const handleShow = () => {
     setIsShow(prev => !prev);
   };
 
@@ -83,10 +81,10 @@ const Filter = () => {
       css={FilterCss.boxstyle(isShow)}
       onClick={handleShow}
       onKeyDown={() => {}}>
-      <label css={FilterCss.labelStyle}>{curValue}</label>
+      <label css={FilterCss.labelStyle}>{filter.subFilter}</label>
       <div css={FilterCss.selectstyle(isShow)}>
         {filters.map(filter => (
-          <button key={filter} css={FilterCss.optionstyle} aria-label={filter} onClick={handleCurValue(filter)}>
+          <button key={filter} css={FilterCss.optionstyle} aria-label={filter} onClick={handleValue(filter)}>
             {filter}
           </button>
         ))}

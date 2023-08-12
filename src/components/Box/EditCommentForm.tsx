@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { Flex } from '../atom';
 import Note from '../atom/Note';
 import { css } from '@emotion/react';
+import { updateComment } from '../../services/comments';
 
 const EditFormCss = {
   textarea: css`
@@ -22,21 +23,26 @@ const EditFormCss = {
 };
 
 type EditProps = {
-  handleModify: () => void;
+  setIsEdit: Dispatch<SetStateAction<boolean>>;
   handleCancle: () => void;
   text: string;
+  commnetId: string;
 };
 
-const EditCommentForm = ({ text, handleModify, handleCancle }: EditProps) => {
+const EditCommentForm = ({ text, commnetId, setIsEdit, handleCancle }: EditProps) => {
   const [input, setInput] = useState(text);
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
+  };
+  const submitModify = () => {
+    updateComment(commnetId, input);
+    setIsEdit(false);
   };
   return (
     <Flex flexDirection="column">
       <textarea css={EditFormCss.textarea} onChange={handleInput} value={input} />
       <Flex alignItems="center" justifyContent="flex-end">
-        <Note css={EditFormCss.note} text="수정" onClick={handleModify} />
+        <Note css={EditFormCss.note} text="수정" onClick={submitModify} />
         <Note css={EditFormCss.note} text="취소" onClick={handleCancle} />
       </Flex>
     </Flex>

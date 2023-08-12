@@ -57,18 +57,19 @@ type Post = {
   authorId: string;
   commentId: string;
   content: string;
-  createdAt: string;
+  createdAt: number;
   likes: number;
   parentId: null | string;
   replies?: Post[];
 };
 
-type BoxItemProps = Post & {
+type CommentProps = Post & {
   owner: string;
   setReplyComment: Dispatch<SetStateAction<string>>;
   setReplyUser: Dispatch<SetStateAction<string>>;
   replyComment: string;
 };
+
 type Profile = {
   displayName: string;
   email: string;
@@ -78,7 +79,7 @@ type Profile = {
   uid: string;
 };
 
-const displayTimeAgo = (postTimestamp: string): string => {
+const displayTimeAgo = (postTimestamp: number): string => {
   const currentTime = new Date();
   const postTime = new Date(postTimestamp);
   const timeDifferenceInSeconds = Math.floor((currentTime.getTime() - postTime.getTime()) / 1000);
@@ -103,7 +104,7 @@ const displayTimeAgo = (postTimestamp: string): string => {
     return `${Math.floor(timeDifferenceInSeconds / SECONDS_IN_YEAR)}y`;
   }
 };
-const BoxItem = ({
+const Comment = ({
   setReplyComment,
   setReplyUser,
   replyComment,
@@ -115,8 +116,7 @@ const BoxItem = ({
   createdAt,
   parentId,
   replies = [],
-}: BoxItemProps) => {
-  // temp
+}: CommentProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const isLike = true;
 
@@ -176,7 +176,7 @@ const BoxItem = ({
       </Flex>
       {replies.length !== 0 &&
         replies.map(({ commentId, authorId, createdAt, content, likes, parentId }, i) => (
-          <BoxItem
+          <Comment
             owner={owner}
             commentId={commentId}
             authorId={authorId}
@@ -194,4 +194,4 @@ const BoxItem = ({
   );
 };
 
-export default BoxItem;
+export default Comment;

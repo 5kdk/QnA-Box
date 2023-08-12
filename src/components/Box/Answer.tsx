@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import userState from '../../jotai/atom/userState';
-import { Avatar, Button, Flex, Note, Toggler } from '../atom';
+import { Avatar, Button, Flex, Note, Text, Toggler } from '../atom';
 import { css, keyframes } from '@emotion/react';
 import { createComment } from '../../services/comments';
 
@@ -56,7 +56,8 @@ const answerCss = {
     padding-left: 9px;
   `,
   reply: css`
-    padding-left: 9px;
+    color: var(--deep_gray);
+    padding-left: 10px;
   `,
 };
 
@@ -77,7 +78,7 @@ const Answer = ({ replyUser, replyComment, BoxId }: { replyUser: string; replyCo
 
   return (
     <Flex css={answerCss.wrapper} flexDirection="column">
-      <div css={answerCss.reply}>{`reply to ${replyUser}`}</div>
+      <Text css={answerCss.reply}>{`Reply to ${replyUser}`}</Text>
       <label css={answerCss.inputBox}>
         <Avatar src={user!.photoURL} size="sm" />
         <input css={answerCss.input} placeholder="어떤 답변인가요?" onChange={handleQustionInput} />

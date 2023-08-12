@@ -67,6 +67,27 @@ export const getMyQnaBoxes = async () => {
   return boxes;
 };
 
+export const getQnaBoxById = async (boxId: string): Promise<Box> => {
+  const boxesCollection = collection(db, BOXES_COLLECTION_NAME);
+  const boxDocRef = doc(boxesCollection, boxId);
+  const snapshot = await getDoc(boxDocRef);
+
+  const boxDataSnapshot = snapshot.data();
+
+  const boxData: Box = {
+    boxId: boxDataSnapshot?.id,
+    title: boxDataSnapshot?.title,
+    owner: boxDataSnapshot?.owner,
+    ownerUid: boxDataSnapshot?.ownerUid,
+    activation: boxDataSnapshot?.activation,
+    anonymous: boxDataSnapshot?.anonymous,
+    createdAt: boxDataSnapshot?.createdAt,
+    description: boxDataSnapshot?.description,
+  };
+
+  return boxData;
+};
+
 export const getQnaBoxesById = async (boxIds: string[]): Promise<Box[] | undefined> => {
   const boxesCollection = collection(db, BOXES_COLLECTION_NAME);
 

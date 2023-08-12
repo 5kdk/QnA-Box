@@ -8,7 +8,7 @@ const controllerCss = css`
   padding: 10px 20px;
 `;
 
-const BoxListController = () => {
+const Controller = () => {
   const [userInput, setUserInput] = useAtom(searchInputState);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,4 +23,4 @@ const BoxListController = () => {
   );
 };
 
-export default BoxListController;
+export default Controller;

@@ -1,14 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Avatar, Flex } from '../components/atom';
 import { InfoSubject } from '../components/User';
 import { AttachFile, UserEditForm } from '../components/Account';
-import { userState } from '../jotai/atom';
-import useImgFile from '../hooks/useImgFile';
-import { editPswdSchemaType, editPswdSchema } from '../schema';
-import { updateUserAvartar, updateUserDisplayName } from '../services/profile';
-import { updateUserPassword } from '../services/auth';
+import { editPswdSchemaType } from '../schema';
+import { NameType } from '../hooks/useEditImgName';
+import { useEditImgName, useEditPassword } from '../hooks';
 
 const editCss = {
   wrapper: css`
@@ -21,27 +18,10 @@ const editCss = {
   `,
 };
 
-const formPassword = [
-  { text: '기존 비밀번호', key: 'prePassword', type: 'password' },
-  { text: '새 비밀번호', key: 'password', type: 'password' },
-  { text: '비밀번호 확인', key: 'passwordCheck', type: 'password' },
-];
-
-const formName = [{ text: 'DisplayName', key: 'displayName', type: 'text' }];
-interface NameType {
-  displayName: string;
-}
-
 const EditAccount = () => {
-  const user = useAtomValue(userState);
-  const { setNewImg, imgBuffer, imgFile } = useImgFile(user!.photoURL);
   const { target } = useParams();
-  const editImgName = async (data: NameType) => {
-    if (imgFile && user!.photoURL !== imgBuffer) await updateUserAvartar(imgFile);
-    if (user!.displayName !== data.displayName) await updateUserDisplayName(data.displayName);
-  };
-
-  const editPswd = (data: editPswdSchemaType) => updateUserPassword(data.prePassword, data.password);
+  const { user, setNewImg, imgBuffer, editForm: editName } = useEditImgName();
+  const { editForm: editPassword } = useEditPassword();
 
   return (
     <Flex css={editCss.wrapper} flexDirection="column">
@@ -51,26 +31,9 @@ const EditAccount = () => {
         <InfoSubject title="E-mail" body={user!.email} />
       </Flex>
       {target === 'profile' ? (
-        <UserEditForm<NameType>
-          formElement={formName}
-          defaultValues={{ displayName: user!.displayName }}
-          btnSettings={{
-            text: '회원정보 수정',
-            color: 'var(--black)',
-            bgColor: 'var(--white)',
-            borderColor: 'var(--black)',
-          }}
-          submitFunc={editImgName}
-        />
+        <UserEditForm<NameType> {...editName} />
       ) : (
-        target === 'password' && (
-          <UserEditForm<editPswdSchemaType>
-            formElement={formPassword}
-            formSchema={editPswdSchema}
-            btnSettings={{ text: '비밀번호 변경', color: 'var(--white)', bgColor: 'var(--black)' }}
-            submitFunc={editPswd}
-          />
-        )
+        target === 'password' && <UserEditForm<editPswdSchemaType> {...editPassword} />
       )}
     </Flex>
   );

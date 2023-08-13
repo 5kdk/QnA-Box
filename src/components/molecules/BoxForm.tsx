@@ -10,6 +10,7 @@ import { FormElement } from '../../services/boxes';
 const boxFormCss = {
   wrapper: css`
     background-color: var(--white);
+    width: 100%;
   `,
   form: css`
     display: flex;

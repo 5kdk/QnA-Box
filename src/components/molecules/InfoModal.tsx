@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import { Flex, Button } from '../atom';
 import { modalCss } from '../../styles';
+import { useAtomValue } from 'jotai';
+import { globalWidthState } from '../../jotai/atom';
 
 const infoModalCss = {
-  infoBox: css`
-    width: var(--app_width);
+  infoBox: (globalWidth: string) => css`
+    width: ${globalWidth};
     padding: 48px 24px;
     gap: 32px;
     background-color: var(--white);
@@ -33,9 +35,15 @@ interface ModalProps {
 }
 
 const InfoModal = ({ title, text, normalBtn, importantBtn }: ModalProps) => {
+  const globalWidth = useAtomValue(globalWidthState);
+
   return (
     <Flex css={modalCss} justifyContent="center" alignItems="center" onClick={importantBtn.onClick}>
-      <Flex css={infoModalCss.infoBox} flexDirection="column" alignContent="center" onClick={e => e.stopPropagation()}>
+      <Flex
+        css={infoModalCss.infoBox(globalWidth)}
+        flexDirection="column"
+        alignContent="center"
+        onClick={e => e.stopPropagation()}>
         <Flex css={infoModalCss.text} flexDirection="column">
           <h3>{title}</h3>
           {text && <p>{text}</p>}

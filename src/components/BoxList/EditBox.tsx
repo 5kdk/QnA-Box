@@ -4,10 +4,12 @@ import { BoxForm } from '../molecules';
 import { css } from '@emotion/react';
 import { useUpdateMyBoxMutation } from '../../hooks/mutation';
 import { FormElement } from '../../services/boxes';
+import { globalWidthState } from '../../jotai/atom';
+import { useAtomValue } from 'jotai';
 
 const editBoxCss = {
-  wrapper: css`
-    width: var(--app_width);
+  wrapper: (globalWidth: string) => css`
+    width: ${globalWidth};
     padding: 30px;
     background-color: var(--white);
     box-shadow: 0px -10px 10px 1px var(--shadow);
@@ -34,10 +36,11 @@ interface EditBoxProps {
 
 const EditBox = ({ boxId, boxInfo, closeEdit }: EditBoxProps) => {
   const { mutate: update } = useUpdateMyBoxMutation();
+  const globalWidth = useAtomValue(globalWidthState);
 
   return (
     <Flex css={modalCss} justifyContent="center" alignItems="flex-end" onClick={closeEdit}>
-      <Flex css={editBoxCss.wrapper} justifyContent="center" onClick={e => e.stopPropagation()}>
+      <Flex css={editBoxCss.wrapper(globalWidth)} justifyContent="center" onClick={e => e.stopPropagation()}>
         <BoxForm
           defaultValues={boxInfo}
           btnOpt={{ text: '수정하기', color: 'var(--white)', bgColor: 'var(--black)' }}

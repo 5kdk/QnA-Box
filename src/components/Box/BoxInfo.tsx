@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { css } from '@emotion/react';
 import { Box } from '../../services/boxes';
 import { Flex, Text, Title } from '../atom';
-import { InfoSquare } from 'emotion-icons/boxicons-regular';
+import { InfoCircle } from 'emotion-icons/boxicons-regular';
 
 const boxInfoCss = {
   wrapper: css`
-    padding: 10px 20px 5px 20px;
+    padding: 10px 20px 0 20px;
+    gap: 10px;
   `,
   title: css`
     max-width: 350px;
@@ -37,10 +38,10 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
 
   return (
     <>
-      <Flex justifyContent="space-between" alignItems="center" css={boxInfoCss.wrapper}>
+      <Flex alignItems="center" css={boxInfoCss.wrapper}>
         <Title text={boxdetail.title} css={boxInfoCss.title} />
         <button aria-label="더 많은 Box 정보 보기">
-          <InfoSquare size="18px" onClick={() => setMoreInfo(prev => !prev)} />
+          <InfoCircle size="18px" onClick={() => setMoreInfo(prev => !prev)} />
         </button>
       </Flex>
       <div css={boxInfoCss.wrapper}>

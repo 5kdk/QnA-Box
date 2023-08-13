@@ -69,10 +69,13 @@ const Answer = ({ replyUser, replyComment, BoxId }: { replyUser: string; replyCo
   const navigate = useNavigate();
 
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setreply(e.target.value);
+
   const setAnonymous = () => setIsAnonymous(pre => !pre);
+
   const createReply = () => {
-    createComment(BoxId, reply, replyComment);
+    createComment(BoxId, reply, replyComment, user?.displayName);
   };
+
   const ToSignin = () => {
     navigate('/signin');
   };

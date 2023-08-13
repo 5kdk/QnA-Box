@@ -21,15 +21,21 @@ export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_
 
 export interface CommentData {
   commentId: string;
-  boxId: string;
   authorId: string;
+  displayName: string | undefined;
+  boxId: string;
   content: string;
   likes: number;
   createdAt: number;
   parentId: string | null;
 }
 
-export const createComment = async (boxId: string, content: string, commentId?: string) => {
+export const createComment = async (
+  boxId: string,
+  content: string,
+  displayName: string | undefined,
+  commentId?: string,
+) => {
   const uid = getUid();
   if (!uid) return;
 
@@ -40,6 +46,7 @@ export const createComment = async (boxId: string, content: string, commentId?: 
     commentId: commentDocRef.id,
     boxId,
     authorId: uid,
+    displayName,
     content,
     likes: 0,
     createdAt: Date.now(),

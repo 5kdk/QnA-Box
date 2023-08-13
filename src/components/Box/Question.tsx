@@ -69,7 +69,7 @@ const Question = () => {
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setQuestion(e.target.value);
   const setAnonymous = () => setIsAnonymous(pre => !pre);
   const createQuestion = () => {
-    createComment(id, question);
+    createComment(id, question, user?.displayName);
     setQuestion('');
   };
   const ToSignin = () => {

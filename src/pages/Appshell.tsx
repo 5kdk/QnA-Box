@@ -1,18 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Notification } from '../components/atom';
 import { Header } from '../components/molecules';
-import { userState } from '../jotai/atom';
+import { userState, globalWidthState } from '../jotai/atom';
 import { getProfile } from '../services/profile';
 import { auth } from '../services/firebase';
 
 const appShellCss = {
   wrapper: css`
-    width: var(--app_width);
+    max-width: var(--max_app_width);
+    min-width: var(--min_app_width);
     margin: 0 auto;
     padding-top: 56px;
+    overflow: hidden;
   `,
   main: css`
     min-height: calc(100vh - 56px);
@@ -22,8 +24,17 @@ const appShellCss = {
 
 const Appshell = () => {
   const [isLoading, setLoading] = useState(true);
+  const setGlobalWidth = useSetAtom(globalWidthState);
+  const appShellRef = useRef<HTMLDivElement>(null);
+
   const setUser = useSetAtom(userState);
   const params = useParams();
+
+  useEffect(() => {
+    if (appShellRef.current) {
+      setGlobalWidth(`${appShellRef.current.clientWidth}px`);
+    }
+  }, [setGlobalWidth]);
 
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
@@ -52,7 +63,7 @@ const Appshell = () => {
   }, [setUser, params]);
 
   return (
-    <div css={appShellCss.wrapper}>
+    <div ref={appShellRef} css={appShellCss.wrapper}>
       <Notification />
       <Header />
       <main css={appShellCss.main}>{!isLoading && <Outlet />}</main>

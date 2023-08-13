@@ -5,6 +5,7 @@ import userState from '../../jotai/atom/userState';
 import { Avatar, Button, Flex, Toggler, Note } from '../atom';
 import { css, keyframes } from '@emotion/react';
 import { createComment } from '../../services/comments';
+import { globalWidthState } from '../../jotai/atom/';
 
 const Slide = keyframes`
     0%{
@@ -17,13 +18,13 @@ const Slide = keyframes`
 `;
 
 const questionCss = {
-  wrapper: css`
+  wrapper: (globalWidth: string) => css`
     z-index: 10;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
-    width: var(--app_width);
+    width: ${globalWidth};
     padding: 20px;
     gap: 10px;
     background-color: var(--white);
@@ -59,6 +60,7 @@ const questionCss = {
 
 const Question = () => {
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const globalWidth = useAtomValue(globalWidthState);
   const [question, setQuestion] = useState('');
   const user = useAtomValue(userState);
   const navigate = useNavigate();
@@ -75,7 +77,7 @@ const Question = () => {
   };
 
   return (
-    <Flex css={questionCss.wrapper} flexDirection="column">
+    <Flex css={questionCss.wrapper(globalWidth)} flexDirection="column">
       <label css={questionCss.inputBox}>
         <Avatar src={user?.photoURL} size="sm" />
         <input

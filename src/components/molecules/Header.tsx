@@ -11,9 +11,10 @@ const HeaderCss = {
     position: fixed;
     z-index: 990;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: var(--app_width);
+    width: 100%;
+    margin: 0 auto;
+    min-width: var(--min_app_width);
+    max-width: var(--max_app_width);
     padding: 10px;
     background-color: ${isRoot ? 'var(--black)' : 'var(--white)'};
   `,
@@ -89,11 +90,9 @@ const Header = () => {
         <ChevronLeft size="22px" color={isRoot ? 'white' : undefined} />
       </button>
       {logoDisplay && <Logo size="sm" css={HeaderCss.LogoStyle} onClick={handleLogoClick} />}
-      <Flex>
-        <button aria-label="Info-button" css={HeaderCss.buttonStyle} onClick={handleBurgerClick}>
-          <i css={HeaderCss.iconStyle(isOpen, isRoot)}></i>
-        </button>
-      </Flex>
+      <button aria-label="Info-button" css={HeaderCss.buttonStyle} onClick={handleBurgerClick}>
+        <i css={HeaderCss.iconStyle(isOpen, isRoot)}></i>
+      </button>
       <SideNav isOpen={isOpen} />
     </Flex>
   );

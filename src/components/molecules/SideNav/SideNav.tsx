@@ -133,7 +133,6 @@ const SideNav = ({ isOpen }: SideNavProps) => {
             text={user ? 'Sign out' : 'Sign In'}
             color="var(--white)"
             bgColor="var(--black)"
-            minWidth="100%"
             onClick={user ? handleSignOutClick : handleSignInClick}
           />
           <br />

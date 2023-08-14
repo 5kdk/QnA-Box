@@ -4,9 +4,9 @@ import { css } from '@emotion/react';
 // import { Reply } from '@emotion-icons/boxicons-regular/';
 import EditCommentForm from './EditCommentForm';
 import { displayTimeAgo } from '../../utils';
-import { deleteComment } from '../../services/comments';
 import { useUserInfo } from '../../hooks/query';
 import { useRemoveCommentMutation } from '../../hooks/mutation';
+import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -62,6 +62,7 @@ interface CommentProps {
   createdAt: number;
   replies: [];
   isAnonymous: boolean;
+  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
 }
 
 const Comment = ({
@@ -73,6 +74,7 @@ const Comment = ({
   createdAt,
   isAnonymous,
   replies = [],
+  activateReplyMode,
 }: CommentProps) => {
   const [isEdit, setIsEdit] = useState(false);
 
@@ -87,6 +89,8 @@ const Comment = ({
     remove(commentId);
   };
 
+  const displayName = isAnonymous ? '익명' : commentOwner?.displayName;
+
   return (
     <>
       <Flex css={boxItemCss.wrapper(false)} justifyContent="space-between">
@@ -99,7 +103,7 @@ const Comment = ({
             <Flex>
               <span
                 css={!isAnonymous && ownerId === authorId ? [boxItemCss.name, boxItemCss.ownerName] : boxItemCss.name}>
-                {isAnonymous ? '익명' : commentOwner?.displayName}
+                {displayName}
               </span>
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
@@ -113,10 +117,10 @@ const Comment = ({
             <Text>{content}</Text>
           )}
           <Flex alignItems="center" css={boxItemCss.like}>
-            {/* {likes !== 0 && <span css={boxItemCss.subText}>{`${likes} likes`}</span>}
-            <button css={boxItemCss.reply} onClick={() => {}}>
-              <Reply size="20px" />
-            </button> */}
+            {likes !== 0 && <span css={boxItemCss.subText}>{`${likes} likes`}</span>}
+            <button css={boxItemCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
+              <ReplyIcon size="20px" />
+            </button>
           </Flex>
         </Flex>
       </Flex>

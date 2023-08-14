@@ -1,5 +1,5 @@
-import { css } from '@emotion/react';
 import { Suspense } from 'react';
+import { css } from '@emotion/react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { ItemSkeleton, ItemWrapper } from '../molecules';
 import { Flex } from '../atom';
@@ -10,7 +10,13 @@ const flexStyle = css`
   border-bottom: 1px solid var(--gray);
 `;
 
-const Comments = ({ ownerId }: { ownerId: string }) => {
+const Comments = ({
+  ownerId,
+  activateReplyMode,
+}: {
+  ownerId: string;
+  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
+}) => {
   const { data, fetchNextPage, hasNextPage } = useInfinityCommentQuery();
 
   const [sentryRef] = useInfiniteScroll({
@@ -37,6 +43,7 @@ const Comments = ({ ownerId }: { ownerId: string }) => {
               likes={likes}
               isAnonymous={isAnonymous}
               replies={replies}
+              activateReplyMode={activateReplyMode}
             />
           </Suspense>
         </Flex>

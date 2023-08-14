@@ -1,6 +1,7 @@
-import { BoxInfo, Comments, Question } from '.';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { BoxInfo, Comments, Question } from '.';
 import { getQnaBoxById } from '../../services/boxes';
 
 const staleTime = 3000;
@@ -13,11 +14,20 @@ const BoxContents = () => {
     staleTime,
   });
 
+  const [replyFor, setReplyFor] = useState<{ commentOwnerName: string; commentId: string } | null>(null);
+
+  const activateReplyMode = (commentOwnerName: string, commentId: string) => {
+    setReplyFor({ commentOwnerName, commentId });
+  };
+  const deactivateReplyMode = () => {
+    setReplyFor(null);
+  };
+
   return (
     <>
       <BoxInfo boxdetail={boxdetail!} />
-      <Comments ownerId={boxdetail!.ownerId} />
-      <Question />
+      <Comments ownerId={boxdetail!.ownerId} activateReplyMode={activateReplyMode} />
+      <Question replyFor={replyFor} deactivateReplyMode={deactivateReplyMode} />
     </>
   );
 };

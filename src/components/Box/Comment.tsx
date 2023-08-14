@@ -83,7 +83,7 @@ const Comment = ({
     setIsEdit(prev => !prev);
   };
 
-  const removePost = () => {
+  const removeComment = () => {
     remove(commentId);
   };
 
@@ -105,7 +105,7 @@ const Comment = ({
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
               <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
-              {ownerId === authorId && <Edit edit={handleModify} remove={removePost} />}
+              {ownerId === authorId && <Edit edit={handleModify} remove={removeComment} />}
             </Flex>
           </Flex>
           {isEdit ? (

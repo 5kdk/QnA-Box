@@ -36,14 +36,12 @@ const useUpdateCommentMutation = () => {
       const expected = (prev: QueryData, variables: mutationFnProps) => {
         const updatedBoxList = {
           ...prev,
-          pages: prev.pages.map(page => {
-            return {
-              ...page,
-              data: page.data.map((comment: CommentData) =>
-                comment.commentId === variables.commentId ? { ...comment, content: variables.input } : comment,
-              ),
-            };
-          }),
+          pages: prev.pages.map(page => ({
+            ...page,
+            data: page.data.map((comment: CommentData) =>
+              comment.commentId === variables.commentId ? { ...comment, content: variables.input } : comment,
+            ),
+          })),
         };
         return updatedBoxList;
       };

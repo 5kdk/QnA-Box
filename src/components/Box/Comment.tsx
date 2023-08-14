@@ -6,6 +6,7 @@ import EditCommentForm from './EditCommentForm';
 import { displayTimeAgo } from '../../utils';
 import { deleteComment } from '../../services/comments';
 import { useUserInfo } from '../../hooks/query';
+import { useRemoveCommentMutation } from '../../hooks/mutation';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -76,13 +77,14 @@ const Comment = ({
   const [isEdit, setIsEdit] = useState(false);
 
   const commentOwner = useUserInfo(authorId);
+  const { mutate: remove } = useRemoveCommentMutation();
 
   const handleModify = () => {
     setIsEdit(prev => !prev);
   };
 
   const removePost = () => {
-    deleteComment(commentId);
+    remove(commentId);
   };
 
   return (

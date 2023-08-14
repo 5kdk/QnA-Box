@@ -41,6 +41,7 @@ const EditCommentForm = ({ text, commentId, setIsEdit, handleCancle }: EditProps
     update({ commentId, input });
     setIsEdit(false);
   };
+
   return (
     <Flex flexDirection="column">
       <textarea css={EditFormCss.textarea} onChange={handleInput} value={input} />

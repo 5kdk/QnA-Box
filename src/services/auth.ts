@@ -12,7 +12,6 @@ import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from './firebase';
 import { USERS_COLLECTION_NAME } from '../constants/collectionNames';
 import { extractUsernameFromEmail } from '../utils';
-import { getLocalStorage, removeLocalStorage } from '../utils/localStorage';
 import { UserData } from './profile';
 
 const createUserDoc = async (
@@ -61,7 +60,7 @@ export const loginUser = async (email: string, password: string) => {
 
 export const deregisterUser = async () => {
   const user = auth.currentUser;
-  if (!user || verifiedUid()) return;
+  if (!user) return;
 
   const docRef = doc(db, USERS_COLLECTION_NAME, user.uid);
   await deleteDoc(docRef);
@@ -74,7 +73,7 @@ export const logoutUser = async (): Promise<void> => {
 
 export const updateUserPassword = async (password: string, newPassword: string) => {
   const user = auth.currentUser;
-  if (!user || verifiedUid()) return;
+  if (!user) return;
 
   if (user?.email) {
     const credential = EmailAuthProvider.credential(user.email, password);
@@ -83,11 +82,6 @@ export const updateUserPassword = async (password: string, newPassword: string) 
   }
 };
 
-export const verifiedUid = () => {
-  const uid = auth.currentUser?.uid;
-  if (uid === getLocalStorage('uid')) return uid;
-  else {
-    removeLocalStorage('uid');
-    throw new Error('계정이 올바르지 않습니다');
-  }
+export const getUid = () => {
+  return auth.currentUser?.uid;
 };

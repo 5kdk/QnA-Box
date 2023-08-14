@@ -5,8 +5,8 @@ import { css } from '@emotion/react';
 import { Notification } from '../components/atom';
 import { Header } from '../components/molecules';
 import { userState } from '../jotai/atom';
-import { getLocalStorage } from '../utils/localStorage';
 import { getProfile } from '../services/profile';
+import { auth } from '../services/firebase';
 
 const appShellCss = {
   wrapper: css`
@@ -26,26 +26,30 @@ const Appshell = () => {
   const params = useParams();
 
   useEffect(() => {
-    const uid = getLocalStorage('uid');
-    if (uid) {
-      const getUser = async () => {
-        try {
-          setLoading(true);
-          const data = await getProfile(uid);
-          if (data) setUser(data);
-        } catch (err) {
-          console.log(err);
-          setUser(null);
-        } finally {
-          setLoading(false);
-        }
-      };
-      getUser();
-    } else {
-      setLoading(false);
-      setUser(null);
-    }
-  }, [params, setUser]);
+    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
+      if (user) {
+        const getUser = async () => {
+          try {
+            const data = await getProfile(user.uid);
+            if (data) setUser(data);
+          } catch (err) {
+            console.log(err);
+            setUser(null);
+          } finally {
+            setLoading(false);
+          }
+        };
+        getUser();
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      unregisterAuthObserver();
+    };
+  }, [setUser, params]);
 
   return (
     <div css={appShellCss.wrapper}>

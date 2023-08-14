@@ -24,21 +24,21 @@ const router = createBrowserRouter([
       },
       {
         path: 'signin',
-        element: <Signin />,
+        element: <AuthenticationGuard redirectTo="/" element={<Signin />} isAuthenticated={false} />,
       },
       {
         path: 'signup',
-        element: <Signup />,
+        element: <AuthenticationGuard redirectTo="/" element={<Signup />} isAuthenticated={false} />,
       },
       {
         path: 'account',
-        element: <AuthenticationGuard redirectTo="/signin" element={<Account />} />,
+        element: <AuthenticationGuard redirectTo="/signin" element={<Account />} isAuthenticated={true} />,
       },
       {
         path: 'account/:target',
         element: (
           <ConditionalRouteGuard target="target" access={['profile', 'password']} redirectTo="/error">
-            <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} />
+            <AuthenticationGuard redirectTo="/signin" element={<EditAccount />} isAuthenticated={true} />
           </ConditionalRouteGuard>
         ),
       },
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'box',
-        element: <AuthenticationGuard redirectTo="/signin" element={<BoxList />} />,
+        element: <AuthenticationGuard redirectTo="/signin" element={<BoxList />} isAuthenticated={true} />,
       },
       {
         path: 'box/:id',
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'box/create',
-        element: <AuthenticationGuard redirectTo="/signin" element={<CreateBox />} />,
+        element: <AuthenticationGuard redirectTo="/signin" element={<CreateBox />} isAuthenticated={true} />,
       },
       {
         path: '*',

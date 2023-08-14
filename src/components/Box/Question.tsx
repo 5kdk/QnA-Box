@@ -58,11 +58,13 @@ const questionCss = {
 };
 
 const Question = () => {
-  const [isAnonymous, setIsAnonymous] = useState(false);
+  const user = useAtomValue(userState);
+  const isDefaultEnabledForAnonymous = user ? false : true;
+  const [isAnonymous, setIsAnonymous] = useState(isDefaultEnabledForAnonymous);
+
   const [question, setQuestion] = useState('');
   const { mutate: addQuestion } = useCreateCommentMutation();
   const globalWidth = useAtomValue(globalWidthState);
-  const user = useAtomValue(userState);
   const navigate = useNavigate();
 
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setQuestion(e.target.value);
@@ -73,6 +75,7 @@ const Question = () => {
     addQuestion({ question, isAnonymous });
     setQuestion('');
   };
+
   const ToSignin = () => {
     navigate('/signin');
   };

@@ -33,20 +33,18 @@ export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_
 // }
 
 export interface CommentData {
-  commentId: string;
-  authorId: string;
-  displayName: string | undefined;
   boxId: string;
+  commentId: string;
+  authorId: string | undefined;
+  isAnonymous: boolean;
   content: string;
   likes: number;
   createdAt: number;
-  // replies: Reply[];
   replies: [];
 }
 
-export const createComment = async (boxId: string, content: string, displayName: string | undefined) => {
+export const createComment = async (boxId: string, content: string, isAnonymous: boolean) => {
   const uid = getUid();
-  if (!uid) return;
 
   const commentsCollectionRef = collection(db, COMMENTS_COLLECTION_NAME);
   const commentDocRef = doc(commentsCollectionRef);
@@ -55,7 +53,7 @@ export const createComment = async (boxId: string, content: string, displayName:
     commentId: commentDocRef.id,
     boxId,
     authorId: uid,
-    displayName,
+    isAnonymous: isAnonymous,
     content,
     likes: 0,
     createdAt: Date.now(),

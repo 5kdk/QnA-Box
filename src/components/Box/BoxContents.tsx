@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { Answer, BoxInfo, Comments, Question } from '.';
-import { Controller } from '../molecules';
+import { BoxInfo, Comments, Question } from '.';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getQnaBoxById } from '../../services/boxes';
@@ -15,20 +13,11 @@ const BoxContents = () => {
     staleTime,
   });
 
-  const [replyComment, setReplyComment] = useState('');
-  const [replyUser, setReplyUser] = useState('');
-
   return (
     <>
       <BoxInfo boxdetail={boxdetail!} />
-      <Controller />
-      <Comments
-        owner={boxdetail!.owner}
-        replyComment={replyComment}
-        setReplyUser={setReplyUser}
-        setReplyComment={setReplyComment}
-      />
-      {replyComment ? <Answer replyUser={replyUser} replyComment={replyComment} BoxId={id} /> : <Question />}
+      <Comments ownerId={boxdetail!.ownerId} />
+      <Question />
     </>
   );
 };

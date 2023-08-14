@@ -31,7 +31,7 @@ const Comments = ({
 
   return (
     <ItemWrapper>
-      {boxcomments?.map(({ authorId, commentId, content, likes, replies, createdAt, isAnonymous }, i) => (
+      {boxcomments?.map(({ authorId, commentId, content, replies, createdAt, isAnonymous }, i) => (
         <Flex css={flexStyle} flexDirection="column" key={`${commentId} ${i}`}>
           <Suspense fallback={<ItemSkeleton num={5} />}>
             <Comment
@@ -40,7 +40,6 @@ const Comments = ({
               content={content}
               createdAt={createdAt}
               commentId={commentId}
-              likes={likes}
               isAnonymous={isAnonymous}
               replies={replies}
               activateReplyMode={activateReplyMode}

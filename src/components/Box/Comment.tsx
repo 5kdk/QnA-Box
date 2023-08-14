@@ -58,7 +58,6 @@ interface CommentProps {
   authorId: string | undefined;
   ownerId: string;
   content: string;
-  likes: number;
   createdAt: number;
   replies: [];
   isAnonymous: boolean;
@@ -70,7 +69,6 @@ const Comment = ({
   authorId,
   commentId,
   content,
-  likes,
   createdAt,
   isAnonymous,
   replies = [],
@@ -122,14 +120,13 @@ const Comment = ({
           </Flex>
         </Flex>
       </Flex>
-      {replies.map(({ authorId, content, likes, createdAt, isAnonymous }, i) => (
+      {replies.map(({ authorId, content, createdAt, isAnonymous }, i) => (
         <Reply
           key={i}
           commentId={commentId}
           ownerId={ownerId}
           authorId={authorId}
           content={content}
-          likes={likes}
           createdAt={createdAt}
           isAnonymous={isAnonymous}
           activateReplyMode={activateReplyMode}

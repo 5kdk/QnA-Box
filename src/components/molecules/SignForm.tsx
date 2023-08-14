@@ -47,14 +47,14 @@ const SignForm = <T extends FieldValues>({
   buttonText,
   redirectMsg,
 }: SignFormProps<T>) => {
-  const { registerKey, onSubmit } = useCustomForm<T>(submitFunc, undefined, formSchema);
+  const { registerKey, handleSubmit } = useCustomForm<T>(undefined, formSchema);
   const navigate = useNavigate();
   const toOtherPage = () => navigate(redirectTo);
 
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">
       <Logo css={SignFormCss.logostyle} size="lg" />
-      <form css={SignFormCss.form} onSubmit={onSubmit}>
+      <form css={SignFormCss.form} onSubmit={handleSubmit(submitFunc)}>
         <FormInput css={SignFormCss.inputstyle} label="E-mail" type="text" register={registerKey('email')} />
         <FormInput css={SignFormCss.inputstyle} label="Password" type="password" register={registerKey('password')} />
         {anotherInputs.map((input, idx) => (

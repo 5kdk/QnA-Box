@@ -23,7 +23,7 @@ const userEditFormCss = {
 };
 
 interface UserEditFormProps<T extends FieldValues> {
-  submitFunc: SubmitHandler<T>;
+  submitFunc: (data: T) => Promise<void>;
   defaultValues?: DefaultValues<T>;
   formSchema?: ZodType<T>;
   formElement: {
@@ -41,18 +41,18 @@ const UserEditForm = <T extends FieldValues>({
   formElement,
   btnSettings,
 }: UserEditFormProps<T>) => {
-  const { registerKey, onSubmit } = useCustomForm<T>(submitFunc, defaultValues, formSchema);
+  const { registerKey, handleSubmit } = useCustomForm<T>(defaultValues, formSchema);
   const setToastError = useSetAtom(toastErrorState);
   const navigate = useNavigate();
   const { mutate: editUserInfo } = useMutation({
-    mutationFn: onSubmit,
+    mutationFn: submitFunc,
     onSettled: () => navigate('/account'),
-    onError: (err: Error) => setToastError(err.message),
+    onError: (err: Error) => setToastError([err.message]),
   });
 
   return (
     <>
-      <form css={userEditFormCss.form} onSubmit={editUserInfo}>
+      <form css={userEditFormCss.form} onSubmit={handleSubmit(editUserInfo as SubmitHandler<T>)}>
         <Flex css={userEditFormCss.account} flexDirection="column">
           {formElement.map(({ text, key, type }) => (
             <FormInput key={key} label={text} type={type} register={registerKey(key, requiredFormValue(text))} />

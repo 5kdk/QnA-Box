@@ -50,7 +50,6 @@ const BoxForm = ({ submitFunc, defaultValues, btnOpt, closeEdit }: BoxFormProps)
       <form css={boxFormCss.form} onSubmit={handleOnSubmit}>
         <Flex css={boxFormCss.inputs} flexDirection="column">
           <FormInput label="Title" type="text" register={registerKey('title', requiredFormValue('Title'))} />
-          <FormInput label="Owner" type="text" register={registerKey('owner', requiredFormValue('Owner'))} />
           <FormInput
             label="Description"
             type="text"

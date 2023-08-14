@@ -4,7 +4,8 @@ import { useAtomValue } from 'jotai';
 import { css, keyframes } from '@emotion/react';
 import { Avatar, Button, Flex, Toggler, Note, Text } from '../atom';
 import { globalWidthState, userState } from '../../jotai/atom';
-import { useCreateCommentMutation } from '../../hooks/mutation';
+import { useCreateCommentMutation, useCreateReplyMutation } from '../../hooks/mutation';
+import { getUid } from '../../services/auth';
 
 const Slide = keyframes`
     0%{
@@ -69,18 +70,34 @@ const QuestionAnswerModal = ({
   const isDefaultEnabledForAnonymous = user ? false : true;
   const [isAnonymous, setIsAnonymous] = useState(isDefaultEnabledForAnonymous);
 
-  const [question, setQuestion] = useState('');
+  const [input, setInput] = useState('');
   const { mutate: addQuestion } = useCreateCommentMutation();
+  const { mutate: addReply } = useCreateReplyMutation();
+
   const globalWidth = useAtomValue(globalWidthState);
   const navigate = useNavigate();
 
-  const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setQuestion(e.target.value);
+  const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
 
   const toggleAnonymous = () => setIsAnonymous(pre => !pre);
 
   const createQuestion = () => {
-    addQuestion({ question, isAnonymous });
-    setQuestion('');
+    if (!replyFor) {
+      addQuestion({ question: input, isAnonymous });
+    } else {
+      const uid = getUid();
+
+      const newReply = {
+        authorId: uid,
+        isAnonymous: isAnonymous,
+        content: input,
+        likes: 0,
+        createdAt: Date.now(),
+      };
+
+      addReply({ commentId: replyFor.commentId, newReply });
+    }
+    setInput('');
   };
 
   const navigateToSignin = () => {
@@ -101,7 +118,7 @@ const QuestionAnswerModal = ({
           name="질문작성창"
           css={questionCss.input}
           placeholder={replyFor ? '답변을 작성해주세요!' : '무엇이 궁금한가요?'}
-          value={question}
+          value={input}
           onChange={handleQustionInput}
         />
       </div>

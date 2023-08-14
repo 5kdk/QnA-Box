@@ -21,16 +21,13 @@ import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
 
-// export interface Reply {
-//   commentId: string;
-//   authorId: string;
-//   displayName: string | undefined;
-//   boxId: string;
-//   content: string;
-//   likes: number;
-//   createdAt: number;
-//   parentId: string | null;
-// }
+export interface ReplyData {
+  authorId: string | undefined;
+  isAnonymous: boolean;
+  content: string;
+  likes: number;
+  createdAt: number;
+}
 
 export interface CommentData {
   boxId: string;
@@ -120,4 +117,12 @@ export const decreaseCommentLikes = async (commentId: string) => {
     const updatedLikes = Math.max(0, commentData.get('likes') - 1);
     await updateDoc(commentRef, { likes: updatedLikes });
   }
+};
+
+export const createReplyToComment = async (commentId: string, reply: ReplyData) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
+  await updateDoc(commentRef, {
+    replies: arrayUnion(reply),
+  });
 };

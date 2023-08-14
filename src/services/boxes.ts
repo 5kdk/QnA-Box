@@ -25,6 +25,7 @@ export interface FormElement {
 
 export interface Box {
   boxId: string;
+  owner: string;
   ownerId: string;
   title: string;
   activation: boolean;
@@ -75,6 +76,7 @@ export const getQnaBoxById = async (boxId: string): Promise<Box> => {
 
   const boxData: Box = {
     boxId: boxDataSnapshot?.id,
+    owner: boxDataSnapshot?.string,
     title: boxDataSnapshot?.title,
     ownerId: boxDataSnapshot?.ownerUid,
     activation: boxDataSnapshot?.activation,

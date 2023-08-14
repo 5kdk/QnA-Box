@@ -29,14 +29,14 @@ const useRemoveCommentMutation = () => {
       const previousComment: QueryData = queryClient.getQueryData<QueryData>(queryKey)!;
 
       const expected = (prev: QueryData, commentId: string) => {
-        const updatedBoxList = {
+        const updatedCommentList = {
           ...prev,
           pages: prev.pages.map((page: PageData) => ({
             ...page,
             data: page.data.filter((comment: CommentData) => comment.commentId !== commentId),
           })),
         };
-        return updatedBoxList;
+        return updatedCommentList;
       };
 
       queryClient.setQueryData(queryKey, expected(previousComment, commentId));

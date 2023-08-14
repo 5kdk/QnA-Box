@@ -1,11 +1,10 @@
 import { ChangeEvent, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
-import userState from '../../jotai/atom/userState';
-import { Avatar, Button, Flex, Toggler, Note } from '../atom';
 import { css, keyframes } from '@emotion/react';
-import { createComment } from '../../services/comments';
-import { globalWidthState } from '../../jotai/atom/';
+import { Avatar, Button, Flex, Toggler, Note } from '../atom';
+import { globalWidthState, userState } from '../../jotai/atom/';
+import { useCreateCommentMutation } from '../../hooks/mutation';
 
 const Slide = keyframes`
     0%{
@@ -60,16 +59,18 @@ const questionCss = {
 
 const Question = () => {
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const globalWidth = useAtomValue(globalWidthState);
   const [question, setQuestion] = useState('');
+  const { mutate: addQuestion } = useCreateCommentMutation();
+  const globalWidth = useAtomValue(globalWidthState);
   const user = useAtomValue(userState);
   const navigate = useNavigate();
-  const { id } = useParams() as { id: string };
 
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setQuestion(e.target.value);
-  const setAnonymous = () => setIsAnonymous(pre => !pre);
+
+  const toggleAnonymous = () => setIsAnonymous(pre => !pre);
+
   const createQuestion = () => {
-    createComment(id, question, user?.displayName);
+    addQuestion({ question, isAnonymous });
     setQuestion('');
   };
   const ToSignin = () => {
@@ -89,7 +90,7 @@ const Question = () => {
       </label>
       <Flex justifyContent="space-between" alignItems="center">
         {user ? (
-          <Toggler selected={isAnonymous} setSelected={setAnonymous} text="익명으로 질문하기" />
+          <Toggler selected={isAnonymous} setSelected={toggleAnonymous} text="익명으로 질문하기" />
         ) : (
           <Note css={questionCss.note} text="로그인 하기" onClick={ToSignin} />
         )}

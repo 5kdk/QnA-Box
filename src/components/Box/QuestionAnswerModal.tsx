@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import { css, keyframes } from '@emotion/react';
 import { Avatar, Button, Flex, Toggler, Note, Text } from '../atom';
-import { globalWidthState, userState } from '../../jotai/atom/';
+import { globalWidthState, userState } from '../../jotai/atom';
 import { useCreateCommentMutation } from '../../hooks/mutation';
 
 const Slide = keyframes`
@@ -58,7 +58,7 @@ const questionCss = {
   `,
 };
 
-const Question = ({
+const QuestionAnswerModal = ({
   replyFor,
   deactivateReplyMode,
 }: {
@@ -126,4 +126,4 @@ const Question = ({
   );
 };
 
-export default Question;
+export default QuestionAnswerModal;

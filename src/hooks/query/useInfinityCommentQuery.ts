@@ -1,10 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getComments } from '../../services/comments';
+import { fetchFilteredCommentsByPage } from '../../services/comments';
 import { useParams } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import { filterState } from '../../jotai/atom';
 
-const staleTime = 1000 * 60 * 5;
+const staleTime = 3000;
 
 const useInfinityCommentQuery = () => {
   const { subFilter } = useAtomValue(filterState);
@@ -12,7 +12,7 @@ const useInfinityCommentQuery = () => {
 
   const query = useInfiniteQuery({
     queryKey: ['boxcomments', id, subFilter],
-    queryFn: ({ pageParam = 1 }) => getComments(id!, subFilter, pageParam),
+    queryFn: ({ pageParam = 0 }) => fetchFilteredCommentsByPage(id!, subFilter, pageParam),
     getNextPageParam: lastPage => lastPage.nextPage || undefined,
     staleTime,
   });

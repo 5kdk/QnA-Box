@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { Box } from '../../services/boxes';
 import { Filter, Flex, Text, Title } from '../atom';
 import { InfoCircle } from 'emotion-icons/boxicons-regular';
+import { useUserInfo } from '../../hooks/query';
 
 const boxInfoCss = {
   wrapper: css`
@@ -28,6 +29,7 @@ const boxInfoCss = {
 
 const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
   const [moreInfo, setMoreInfo] = useState(false);
+  const boxOwner = useUserInfo(boxdetail.ownerId);
 
   const date = new Date(boxdetail.createdAt);
 
@@ -47,7 +49,7 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
       </Flex>
       <Flex alignItems="center" justifyContent="space-between" css={boxInfoCss.subWrapper}>
         <Flex flexDirection="column" css={[boxInfoCss.info]}>
-          <Text css={boxInfoCss.onwer}>{boxdetail.owner}</Text>
+          <Text css={boxInfoCss.onwer}>{boxOwner?.displayName}</Text>
           {moreInfo && (
             <>
               <Text>{boxdetail.description}</Text>

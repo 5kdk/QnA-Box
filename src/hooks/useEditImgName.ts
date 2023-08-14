@@ -1,7 +1,8 @@
-import { useAtomValue } from 'jotai';
+import { useRef } from 'react';
+import { useAtom } from 'jotai';
 import { userState } from '../jotai/atom';
 import useImgFile from './useImgFile';
-import { updateUserAvartar, updateUserDisplayName } from '../services/profile';
+import { UserData, updateUserAvartar, updateUserDisplayName } from '../services/profile';
 
 const formName = [{ text: 'DisplayName', key: 'displayName', type: 'text' }];
 export interface NameType {
@@ -9,12 +10,15 @@ export interface NameType {
 }
 
 const useEditImgName = () => {
-  const user = useAtomValue(userState);
+  const [user, setUser] = useAtom(userState);
+  const prevUser = useRef<UserData>(user);
   const { setNewImg, imgBuffer, imgFile } = useImgFile(user!.photoURL);
   const editImgName = async (data: NameType) => {
-    if (imgFile && user!.photoURL !== imgBuffer) await updateUserAvartar(imgFile);
-    if (user!.displayName !== data.displayName) await updateUserDisplayName(data.displayName);
+    if (imgFile && prevUser.current!.photoURL !== imgBuffer) await updateUserAvartar(imgFile);
+    if (prevUser.current!.displayName !== data.displayName) await updateUserDisplayName(data.displayName);
   };
+  const onMutate = (data: NameType) =>
+    user && setUser({ ...user, photoURL: imgBuffer || user.photoURL, displayName: data.displayName });
   const editForm = {
     formElement: formName,
     defaultValues: { displayName: user!.displayName },
@@ -25,6 +29,7 @@ const useEditImgName = () => {
       borderColor: 'var(--black)',
     },
     submitFunc: editImgName,
+    onMutate,
   };
 
   return { user, setNewImg, imgBuffer, editForm };

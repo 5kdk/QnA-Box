@@ -26,6 +26,7 @@ interface UserEditFormProps<T extends FieldValues> {
   submitFunc: (data: T) => Promise<void>;
   defaultValues?: DefaultValues<T>;
   formSchema?: ZodType<T>;
+  onMutate?: (data: T) => void;
   formElement: {
     text: string;
     key: string;
@@ -38,6 +39,7 @@ const UserEditForm = <T extends FieldValues>({
   submitFunc,
   defaultValues,
   formSchema,
+  onMutate,
   formElement,
   btnSettings,
 }: UserEditFormProps<T>) => {
@@ -48,6 +50,7 @@ const UserEditForm = <T extends FieldValues>({
     mutationFn: submitFunc,
     onSettled: () => navigate('/account'),
     onError: (err: Error) => setToastError([err.message]),
+    onMutate,
   });
 
   return (

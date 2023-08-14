@@ -65,20 +65,20 @@ export const createComment = async (boxId: string, content: string, displayName:
   await setDoc(commentDocRef, newComment);
 };
 
-export const getComments = async (boxId: string, subfilter: string, pageParam?: number) => {
+export const fetchFilteredCommentsByPage = async (boxId: string, subfilter: string, pageParam?: number) => {
   const commentsQuery = pageParam
     ? query(
         collection(db, COMMENTS_COLLECTION_NAME),
         where('boxId', '==', boxId),
         orderBy('createdAt', `${subfilter === '최신순' ? 'desc' : 'asc'}`),
-        limit(3),
+        limit(5),
+        startAfter(pageParam),
       )
     : query(
         collection(db, COMMENTS_COLLECTION_NAME),
         where('boxId', '==', boxId),
         orderBy('createdAt', `${subfilter === '최신순' ? 'desc' : 'asc'}`),
-        limit(3),
-        startAfter(pageParam),
+        limit(5),
       );
 
   const querySnapshot = await getDocs(commentsQuery);

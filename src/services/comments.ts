@@ -145,3 +145,21 @@ export const updateReplyToComment = async (commentId: string, newContent: string
     }
   }
 };
+
+export const removeReplyToComment = async (commentId: string, createdAt: number) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
+  const commentSnapshot = await getDoc(commentRef);
+  const commentData = commentSnapshot.data();
+
+  if (commentData && commentData.replies) {
+    const replyIndex = commentData.replies.findIndex((reply: ReplyData) => reply.createdAt === createdAt);
+    if (replyIndex > -1) {
+      const newReplies = [...commentData.replies.slice(0, replyIndex), ...commentData.replies.slice(replyIndex + 1)];
+
+      await updateDoc(commentRef, {
+        replies: newReplies,
+      });
+    }
+  }
+};

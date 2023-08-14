@@ -3,9 +3,10 @@ import { Avatar, Edit, Flex, Text } from '../atom';
 import { css } from '@emotion/react';
 import EditCommentForm from './EditCommentForm';
 import { displayTimeAgo } from '../../utils';
-import { CommentData, deleteComment } from '../../services/comments';
+import { CommentData } from '../../services/comments';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 import { useUserInfo } from '../../hooks/query';
+import { useRemoveReplyMutation } from '../../hooks/mutation';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -81,6 +82,7 @@ const Reply = ({
   activateReplyMode: (commentOwnerName: string, commentId: string) => void;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
+  const { mutate: remove } = useRemoveReplyMutation();
 
   const replyAuthor = useUserInfo(authorId);
 
@@ -88,8 +90,8 @@ const Reply = ({
     setIsEdit(prev => !prev);
   };
 
-  const removePost = () => {
-    deleteComment(commentId);
+  const removeReply = () => {
+    remove({ commentId, createdAt });
   };
 
   const displayName = `${isAnonymous ? '익명' : replyAuthor?.displayName} 's reply`;
@@ -111,7 +113,7 @@ const Reply = ({
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
               <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
-              {ownerId === authorId && <Edit edit={handleModify} remove={removePost} />}
+              {ownerId === authorId && <Edit edit={handleModify} remove={removeReply} />}
             </Flex>
           </Flex>
           {isEdit ? (

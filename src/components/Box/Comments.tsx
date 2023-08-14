@@ -27,7 +27,7 @@ const Comments = ({ ownerId }: { ownerId: string }) => {
     <ItemWrapper>
       {boxcomments?.map(({ authorId, commentId, content, likes, replies, createdAt, isAnonymous }, i) => (
         <Flex css={flexStyle} flexDirection="column" key={`${commentId} ${i}`}>
-          <Suspense fallback={<ItemSkeleton num={1} />}>
+          <Suspense fallback={<ItemSkeleton num={5} />}>
             <Comment
               ownerId={ownerId}
               authorId={authorId}

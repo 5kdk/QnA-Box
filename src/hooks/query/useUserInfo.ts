@@ -3,7 +3,7 @@ import { getProfile } from '../../services/profile';
 
 const staleTime = 3000;
 
-const useUserInfo = (authorId: string) => {
+const useUserInfo = (authorId: string | undefined) => {
   const { data } = useQuery({
     queryKey: ['user', authorId],
     queryFn: () => getProfile(authorId),

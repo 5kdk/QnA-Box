@@ -34,7 +34,7 @@ const useUpdateCommentMutation = () => {
       const previousComment: QueryData = queryClient.getQueryData<QueryData>(queryKey)!;
 
       const expected = (prev: QueryData, variables: mutationFnProps) => {
-        const updatedBoxList = {
+        const updatedCommentList = {
           ...prev,
           pages: prev.pages.map(page => ({
             ...page,
@@ -43,7 +43,7 @@ const useUpdateCommentMutation = () => {
             ),
           })),
         };
-        return updatedBoxList;
+        return updatedCommentList;
       };
 
       queryClient.setQueryData(queryKey, expected(previousComment, variables));

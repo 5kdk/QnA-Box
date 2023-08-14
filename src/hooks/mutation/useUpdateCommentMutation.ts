@@ -3,10 +3,21 @@ import { CommentData, updateComment } from '../../services/comments';
 import { filterState } from '../../jotai/atom';
 import { useAtomValue } from 'jotai';
 import { useParams } from 'react-router-dom';
+import { QueryDocumentSnapshot } from 'firebase/firestore';
 
 interface mutationFnProps {
   commentId: string;
   input: string;
+}
+
+interface PageData {
+  data: Array<CommentData>;
+  nextPage: QueryDocumentSnapshot | undefined;
+}
+
+interface QueryData {
+  pages: Array<PageData>;
+  pageParams: Array<QueryDocumentSnapshot | undefined>;
 }
 
 const useUpdateCommentMutation = () => {
@@ -20,9 +31,9 @@ const useUpdateCommentMutation = () => {
     async onMutate(variables) {
       await queryClient.cancelQueries({ queryKey });
 
-      const previousComment = queryClient.getQueryData(queryKey);
+      const previousComment: QueryData = queryClient.getQueryData<QueryData>(queryKey)!;
 
-      const expected = (prev, variables) => {
+      const expected = (prev: QueryData, variables: mutationFnProps) => {
         const updatedBoxList = {
           ...prev,
           pages: prev.pages.map(page => {

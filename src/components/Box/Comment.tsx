@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { css } from '@emotion/react';
+// import { Reply } from '@emotion-icons/boxicons-regular/';
 import EditCommentForm from './EditCommentForm';
 import { displayTimeAgo } from '../../utils';
 import { deleteComment } from '../../services/comments';
@@ -110,7 +111,10 @@ const Comment = ({
             <Text>{content}</Text>
           )}
           <Flex alignItems="center" css={boxItemCss.like}>
-            {likes !== 0 && <span css={boxItemCss.subText}>{`${likes} likes`}</span>}
+            {/* {likes !== 0 && <span css={boxItemCss.subText}>{`${likes} likes`}</span>}
+            <button css={boxItemCss.reply} onClick={() => {}}>
+              <Reply size="20px" />
+            </button> */}
           </Flex>
         </Flex>
       </Flex>

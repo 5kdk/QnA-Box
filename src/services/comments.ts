@@ -126,3 +126,22 @@ export const createReplyToComment = async (commentId: string, reply: ReplyData) 
     replies: arrayUnion(reply),
   });
 };
+
+export const updateReplyToComment = async (commentId: string, newContent: string, createdAt: number) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
+  const commentSnapshot = await getDoc(commentRef);
+  const commentData = commentSnapshot.data();
+
+  if (commentData && commentData.replies) {
+    const replyIndex = commentData.replies.findIndex((reply: ReplyData) => reply.createdAt === createdAt);
+    if (replyIndex > -1) {
+      const newReplies = [...commentData.replies];
+      newReplies[replyIndex] = { ...newReplies[replyIndex], content: newContent };
+
+      await updateDoc(commentRef, {
+        replies: newReplies,
+      });
+    }
+  }
+};

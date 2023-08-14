@@ -68,7 +68,6 @@ const Reply = ({
   ownerId,
   authorId,
   content,
-  likes,
   createdAt,
   isAnonymous,
   activateReplyMode,
@@ -78,7 +77,6 @@ const Reply = ({
   authorId: string | undefined;
   isAnonymous: boolean;
   content: string;
-  likes: number;
   createdAt: number;
   activateReplyMode: (commentOwnerName: string, commentId: string) => void;
 }) => {
@@ -117,7 +115,14 @@ const Reply = ({
             </Flex>
           </Flex>
           {isEdit ? (
-            <EditCommentForm text={content} commentId={commentId} setIsEdit={setIsEdit} handleCancle={handleModify} />
+            <EditCommentForm
+              text={content}
+              commentId={commentId}
+              setIsEdit={setIsEdit}
+              handleCancle={handleModify}
+              isReply={true}
+              createdAt={createdAt}
+            />
           ) : (
             <Text>{content}</Text>
           )}

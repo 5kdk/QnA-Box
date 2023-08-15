@@ -44,8 +44,8 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
   const navigate = useNavigate();
 
   const { data: userData } = useQuery({
-    queryKey: ['user', boxInfo.ownerUid],
-    queryFn: () => getProfile(boxInfo.ownerUid),
+    queryKey: ['user', boxInfo.ownerId],
+    queryFn: () => getProfile(boxInfo.ownerId),
     staleTime,
   });
 

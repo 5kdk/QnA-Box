@@ -120,8 +120,7 @@ const Reply = ({
             <EditCommentForm
               text={content}
               commentId={commentId}
-              setIsEdit={setIsEdit}
-              handleCancle={handleModify}
+              handleForm={handleModify}
               isReply={true}
               createdAt={createdAt}
             />

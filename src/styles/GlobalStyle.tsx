@@ -41,6 +41,7 @@ const style = css`
   }
 
   button,
+  a,
   textarea,
   input {
     font-family:
@@ -67,6 +68,14 @@ const style = css`
     border: none;
     background: inherit;
     cursor: pointer;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   :root {

@@ -6,7 +6,7 @@ import useClickOutside from '../../hooks/useClickOutside';
 const editCss = {
   modal: css`
     position: absolute;
-    top: 14px;
+    bottom: -10px;
     right: 0;
     width: 70px;
     border-radius: 5px;

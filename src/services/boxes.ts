@@ -33,18 +33,17 @@ export interface Box {
   createdAt: number;
 }
 
-const OWNER_UID = 'ownerUid';
+const OWNER_ID = 'ownerId';
 
 export const createQnaBox = async (formData: FormElement) => {
   const uid = getUid();
-  if (!uid) return;
+  if (!uid || uid !== formData.ownerId) return;
 
   const qnaBoxesCollection = collection(db, BOXES_COLLECTION_NAME);
   const newDocRef = doc(qnaBoxesCollection);
 
   const newData = {
     boxId: newDocRef.id,
-    ownerUid: uid,
     createdAt: Date.now(),
     ...formData,
   };
@@ -57,8 +56,8 @@ export const getMyQnaBoxes = async () => {
   if (!uid) return;
 
   const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
-  const ownerUidFilter = where(OWNER_UID, '==', uid);
-  const q = query(qnaBoxesCollectionRef, ownerUidFilter);
+  const ownerIdFilter = where(OWNER_ID, '==', uid);
+  const q = query(qnaBoxesCollectionRef, ownerIdFilter);
   const querySnapshot = await getDocs(q);
 
   const boxes: Box[] = querySnapshot.docs.map(doc => doc.data() as Box);
@@ -76,7 +75,7 @@ export const getQnaBoxById = async (boxId: string): Promise<Box> => {
   const boxData: Box = {
     boxId: boxDataSnapshot?.id,
     title: boxDataSnapshot?.title,
-    ownerId: boxDataSnapshot?.ownerUid,
+    ownerId: boxDataSnapshot?.ownerId,
     activation: boxDataSnapshot?.activation,
     anonymous: boxDataSnapshot?.anonymous,
     createdAt: boxDataSnapshot?.createdAt,

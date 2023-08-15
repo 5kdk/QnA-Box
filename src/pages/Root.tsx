@@ -20,7 +20,7 @@ const rootPageCss = {
   `,
   title: css`
     color: var(--white);
-    padding: 0 50px 0 60px;
+    width: 320px;
     font-size: 24px;
   `,
 };

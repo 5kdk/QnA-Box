@@ -82,6 +82,7 @@ const QuestionAnswerModal = ({
   const toggleAnonymous = () => setIsAnonymous(pre => !pre);
 
   const createQuestion = () => {
+    if (!input) return;
     if (!replyFor) {
       addQuestion({ question: input, isAnonymous });
     } else {
@@ -109,7 +110,7 @@ const QuestionAnswerModal = ({
       {replyFor && (
         <Flex alignItems="center" justifyContent="space-between">
           <Text>{`Reply to ${replyFor.commentOwnerName}`}</Text>
-          <button onClick={deactivateReplyMode}>답변 취소</button>
+          <button onClick={deactivateReplyMode}>취소</button>
         </Flex>
       )}
       <div css={questionCss.inputBox}>

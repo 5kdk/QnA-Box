@@ -73,7 +73,9 @@ export const getQnaBoxById = async (boxId: string): Promise<Box> => {
   return snapshot.data() as Promise<Box>;
 };
 
-export const getQnaBoxesById = async (boxIds: string[]): Promise<Box[] | undefined> => {
+export const getQnaBoxesById = async (boxIds: string[] | undefined): Promise<Box[] | undefined> => {
+  if (boxIds === undefined) return;
+
   const boxesCollection = collection(db, BOXES_COLLECTION_NAME);
 
   const boxDocsPromises = boxIds.map(boxId => {

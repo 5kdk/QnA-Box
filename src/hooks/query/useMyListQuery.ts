@@ -6,10 +6,10 @@ import { Box, getMyQnaBoxes, getQnaBoxesById } from '../../services/boxes';
 const staleTime = 3000;
 
 const useMyListQuery = () => {
-  const { joinedBoxes } = useAtomValue(userState);
+  const user = useAtomValue(userState);
   const filter = useAtomValue(filterState);
 
-  const queryFn = filter.mainFilter === 'joined' ? () => getQnaBoxesById(joinedBoxes) : () => getMyQnaBoxes();
+  const queryFn = filter.mainFilter === 'joined' ? () => getQnaBoxesById(user?.joinedBoxes) : () => getMyQnaBoxes();
 
   const { data } = useQuery({
     queryKey: ['box', filter.mainFilter],

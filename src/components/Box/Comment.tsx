@@ -68,12 +68,16 @@ const Comment = ({
   replies = [],
   activateReplyMode,
 }: CommentProps) => {
+
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isOpenReply, setIsOpenReply] = useState(false);
   const commentOwner = useUserInfo(authorId);
   const { mutate: remove } = useRemoveCommentMutation();
 
   const handleEditForm = () => setIsEditMode(prev => !prev);
   const removeComment = () => remove(commentId);
+  const toggleReply = () => setIsOpenReply(prev => !prev);
+
   const displayName = isAnonymous ? '익명' : commentOwner?.displayName;
 
   return (
@@ -93,6 +97,7 @@ const Comment = ({
             <button css={commentCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
               <ReplyIcon size="20px" />
             </button>
+            {replies.length !== 0 && <button onClick={toggleReply}>{!isOpenReply ? '답글 열기' : '답글 닫기'}</button>}
           </Flex>
         </Flex>
         <Flex alignItems="baseline" css={commentCss.menuWrapper}>
@@ -108,6 +113,16 @@ const Comment = ({
           activateReplyMode={activateReplyMode}
           {...reply}
         />
+      ))}
+      {isOpenReply &&
+        replies.map((reply, i) => (
+          <Reply
+            key={`${commentId} ${i}`}
+            commentId={commentId}
+            ownerId={ownerId}
+            activateReplyMode={activateReplyMode}
+            {...reply}
+          />
       ))}
     </>
   );

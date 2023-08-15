@@ -70,19 +70,7 @@ export const getQnaBoxById = async (boxId: string): Promise<Box> => {
   const boxDocRef = doc(boxesCollection, boxId);
   const snapshot = await getDoc(boxDocRef);
 
-  const boxDataSnapshot = snapshot.data();
-
-  const boxData: Box = {
-    boxId: boxDataSnapshot?.id,
-    title: boxDataSnapshot?.title,
-    ownerId: boxDataSnapshot?.ownerId,
-    activation: boxDataSnapshot?.activation,
-    anonymous: boxDataSnapshot?.anonymous,
-    createdAt: boxDataSnapshot?.createdAt,
-    description: boxDataSnapshot?.description,
-  };
-
-  return boxData;
+  return snapshot.data() as Promise<Box>;
 };
 
 export const getQnaBoxesById = async (boxIds: string[]): Promise<Box[] | undefined> => {

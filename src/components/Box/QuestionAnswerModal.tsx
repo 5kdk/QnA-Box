@@ -82,6 +82,7 @@ const QuestionAnswerModal = ({
   const toggleAnonymous = () => setIsAnonymous(pre => !pre);
 
   const createQuestion = () => {
+    if (!input) return;
     if (!replyFor) {
       addQuestion({ question: input, isAnonymous });
     } else {

@@ -44,8 +44,8 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
   const navigate = useNavigate();
 
   const { data: userData } = useQuery({
-    queryKey: ['user', boxInfo.ownerUid],
-    queryFn: () => getProfile(boxInfo.ownerUid),
+    queryKey: ['user', boxInfo.ownerId],
+    queryFn: () => getProfile(boxInfo.ownerId),
     staleTime,
   });
 
@@ -76,7 +76,7 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
             <button css={BoxListCss.titleStyle} onClick={navigateToDetail}>
               {boxInfo.title}
             </button>
-            <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{boxInfo.owner}</span>
+            <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{userData?.displayName}</span>
           </Flex>
           <Flex alignItems="center" css={BoxListCss.menuWrapperStyle}>
             <Edit edit={editPost} remove={removePost} />

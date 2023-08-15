@@ -16,8 +16,8 @@ import { getUid } from './auth';
 import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export interface FormElement {
+  ownerId: string;
   title: string;
-  owner: string;
   description: string;
   activation: boolean;
   anonymous: boolean;
@@ -25,13 +25,12 @@ export interface FormElement {
 
 export interface Box {
   boxId: string;
-  owner: string;
   ownerId: string;
   title: string;
+  description: string;
   activation: boolean;
   anonymous: boolean;
   createdAt: number;
-  description: string;
 }
 
 const OWNER_UID = 'ownerUid';
@@ -76,7 +75,6 @@ export const getQnaBoxById = async (boxId: string): Promise<Box> => {
 
   const boxData: Box = {
     boxId: boxDataSnapshot?.id,
-    owner: boxDataSnapshot?.string,
     title: boxDataSnapshot?.title,
     ownerId: boxDataSnapshot?.ownerUid,
     activation: boxDataSnapshot?.activation,
@@ -113,7 +111,7 @@ export const updateQnaBox = async (boxId: string, editFormData: FormElement): Pr
 
   const updatedData = {
     title: editFormData.title,
-    owner: editFormData.owner,
+    ownerId: editFormData.ownerId,
     description: editFormData.description,
     activation: editFormData.activation,
     anonymous: editFormData.anonymous,

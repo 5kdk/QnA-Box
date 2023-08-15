@@ -29,7 +29,7 @@ const Board = () => {
     if (searchInput) {
       const searchString = searchInput.trim().toLowerCase();
       const regex = new RegExp(searchString);
-      return sorted.filter(box => regex.test(box.title.toLowerCase()) || regex.test(box.owner.toLowerCase()));
+      return sorted.filter(box => regex.test(box.title.toLowerCase()));
     }
 
     return sorted;

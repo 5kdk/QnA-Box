@@ -37,7 +37,7 @@ export interface CommentData {
   content: string;
   likes: number;
   createdAt: number;
-  replies: [];
+  replies: ReplyData[];
 }
 
 export const createComment = async (boxId: string, content: string, isAnonymous: boolean) => {

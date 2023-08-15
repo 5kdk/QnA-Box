@@ -1,12 +1,12 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
 import { EditBox } from '.';
-import { getProfile } from '../../services/profile';
-import { Box } from '../../services/boxes';
 import { useRemoveMyBoxMutation } from '../../hooks/mutation';
-import { useNavigate } from 'react-router-dom';
+import { Box } from '../../services/boxes';
+import { getProfile } from '../../services/profile';
 
 const BoxListCss = {
   wrapperStyle: css`
@@ -41,17 +41,12 @@ interface BoxListItemProps {
 const BoxItem = ({ boxInfo }: BoxListItemProps) => {
   const [editMode, setEditMode] = useState(false);
   const { mutate: remove } = useRemoveMyBoxMutation();
-  const navigate = useNavigate();
 
   const { data: userData } = useQuery({
     queryKey: ['user', boxInfo.ownerId],
     queryFn: () => getProfile(boxInfo.ownerId),
     staleTime,
   });
-
-  const navigateToDetail = () => {
-    navigate(boxInfo.boxId);
-  };
 
   const editPost = () => {
     console.log('edit');
@@ -69,20 +64,16 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
       {editMode && <EditBox boxId={boxInfo.boxId} boxInfo={boxInfo} closeEdit={closeEdit} />}
-      <Avatar size="sm" src={userData ? userData.photoURL : ''} />
+      <Avatar size="sm" src={userData?.photoURL} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
-        <Flex justifyContent="space-between" alignItems="flex-start">
-          <Flex flexDirection="column">
-            <button css={BoxListCss.titleStyle} onClick={navigateToDetail}>
-              {boxInfo.title}
-            </button>
-            <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{userData?.displayName}</span>
-          </Flex>
-          <Flex alignItems="center" css={BoxListCss.menuWrapperStyle}>
-            <Edit edit={editPost} remove={removePost} />
-          </Flex>
-        </Flex>
+        <Link css={BoxListCss.titleStyle} to={boxInfo.boxId}>
+          {boxInfo.title}
+        </Link>
+        <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{userData?.displayName}</span>
         <Text>{boxInfo.description}</Text>
+      </Flex>
+      <Flex css={BoxListCss.menuWrapperStyle}>
+        <Edit edit={editPost} remove={removePost} />
       </Flex>
     </Flex>
   );

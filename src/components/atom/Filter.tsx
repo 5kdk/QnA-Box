@@ -11,8 +11,6 @@ const FilterCss = {
       width: 70px;
       padding: 8px 0;
       border-radius: 8px;
-      align-items: center;
-      align-self: center;
       ::before {
         position: absolute;
         content: ${isShow ? "'▲'" : "'▼'"};

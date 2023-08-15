@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Avatar, Edit, Flex, Text } from '../atom';
 import { css } from '@emotion/react';
-import EditCommentForm from './EditCommentForm';
-import { displayTimeAgo } from '../../utils';
+import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
+import { Avatar, Edit, Flex, Text } from '../atom';
+import { Reply, EditCommentForm } from '.';
 import { useUserInfo } from '../../hooks/query';
 import { useRemoveCommentMutation } from '../../hooks/mutation';
-import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
-import { Reply } from '.';
+import { displayTimeAgo } from '../../utils';
+import { CommentData } from '../../services/comments';
 
-const boxItemCss = {
+const commentCss = {
   wrapper: (reply: boolean) => css`
     min-height: 100px;
     padding: 12px 24px;
@@ -53,14 +53,8 @@ const boxItemCss = {
   `,
 };
 
-interface CommentProps {
-  commentId: string;
-  authorId: string | undefined;
+interface CommentProps extends CommentData {
   ownerId: string;
-  content: string;
-  createdAt: number;
-  replies: [];
-  isAnonymous: boolean;
   activateReplyMode: (commentOwnerName: string, commentId: string) => void;
 }
 
@@ -74,81 +68,64 @@ const Comment = ({
   replies = [],
   activateReplyMode,
 }: CommentProps) => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [isOpenReply, setIsOpenReply] = useState(false);
 
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isOpenReply, setIsOpenReply] = useState(false);
   const commentOwner = useUserInfo(authorId);
   const { mutate: remove } = useRemoveCommentMutation();
 
-  const handleModify = () => {
-    setIsEdit(prev => !prev);
-  };
-
-  const removeComment = () => {
-    remove(commentId);
-  };
-
-  const toggleReply = () => {
-    setIsOpenReply(prev => !prev);
-  };
+  const handleEditForm = () => setIsEditMode(prev => !prev);
+  const removeComment = () => remove(commentId);
+  const toggleReply = () => setIsOpenReply(prev => !prev);
 
   const displayName = isAnonymous ? '익명' : commentOwner?.displayName;
 
   return (
     <>
-      <Flex css={boxItemCss.wrapper(false)} justifyContent="space-between">
-        <Flex alignItems="center" flexDirection="column">
-          <Avatar size="sm" src={isAnonymous ? '' : commentOwner?.photoURL} />
-        </Flex>
-        <Flex flexDirection="column" css={boxItemCss.question}>
-          <Flex justifyContent="space-between" alignItems="flex-start">
-            <Flex>
-              <span
-                css={!isAnonymous && ownerId === authorId ? [boxItemCss.name, boxItemCss.ownerName] : boxItemCss.name}>
-                {displayName}
-              </span>
-            </Flex>
-            <Flex alignItems="center" css={boxItemCss.menuWrapper}>
-              <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
-              {ownerId === authorId && <Edit edit={handleModify} remove={removeComment} />}
-            </Flex>
-          </Flex>
-          {isEdit ? (
-            <EditCommentForm text={content} commentId={commentId} setIsEdit={setIsEdit} handleCancle={handleModify} />
+      <Flex css={commentCss.wrapper(false)} justifyContent="space-between">
+        <Avatar size="sm" src={isAnonymous ? '' : commentOwner?.photoURL} />
+        <Flex flexDirection="column" css={commentCss.question}>
+          <p css={!isAnonymous && ownerId === authorId ? [commentCss.name, commentCss.ownerName] : commentCss.name}>
+            {displayName}
+          </p>
+          {isEditMode ? (
+            <EditCommentForm text={content} commentId={commentId} handleForm={handleEditForm} />
           ) : (
             <Text>{content}</Text>
           )}
-          <Flex alignItems="center" css={boxItemCss.like}>
-            <button css={boxItemCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
+          <Flex alignItems="center" css={commentCss.like}>
+            <button css={commentCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
               <ReplyIcon size="20px" />
             </button>
             {replies.length !== 0 && <button onClick={toggleReply}>{!isOpenReply ? '답글 열기' : '답글 닫기'}</button>}
           </Flex>
         </Flex>
+        <Flex alignItems="baseline" css={commentCss.menuWrapper}>
+          <span css={commentCss.subText}>{displayTimeAgo(createdAt)}</span>
+          {ownerId === authorId && <Edit edit={handleEditForm} remove={removeComment} />}
+        </Flex>
       </Flex>
+      {replies.map((reply, i) => (
+        <Reply
+          key={`${commentId} ${i}`}
+          commentId={commentId}
+          ownerId={ownerId}
+          activateReplyMode={activateReplyMode}
+          {...reply}
+        />
+      ))}
       {isOpenReply &&
-        replies.map(({ authorId, content, createdAt, isAnonymous }, i) => (
+        replies.map((reply, i) => (
           <Reply
-            key={i}
+            key={`${commentId} ${i}`}
             commentId={commentId}
             ownerId={ownerId}
-            authorId={authorId}
-            content={content}
-            createdAt={createdAt}
-            isAnonymous={isAnonymous}
             activateReplyMode={activateReplyMode}
+            {...reply}
           />
-        ))}
+      ))}
     </>
   );
 };
 
 export default Comment;
-
-export interface ReplyData {
-  authorId: string | undefined;
-  isAnonymous: boolean;
-  content: string;
-  likes: number;
-  createdAt: number;
-}

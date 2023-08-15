@@ -1,6 +1,5 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
-import { Flex } from '../atom';
-import Note from '../atom/Note';
+import { ChangeEvent, useState } from 'react';
+import { Flex, Note } from '../atom';
 import { css } from '@emotion/react';
 import { useUpdateCommentMutation, useUpdateReplyMutaion } from '../../hooks/mutation';
 
@@ -23,15 +22,14 @@ const EditFormCss = {
 };
 
 type EditProps = {
-  setIsEdit: Dispatch<SetStateAction<boolean>>;
-  handleCancle: () => void;
+  handleForm: () => void;
   text: string;
   commentId: string;
   isReply?: boolean;
   createdAt?: number;
 };
 
-const EditCommentForm = ({ text, commentId, setIsEdit, handleCancle, isReply = false, createdAt }: EditProps) => {
+const EditCommentForm = ({ text, commentId, handleForm, isReply = false, createdAt }: EditProps) => {
   const [input, setInput] = useState(text);
   const { mutate: updateComment } = useUpdateCommentMutation();
   const { mutate: updateReply } = useUpdateReplyMutaion();
@@ -46,7 +44,7 @@ const EditCommentForm = ({ text, commentId, setIsEdit, handleCancle, isReply = f
     } else {
       updateComment({ commentId, input });
     }
-    setIsEdit(false);
+    handleForm();
   };
 
   return (
@@ -54,7 +52,7 @@ const EditCommentForm = ({ text, commentId, setIsEdit, handleCancle, isReply = f
       <textarea css={EditFormCss.textarea} onChange={handleInput} value={input} />
       <Flex alignItems="center" justifyContent="flex-end">
         <Note css={EditFormCss.note} text="수정" onClick={submitModify} />
-        <Note css={EditFormCss.note} text="취소" onClick={handleCancle} />
+        <Note css={EditFormCss.note} text="취소" onClick={handleForm} />
       </Flex>
     </Flex>
   );

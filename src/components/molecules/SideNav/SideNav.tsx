@@ -82,18 +82,6 @@ const SideNav = ({ isOpen }: SideNavProps) => {
     setSideNavState(false);
   };
 
-  const handleSignInClick = () => {
-    navigate('/signin');
-    setSideNavState(false);
-  };
-
-  const handleMyBoxClick = () => {
-    navigate('/box');
-    setSideNavState(false);
-  };
-
-  const handleSignUpClick = () => {};
-
   return (
     <Flex css={SideNavCss.navContainer(isOpen, globalWidth)} flexDirection="column">
       <Flex
@@ -114,11 +102,11 @@ const SideNav = ({ isOpen }: SideNavProps) => {
         <Flex css={SideNavCss.subWrapper(globalWidth)} flexDirection="column" alignItems="center">
           <div css={SideNavCss.listWrapper(!!user)}>
             {user ? (
-              <button css={SideNavCss.notestyle} onClick={handleMyBoxClick} aria-label="">
+              <button css={SideNavCss.notestyle} onClick={redirectTo('/box')} aria-label="">
                 나의 QnA Box목록
               </button>
             ) : (
-              <button css={SideNavCss.notestyle} onClick={handleSignUpClick}>
+              <button css={SideNavCss.notestyle} onClick={redirectTo('/signup')}>
                 회원가입
               </button>
             )}
@@ -133,7 +121,7 @@ const SideNav = ({ isOpen }: SideNavProps) => {
             text={user ? 'Sign out' : 'Sign In'}
             color="var(--white)"
             bgColor="var(--black)"
-            onClick={user ? handleSignOutClick : handleSignInClick}
+            onClick={user ? handleSignOutClick : redirectTo('/signin')}
           />
           <br />
           <CopyLight black />

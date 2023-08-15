@@ -16,8 +16,8 @@ import { getUid } from './auth';
 import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export interface FormElement {
+  ownerId: string;
   title: string;
-  owner: string;
   description: string;
   activation: boolean;
   anonymous: boolean;
@@ -25,27 +25,25 @@ export interface FormElement {
 
 export interface Box {
   boxId: string;
-  owner: string;
   ownerId: string;
   title: string;
+  description: string;
   activation: boolean;
   anonymous: boolean;
   createdAt: number;
-  description: string;
 }
 
-const OWNER_UID = 'ownerUid';
+const OWNER_ID = 'ownerId';
 
 export const createQnaBox = async (formData: FormElement) => {
   const uid = getUid();
-  if (!uid) return;
+  if (!uid || uid !== formData.ownerId) return;
 
   const qnaBoxesCollection = collection(db, BOXES_COLLECTION_NAME);
   const newDocRef = doc(qnaBoxesCollection);
 
   const newData = {
     boxId: newDocRef.id,
-    ownerUid: uid,
     createdAt: Date.now(),
     ...formData,
   };
@@ -58,8 +56,8 @@ export const getMyQnaBoxes = async () => {
   if (!uid) return;
 
   const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
-  const ownerUidFilter = where(OWNER_UID, '==', uid);
-  const q = query(qnaBoxesCollectionRef, ownerUidFilter);
+  const ownerIdFilter = where(OWNER_ID, '==', uid);
+  const q = query(qnaBoxesCollectionRef, ownerIdFilter);
   const querySnapshot = await getDocs(q);
 
   const boxes: Box[] = querySnapshot.docs.map(doc => doc.data() as Box);
@@ -72,20 +70,7 @@ export const getQnaBoxById = async (boxId: string): Promise<Box> => {
   const boxDocRef = doc(boxesCollection, boxId);
   const snapshot = await getDoc(boxDocRef);
 
-  const boxDataSnapshot = snapshot.data();
-
-  const boxData: Box = {
-    boxId: boxDataSnapshot?.id,
-    owner: boxDataSnapshot?.string,
-    title: boxDataSnapshot?.title,
-    ownerId: boxDataSnapshot?.ownerUid,
-    activation: boxDataSnapshot?.activation,
-    anonymous: boxDataSnapshot?.anonymous,
-    createdAt: boxDataSnapshot?.createdAt,
-    description: boxDataSnapshot?.description,
-  };
-
-  return boxData;
+  return snapshot.data() as Promise<Box>;
 };
 
 export const getQnaBoxesById = async (boxIds: string[] | undefined): Promise<Box[] | undefined> => {
@@ -115,7 +100,7 @@ export const updateQnaBox = async (boxId: string, editFormData: FormElement): Pr
 
   const updatedData = {
     title: editFormData.title,
-    owner: editFormData.owner,
+    ownerId: editFormData.ownerId,
     description: editFormData.description,
     activation: editFormData.activation,
     anonymous: editFormData.anonymous,

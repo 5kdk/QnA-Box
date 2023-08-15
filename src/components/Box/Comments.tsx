@@ -6,7 +6,7 @@ import { Flex } from '../atom';
 import { Comment } from '.';
 import { useInfinityCommentQuery } from '../../hooks/query';
 
-const flexStyle = css`
+const commentCss = css`
   border-bottom: 1px solid var(--gray);
 `;
 
@@ -31,19 +31,10 @@ const Comments = ({
 
   return (
     <ItemWrapper>
-      {boxcomments?.map(({ authorId, commentId, content, replies, createdAt, isAnonymous }, i) => (
-        <Flex css={flexStyle} flexDirection="column" key={`${commentId} ${i}`}>
-          <Suspense fallback={<ItemSkeleton num={5} />}>
-            <Comment
-              ownerId={ownerId}
-              authorId={authorId}
-              content={content}
-              createdAt={createdAt}
-              commentId={commentId}
-              isAnonymous={isAnonymous}
-              replies={replies}
-              activateReplyMode={activateReplyMode}
-            />
+      {boxcomments?.map(comment => (
+        <Flex css={commentCss} flexDirection="column" key={`${comment.commentId}`}>
+          <Suspense fallback={<ItemSkeleton num={comment.replies.length + 1} />}>
+            <Comment ownerId={ownerId} activateReplyMode={activateReplyMode} {...comment} />
           </Suspense>
         </Flex>
       ))}

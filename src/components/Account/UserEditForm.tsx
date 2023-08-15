@@ -48,22 +48,20 @@ const UserEditForm = <T extends FieldValues>({
   const navigate = useNavigate();
   const { mutate: editUserInfo } = useMutation({
     mutationFn: submitFunc,
-    onSettled: () => navigate('/account'),
+    onSettled: () => navigate('/account', { replace: true }),
     onError: (err: Error) => setToastError([err.message]),
     onMutate,
   });
 
   return (
-    <>
-      <form css={userEditFormCss.form} onSubmit={handleSubmit(editUserInfo as SubmitHandler<T>)}>
-        <Flex css={userEditFormCss.account} flexDirection="column">
-          {formElement.map(({ text, key, type }) => (
-            <FormInput key={key} label={text} type={type} register={registerKey(key, requiredFormValue(text))} />
-          ))}
-        </Flex>
-        <WideButton type="submit" {...btnSettings} />
-      </form>
-    </>
+    <form css={userEditFormCss.form} onSubmit={handleSubmit(editUserInfo as SubmitHandler<T>)}>
+      <Flex css={userEditFormCss.account} flexDirection="column">
+        {formElement.map(({ text, key, type }) => (
+          <FormInput key={key} label={text} type={type} register={registerKey(key, requiredFormValue(text))} />
+        ))}
+      </Flex>
+      <WideButton type="submit" {...btnSettings} />
+    </form>
   );
 };
 

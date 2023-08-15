@@ -6,6 +6,8 @@ import { Flex, Logo, Note, WideButton } from '../atom';
 import { FormInput } from '.';
 import useCustomForm from '../../hooks/useCustomForm';
 import googlelogin2 from '../../assets/images/btn_google_signin_light_normal_web.png';
+import { useReqTryCatch } from '../../hooks';
+import { loginWithGoogle } from '../../services/auth';
 
 const SignFormCss = {
   container: css`
@@ -50,6 +52,8 @@ const SignForm = <T extends FieldValues>({
   const { registerKey, handleSubmit } = useCustomForm<T>(undefined, formSchema);
   const navigate = useNavigate();
   const toOtherPage = () => navigate(redirectTo);
+  const reqTryCatch = useReqTryCatch();
+  const signinGoogle = () => reqTryCatch(loginWithGoogle);
 
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">
@@ -62,7 +66,7 @@ const SignForm = <T extends FieldValues>({
         ))}
         <div css={SignFormCss.buttons}>
           <WideButton type="submit" text={buttonText} bgColor="var(--blue)" color="var(--white)" />
-          <button aria-label="구글 로그인">
+          <button aria-label="구글 로그인" type="button" onClick={signinGoogle}>
             <img css={SignFormCss.googlelogin} src={googlelogin2} alt="google" />
           </button>
         </div>

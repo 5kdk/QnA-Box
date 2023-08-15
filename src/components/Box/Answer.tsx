@@ -1,10 +1,10 @@
 import { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
-import userState from '../../jotai/atom/userState';
 import { Avatar, Button, Flex, Note, Text, Toggler } from '../atom';
 import { css, keyframes } from '@emotion/react';
 import { createComment } from '../../services/comments';
+import { globalWidthState, userState } from '../../jotai/atom/';
 
 const Slide = keyframes`
     0%{
@@ -17,13 +17,13 @@ const Slide = keyframes`
 `;
 
 const answerCss = {
-  wrapper: css`
+  wrapper: (globalWidth: string) => css`
     z-index: 10;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
-    width: var(--app_width);
+    width: ${globalWidth};
     padding: 20px;
     gap: 10px;
     background-color: var(--white);
@@ -63,21 +63,25 @@ const answerCss = {
 
 const Answer = ({ replyUser, replyComment, BoxId }: { replyUser: string; replyComment: string; BoxId: string }) => {
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const globalWidth = useAtomValue(globalWidthState);
   const [reply, setreply] = useState('');
   const user = useAtomValue(userState);
   const navigate = useNavigate();
 
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setreply(e.target.value);
+
   const setAnonymous = () => setIsAnonymous(pre => !pre);
+
   const createReply = () => {
-    createComment(BoxId, reply, replyComment);
+    createComment(BoxId, reply, replyComment, user?.displayName);
   };
+
   const ToSignin = () => {
     navigate('/signin');
   };
 
   return (
-    <Flex css={answerCss.wrapper} flexDirection="column">
+    <Flex css={answerCss.wrapper(globalWidth)} flexDirection="column">
       <Text css={answerCss.reply}>{`Reply to ${replyUser}`}</Text>
       <label css={answerCss.inputBox}>
         <Avatar src={user!.photoURL} size="sm" />

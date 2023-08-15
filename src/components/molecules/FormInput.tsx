@@ -13,7 +13,7 @@ const InputCss = {
     width: 100%;
     font-weight: bold;
     border: none;
-    border-bottom: 2px solid var(--deep_gray);
+    border-bottom: 1.5px solid var(--deep_gray);
     line-height: 25px;
     font-size: 16px;
     :focus {

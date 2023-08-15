@@ -6,9 +6,11 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   setDoc,
+  startAfter,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -19,19 +21,27 @@ import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
 
-export interface CommentData {
-  commentId: string;
-  boxId: string;
-  authorId: string;
+export interface ReplyData {
+  authorId: string | undefined;
+  isAnonymous: boolean;
   content: string;
   likes: number;
   createdAt: number;
-  parentId: string | null;
 }
 
-export const createComment = async (boxId: string, content: string, commentId?: string) => {
+export interface CommentData {
+  boxId: string;
+  commentId: string;
+  authorId: string | undefined;
+  isAnonymous: boolean;
+  content: string;
+  likes: number;
+  createdAt: number;
+  replies: [];
+}
+
+export const createComment = async (boxId: string, content: string, isAnonymous: boolean) => {
   const uid = getUid();
-  if (!uid) return;
 
   const commentsCollectionRef = collection(db, COMMENTS_COLLECTION_NAME);
   const commentDocRef = doc(commentsCollectionRef);
@@ -40,29 +50,37 @@ export const createComment = async (boxId: string, content: string, commentId?: 
     commentId: commentDocRef.id,
     boxId,
     authorId: uid,
+    isAnonymous: isAnonymous,
     content,
     likes: 0,
     createdAt: Date.now(),
-    parentId: commentId || null,
+    replies: [],
   };
 
   await setDoc(commentDocRef, newComment);
 };
 
-export const getComments = async (boxId: string) => {
-  const commentsQuery = query(
-    collection(db, COMMENTS_COLLECTION_NAME),
-    where('boxId', '==', boxId),
-    orderBy('createdAt'),
-  );
+export const fetchFilteredCommentsByPage = async (boxId: string, subfilter: string, pageParam?: number) => {
+  const commentsQuery = pageParam
+    ? query(
+        collection(db, COMMENTS_COLLECTION_NAME),
+        where('boxId', '==', boxId),
+        orderBy('createdAt', `${subfilter === '최신순' ? 'desc' : 'asc'}`),
+        limit(5),
+        startAfter(pageParam),
+      )
+    : query(
+        collection(db, COMMENTS_COLLECTION_NAME),
+        where('boxId', '==', boxId),
+        orderBy('createdAt', `${subfilter === '최신순' ? 'desc' : 'asc'}`),
+        limit(5),
+      );
 
   const querySnapshot = await getDocs(commentsQuery);
-  const allComments = querySnapshot.docs.map(doc => doc.data() as CommentData);
-  const comments = allComments.filter(c => !c.parentId);
-  const replies = allComments.filter(c => c.parentId);
-  return comments.map(comment => {
-    return { ...comment, replies: replies.filter(reply => reply.parentId === comment.commentId) };
-  });
+  const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+  const data = querySnapshot.docs.map(doc => doc.data() as CommentData);
+
+  return { data, nextPage: lastVisible };
 };
 
 export const updateComment = async (commentId: string, updatedContent: string) => {
@@ -98,5 +116,50 @@ export const decreaseCommentLikes = async (commentId: string) => {
   if (commentData.exists()) {
     const updatedLikes = Math.max(0, commentData.get('likes') - 1);
     await updateDoc(commentRef, { likes: updatedLikes });
+  }
+};
+
+export const createReplyToComment = async (commentId: string, reply: ReplyData) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
+  await updateDoc(commentRef, {
+    replies: arrayUnion(reply),
+  });
+};
+
+export const updateReplyToComment = async (commentId: string, newContent: string, createdAt: number) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
+  const commentSnapshot = await getDoc(commentRef);
+  const commentData = commentSnapshot.data();
+
+  if (commentData && commentData.replies) {
+    const replyIndex = commentData.replies.findIndex((reply: ReplyData) => reply.createdAt === createdAt);
+    if (replyIndex > -1) {
+      const newReplies = [...commentData.replies];
+      newReplies[replyIndex] = { ...newReplies[replyIndex], content: newContent };
+
+      await updateDoc(commentRef, {
+        replies: newReplies,
+      });
+    }
+  }
+};
+
+export const removeReplyToComment = async (commentId: string, createdAt: number) => {
+  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
+  const commentSnapshot = await getDoc(commentRef);
+  const commentData = commentSnapshot.data();
+
+  if (commentData && commentData.replies) {
+    const replyIndex = commentData.replies.findIndex((reply: ReplyData) => reply.createdAt === createdAt);
+    if (replyIndex > -1) {
+      const newReplies = [...commentData.replies.slice(0, replyIndex), ...commentData.replies.slice(replyIndex + 1)];
+
+      await updateDoc(commentRef, {
+        replies: newReplies,
+      });
+    }
   }
 };

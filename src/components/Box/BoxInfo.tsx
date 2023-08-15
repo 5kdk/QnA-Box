@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { css } from '@emotion/react';
 import { Box } from '../../services/boxes';
-import { Flex, Text, Title } from '../atom';
-import { InfoSquare } from 'emotion-icons/boxicons-regular';
+import { Filter, Flex, Text, Title } from '../atom';
+import { InfoCircle } from 'emotion-icons/boxicons-regular';
+import { useUserInfo } from '../../hooks/query';
 
 const boxInfoCss = {
   wrapper: css`
-    padding: 10px 20px 5px 20px;
+    padding: 10px 20px;
+  `,
+  subWrapper: css`
+    gap: 10px;
+    margin: 5px 0;
   `,
   title: css`
     max-width: 350px;
@@ -15,17 +20,16 @@ const boxInfoCss = {
   onwer: css`
     font-size: 16px;
     font-weight: 500;
-    padding: 0 0 5px 3px;
   `,
   info: css`
     color: var(--deep_gray);
-    padding-left: 3px;
     gap: 5px;
   `,
 };
 
 const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
   const [moreInfo, setMoreInfo] = useState(false);
+  const boxOwner = useUserInfo(boxdetail.ownerId);
 
   const date = new Date(boxdetail.createdAt);
 
@@ -36,16 +40,16 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
   const formattedDate = `${year}.${month < 10 ? '0' + month : month}.${day < 10 ? '0' + day : day}`;
 
   return (
-    <>
-      <Flex justifyContent="space-between" alignItems="center" css={boxInfoCss.wrapper}>
+    <div css={boxInfoCss.wrapper}>
+      <Flex alignItems="center" css={boxInfoCss.subWrapper}>
         <Title text={boxdetail.title} css={boxInfoCss.title} />
         <button aria-label="더 많은 Box 정보 보기">
-          <InfoSquare size="18px" onClick={() => setMoreInfo(prev => !prev)} />
+          <InfoCircle size="18px" onClick={() => setMoreInfo(prev => !prev)} />
         </button>
       </Flex>
-      <div css={boxInfoCss.wrapper}>
-        <Text css={boxInfoCss.onwer}>{boxdetail.owner}</Text>
+      <Flex alignItems="center" justifyContent="space-between" css={boxInfoCss.subWrapper}>
         <Flex flexDirection="column" css={[boxInfoCss.info]}>
+          <Text css={boxInfoCss.onwer}>{boxOwner?.displayName}</Text>
           {moreInfo && (
             <>
               <Text>{boxdetail.description}</Text>
@@ -53,8 +57,9 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
             </>
           )}
         </Flex>
-      </div>
-    </>
+        <Filter />
+      </Flex>
+    </div>
   );
 };
 

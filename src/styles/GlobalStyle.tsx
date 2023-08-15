@@ -79,7 +79,8 @@ const style = css`
     --orange: #fc6d1c;
     --shadow: rgba(0, 0, 0, 0.2);
     --modal: rgba(0, 0, 0, 0.5);
-    --app_width: 448px;
+    --max_app_width: 480px;
+    --min_app_width: 320px;
     --toastify-color-info: #1c56fc;
     --toastify-icon-color-info: #1c56fc;
   }

@@ -15,8 +15,8 @@ export interface UserData {
 
 export const getUserRef = (uid: string) => doc(db, USERS_COLLECTION_NAME, uid);
 
-export const getProfile = async (uid?: string): Promise<UserData | undefined | null> => {
-  if (!uid) return;
+export const getProfile = async (uid: string | undefined) => {
+  if (!uid) return null;
 
   const snapshot = await getDoc(getUserRef(uid));
   const result = snapshot.data();

@@ -2,7 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { Flex } from '../atom';
 import Note from '../atom/Note';
 import { css } from '@emotion/react';
-import { updateComment } from '../../services/comments';
+import { useUpdateCommentMutation, useUpdateReplyMutaion } from '../../hooks/mutation';
 
 const EditFormCss = {
   textarea: css`
@@ -26,18 +26,29 @@ type EditProps = {
   setIsEdit: Dispatch<SetStateAction<boolean>>;
   handleCancle: () => void;
   text: string;
-  commnetId: string;
+  commentId: string;
+  isReply?: boolean;
+  createdAt?: number;
 };
 
-const EditCommentForm = ({ text, commnetId, setIsEdit, handleCancle }: EditProps) => {
+const EditCommentForm = ({ text, commentId, setIsEdit, handleCancle, isReply = false, createdAt }: EditProps) => {
   const [input, setInput] = useState(text);
+  const { mutate: updateComment } = useUpdateCommentMutation();
+  const { mutate: updateReply } = useUpdateReplyMutaion();
+
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
   };
+
   const submitModify = () => {
-    updateComment(commnetId, input);
+    if (isReply && createdAt) {
+      updateReply({ commentId, input, createdAt });
+    } else {
+      updateComment({ commentId, input });
+    }
     setIsEdit(false);
   };
+
   return (
     <Flex flexDirection="column">
       <textarea css={EditFormCss.textarea} onChange={handleInput} value={input} />

@@ -8,17 +8,19 @@ const FilterCss = {
   boxstyle: (isShow: boolean) => {
     return css`
       position: relative;
-      width: 90px;
-      padding: 8px;
+      width: 70px;
+      padding: 8px 0;
       border-radius: 8px;
+      align-items: center;
       align-self: center;
       ::before {
         position: absolute;
         content: ${isShow ? "'▲'" : "'▼'"};
         top: 7px;
-        right: 8px;
+        right: 0;
         color: var(--black);
-        font-size: 15px;
+        font-size: 14px;
+        margin-top: 3px;
       }
     `;
   },

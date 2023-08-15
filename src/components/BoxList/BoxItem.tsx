@@ -12,7 +12,6 @@ const BoxListCss = {
   wrapperStyle: css`
     padding: 12px 24px 24px 24px;
     min-height: 100px;
-    width: var(--app_width);
     gap: 15px;
     border-bottom: 1px solid var(--gray);
   `,

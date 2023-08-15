@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { css } from '@emotion/react';
 import EditCommentForm from './EditCommentForm';
 import { displayTimeAgo } from '../../utils';
-import { useUserInfo } from '../../hooks/query';
-import { useRemoveCommentMutation } from '../../hooks/mutation';
+import { CommentData } from '../../services/comments';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
-import { Reply } from '.';
+import { useUserInfo } from '../../hooks/query';
+import { useRemoveReplyMutation } from '../../hooks/mutation';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -15,11 +15,15 @@ const boxItemCss = {
     gap: 15px;
     background-color: ${reply ? 'var(--gray)' : 'white'};
   `,
+  avatarWrapper: css`
+    position: relative;
+  `,
   line: css`
+    position: absolute;
+    top: -70px;
     width: 1.5px;
-    height: calc(100% + 30px);
-    margin-top: 10px;
-    margin-bottom: -10px;
+    height: 50px;
+    margin: 10px 0;
     background-color: var(--gray);
   `,
   question: css`
@@ -53,47 +57,51 @@ const boxItemCss = {
   `,
 };
 
-interface CommentProps {
-  commentId: string;
-  authorId: string | undefined;
-  ownerId: string;
-  content: string;
-  createdAt: number;
-  replies: [];
-  isAnonymous: boolean;
-  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
+export interface Comments extends CommentData {
+  owner: string;
+  setReplyComment: Dispatch<SetStateAction<string>>;
+  setReplyUser: Dispatch<SetStateAction<string>>;
+  replyComment: string;
 }
 
-const Comment = ({
+const Reply = ({
+  commentId,
   ownerId,
   authorId,
-  commentId,
   content,
   createdAt,
   isAnonymous,
-  replies = [],
   activateReplyMode,
-}: CommentProps) => {
+}: {
+  commentId: string;
+  ownerId: string;
+  authorId: string | undefined;
+  isAnonymous: boolean;
+  content: string;
+  createdAt: number;
+  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
+}) => {
   const [isEdit, setIsEdit] = useState(false);
+  const { mutate: remove } = useRemoveReplyMutation();
 
-  const commentOwner = useUserInfo(authorId);
-  const { mutate: remove } = useRemoveCommentMutation();
+  const replyAuthor = useUserInfo(authorId);
 
   const handleModify = () => {
     setIsEdit(prev => !prev);
   };
 
-  const removeComment = () => {
-    remove(commentId);
+  const removeReply = () => {
+    remove({ commentId, createdAt });
   };
 
-  const displayName = isAnonymous ? '익명' : commentOwner?.displayName;
+  const displayName = `${isAnonymous ? '익명' : replyAuthor?.displayName} 's reply`;
 
   return (
     <>
       <Flex css={boxItemCss.wrapper(false)} justifyContent="space-between">
-        <Flex alignItems="center" flexDirection="column">
-          <Avatar size="sm" src={isAnonymous ? '' : commentOwner?.photoURL} />
+        <Flex css={boxItemCss.avatarWrapper} alignItems="center" flexDirection="column">
+          <div css={boxItemCss.line}></div>
+          <Avatar size="sm" src={isAnonymous ? '' : replyAuthor?.photoURL} />
         </Flex>
         <Flex flexDirection="column" css={boxItemCss.question}>
           <Flex justifyContent="space-between" alignItems="flex-start">
@@ -105,11 +113,18 @@ const Comment = ({
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
               <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
-              {ownerId === authorId && <Edit edit={handleModify} remove={removeComment} />}
+              {ownerId === authorId && <Edit edit={handleModify} remove={removeReply} />}
             </Flex>
           </Flex>
           {isEdit ? (
-            <EditCommentForm text={content} commentId={commentId} setIsEdit={setIsEdit} handleCancle={handleModify} />
+            <EditCommentForm
+              text={content}
+              commentId={commentId}
+              setIsEdit={setIsEdit}
+              handleCancle={handleModify}
+              isReply={true}
+              createdAt={createdAt}
+            />
           ) : (
             <Text>{content}</Text>
           )}
@@ -120,28 +135,8 @@ const Comment = ({
           </Flex>
         </Flex>
       </Flex>
-      {replies.map(({ authorId, content, createdAt, isAnonymous }, i) => (
-        <Reply
-          key={i}
-          commentId={commentId}
-          ownerId={ownerId}
-          authorId={authorId}
-          content={content}
-          createdAt={createdAt}
-          isAnonymous={isAnonymous}
-          activateReplyMode={activateReplyMode}
-        />
-      ))}
     </>
   );
 };
 
-export default Comment;
-
-export interface ReplyData {
-  authorId: string | undefined;
-  isAnonymous: boolean;
-  content: string;
-  likes: number;
-  createdAt: number;
-}
+export default Reply;

@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Answer, BoxInfo, Comments, Question } from '.';
-import { Controller } from '../molecules';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { BoxInfo, Comments, QuestionAnswerModal } from '.';
 import { getQnaBoxById } from '../../services/boxes';
 
 const staleTime = 3000;
@@ -15,20 +14,20 @@ const BoxContents = () => {
     staleTime,
   });
 
-  const [replyComment, setReplyComment] = useState('');
-  const [replyUser, setReplyUser] = useState('');
+  const [replyFor, setReplyFor] = useState<{ commentOwnerName: string; commentId: string } | null>(null);
+
+  const activateReplyMode = (commentOwnerName: string, commentId: string) => {
+    setReplyFor({ commentOwnerName, commentId });
+  };
+  const deactivateReplyMode = () => {
+    setReplyFor(null);
+  };
 
   return (
     <>
       <BoxInfo boxdetail={boxdetail!} />
-      <Controller />
-      <Comments
-        owner={boxdetail!.owner}
-        replyComment={replyComment}
-        setReplyUser={setReplyUser}
-        setReplyComment={setReplyComment}
-      />
-      {replyComment ? <Answer replyUser={replyUser} replyComment={replyComment} BoxId={id} /> : <Question />}
+      <Comments ownerId={boxdetail!.ownerId} activateReplyMode={activateReplyMode} />
+      <QuestionAnswerModal replyFor={replyFor} deactivateReplyMode={deactivateReplyMode} />
     </>
   );
 };

@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { css, keyframes } from '@emotion/react';
 import { Avatar, Flex } from '../atom';
 
@@ -39,9 +40,9 @@ interface ItemSkeletonProps {
   num: number;
 }
 
-const ItemSkeleton = ({ num }: ItemSkeletonProps) => {
+const ItemSkeleton = forwardRef<HTMLDivElement, ItemSkeletonProps>(({ num }, ref) => {
   return (
-    <>
+    <div ref={ref}>
       {Array.from({ length: num }, (_, i) => (
         <Flex key={`wrapper ${i}`} css={itemSkeletonCss.wrapper} justifyContent="space-between">
           <Avatar size="sm" />
@@ -53,8 +54,8 @@ const ItemSkeleton = ({ num }: ItemSkeletonProps) => {
           </Flex>
         </Flex>
       ))}
-    </>
+    </div>
   );
-};
+});
 
 export default ItemSkeleton;

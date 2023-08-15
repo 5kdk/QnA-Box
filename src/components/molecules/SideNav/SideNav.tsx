@@ -4,29 +4,28 @@ import { css } from '@emotion/react';
 import { Flex, Logo, WideButton } from '../../atom';
 import { UserInfo } from '.';
 import { logoutUser } from '../../../services/auth';
-import { sideNavState, userState } from '../../../jotai/atom';
+import { sideNavState, userState, globalWidthState } from '../../../jotai/atom';
 import { CopyLight } from '..';
 
 const SideNavCss = {
-  navContainer: (isOpen: boolean) => css`
+  navContainer: (isOpen: boolean, globalWidth: string) => css`
     position: absolute;
     z-index: 999;
     top: 56px;
-    left: ${isOpen ? '0' : 'var(--app_width)'};
-    width: ${isOpen ? 'var(--app_width)' : '0'};
+    right: 0;
+    width: ${isOpen ? globalWidth : '0'};
     height: calc(100vh - 56px);
     transition: 1s;
     overflow: hidden;
-    white-space: nowrap;
     background-color: var(--white);
-    border: 0.2px solid var(--gray);
   `,
-  wrapper: css`
-    width: var(--app_width);
+  wrapper: (globalWidth: string) => css`
+    width: ${globalWidth};
     height: 100%;
   `,
-  subWrapper: css`
-    width: var(--app_width);
+  subWrapper: (globalWidth: string) => css`
+    width: ${globalWidth};
+
     flex: 2;
     padding: 10px 30px;
   `,
@@ -51,8 +50,8 @@ const SideNavCss = {
       color: var(--black);
     }
   `,
-  buttonWrapper: css`
-    width: var(--app_width);
+  buttonWrapper: (globalWidth: string) => css`
+    width: ${globalWidth};
     flex: 1;
     padding: 10px 30px;
   `,
@@ -69,6 +68,7 @@ interface SideNavProps {
 }
 
 const SideNav = ({ isOpen }: SideNavProps) => {
+  const globalWidth = useAtomValue(globalWidthState);
   const setSideNavState = useSetAtom(sideNavState);
   const user = useAtomValue(userState);
   const navigate = useNavigate();
@@ -95,9 +95,9 @@ const SideNav = ({ isOpen }: SideNavProps) => {
   const handleSignUpClick = () => {};
 
   return (
-    <Flex css={SideNavCss.navContainer(isOpen)} flexDirection="column">
+    <Flex css={SideNavCss.navContainer(isOpen, globalWidth)} flexDirection="column">
       <Flex
-        css={SideNavCss.wrapper}
+        css={SideNavCss.wrapper(globalWidth)}
         flexDirection="column"
         alignItems={user ? 'stretch' : 'center'}
         justifyContent="space-between">
@@ -111,7 +111,7 @@ const SideNav = ({ isOpen }: SideNavProps) => {
         ) : (
           <Logo css={SideNavCss.logostyle} size="lg" />
         )}
-        <Flex css={SideNavCss.subWrapper} flexDirection="column" alignItems="center">
+        <Flex css={SideNavCss.subWrapper(globalWidth)} flexDirection="column" alignItems="center">
           <div css={SideNavCss.listWrapper(!!user)}>
             {user ? (
               <button css={SideNavCss.notestyle} onClick={handleMyBoxClick} aria-label="">
@@ -128,12 +128,11 @@ const SideNav = ({ isOpen }: SideNavProps) => {
             </div>
           </div>
         </Flex>
-        <Flex css={SideNavCss.buttonWrapper} flexDirection="column" alignItems="center">
+        <Flex css={SideNavCss.buttonWrapper(globalWidth)} flexDirection="column" alignItems="center">
           <WideButton
             text={user ? 'Sign out' : 'Sign In'}
             color="var(--white)"
             bgColor="var(--black)"
-            minWidth="100%"
             onClick={user ? handleSignOutClick : handleSignInClick}
           />
           <br />

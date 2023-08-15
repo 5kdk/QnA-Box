@@ -48,7 +48,7 @@ const UserEditForm = <T extends FieldValues>({
   const navigate = useNavigate();
   const { mutate: editUserInfo } = useMutation({
     mutationFn: submitFunc,
-    onSettled: () => navigate('/account'),
+    onSettled: () => navigate('/account', { replace: true }),
     onError: (err: Error) => setToastError([err.message]),
     onMutate,
   });

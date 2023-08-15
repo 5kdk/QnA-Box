@@ -37,10 +37,10 @@ interface BoxFormProps {
 }
 
 const BoxForm = ({ submitFunc, defaultValues, btnOpt, closeEdit }: BoxFormProps) => {
-  const { registerKey, onSubmit, watch } = useCustomForm<FormElement>(submitFunc, defaultValues);
+  const { registerKey, handleSubmit, watch } = useCustomForm<FormElement>(defaultValues);
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit();
+    handleSubmit(submitFunc)();
     if (closeEdit) closeEdit();
   };
 

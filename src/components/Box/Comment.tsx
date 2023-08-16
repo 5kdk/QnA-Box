@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { Reply, EditCommentForm } from '.';
+import { userState } from '../../jotai/atom';
 import { useUserInfo } from '../../hooks/query';
 import { useRemoveCommentMutation } from '../../hooks/mutation';
 import { displayTimeAgo } from '../../utils';
@@ -68,9 +70,9 @@ const Comment = ({
   replies = [],
   activateReplyMode,
 }: CommentProps) => {
-
   const [isEditMode, setIsEditMode] = useState(false);
   const [isOpenReply, setIsOpenReply] = useState(false);
+  const user = useAtomValue(userState);
   const commentOwner = useUserInfo(authorId);
   const { mutate: remove } = useRemoveCommentMutation();
 
@@ -102,18 +104,9 @@ const Comment = ({
         </Flex>
         <Flex alignItems="baseline" css={commentCss.menuWrapper}>
           <span css={commentCss.subText}>{displayTimeAgo(createdAt)}</span>
-          {ownerId === authorId && <Edit edit={handleEditForm} remove={removeComment} />}
+          {user?.uid === authorId && <Edit edit={handleEditForm} remove={removeComment} />}
         </Flex>
       </Flex>
-      {replies.map((reply, i) => (
-        <Reply
-          key={`${commentId} ${i}`}
-          commentId={commentId}
-          ownerId={ownerId}
-          activateReplyMode={activateReplyMode}
-          {...reply}
-        />
-      ))}
       {isOpenReply &&
         replies.map((reply, i) => (
           <Reply
@@ -123,7 +116,7 @@ const Comment = ({
             activateReplyMode={activateReplyMode}
             {...reply}
           />
-      ))}
+        ))}
     </>
   );
 };

@@ -26,14 +26,12 @@ export const getProfile = async (uid: string | undefined) => {
 
 export const updateUserDisplayName = async (displayName: string) => {
   const uid = getUid();
-  if (!uid) return;
 
   await updateDoc(getUserRef(uid), { displayName });
 };
 
 export const updateUserAvartar = async (imageFile: Blob) => {
   const uid = getUid();
-  if (!uid) return;
 
   const imageRef = ref(storage, `avartar/${uid}/${imageFile.name}`);
   await uploadBytes(imageRef, imageFile);

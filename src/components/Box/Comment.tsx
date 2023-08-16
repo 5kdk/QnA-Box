@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 import { Avatar, Edit, Flex, Text } from '../atom';
-import { Reply, EditCommentForm } from '.';
+import { Reply, EditCommentForm, LinkToUser } from '.';
 import { userState } from '../../jotai/atom';
 import { useUserInfo } from '../../hooks/query';
 import { useRemoveCommentMutation } from '../../hooks/mutation';
@@ -17,27 +17,8 @@ const commentCss = {
     gap: 15px;
     background-color: ${reply ? 'var(--gray)' : 'white'};
   `,
-  line: css`
-    width: 1.5px;
-    height: calc(100% + 30px);
-    margin-top: 10px;
-    margin-bottom: -10px;
-    background-color: var(--gray);
-  `,
   question: css`
     width: 100%;
-  `,
-  name: css`
-    margin-bottom: 5px;
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--deep_gray);
-  `,
-  ownerName: css`
-    color: var(--blue);
-  `,
-  menuWrapper: css`
-    position: relative;
   `,
   subText: css`
     margin-right: 5px;
@@ -87,9 +68,7 @@ const Comment = ({
       <Flex css={commentCss.wrapper(false)} justifyContent="space-between">
         <Avatar size="sm" src={isAnonymous ? '' : commentOwner?.photoURL} />
         <Flex flexDirection="column" css={commentCss.question}>
-          <p css={!isAnonymous && ownerId === authorId ? [commentCss.name, commentCss.ownerName] : commentCss.name}>
-            {displayName}
-          </p>
+          <LinkToUser name={displayName} uid={authorId} color={!isAnonymous && ownerId === authorId && 'blue'} />
           {isEditMode ? (
             <EditCommentForm text={content} commentId={commentId} handleForm={handleEditForm} />
           ) : (
@@ -102,7 +81,7 @@ const Comment = ({
             {replies.length !== 0 && <button onClick={toggleReply}>{!isOpenReply ? '답글 열기' : '답글 닫기'}</button>}
           </Flex>
         </Flex>
-        <Flex alignItems="baseline" css={commentCss.menuWrapper}>
+        <Flex alignItems="baseline">
           <span css={commentCss.subText}>{displayTimeAgo(createdAt)}</span>
           {user?.uid === authorId && <Edit edit={handleEditForm} remove={removeComment} />}
         </Flex>

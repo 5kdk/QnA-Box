@@ -4,6 +4,9 @@ import { Pencil, ThreeDots, Trash } from 'emotion-icons/bootstrap';
 import useClickOutside from '../../hooks/useClickOutside';
 
 const editCss = {
+  wrapper: css`
+    position: relative;
+  `,
   modal: css`
     position: absolute;
     bottom: -10px;
@@ -50,7 +53,7 @@ const Edit = ({ edit, remove }: EditProps) => {
   };
 
   return (
-    <div>
+    <div css={editCss.wrapper}>
       <button aria-label="Edit-button" onClick={handleClickMenuButton}>
         <ThreeDots size="16px" />
       </button>
@@ -58,11 +61,11 @@ const Edit = ({ edit, remove }: EditProps) => {
         <div css={editCss.modal} ref={ref}>
           <button css={editCss.button} onClick={handleEditClick}>
             <Pencil size="12px" />
-            {' 수정'}
+            수정
           </button>
           <button css={editCss.button} onClick={handleRemoveClick}>
             <Trash size="12px" />
-            {' 삭제'}
+            삭제
           </button>
         </div>
       )}

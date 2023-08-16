@@ -37,16 +37,15 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
   const boxOwner = useUserInfo(boxdetail.ownerId);
   const user = useAtomValue(userState);
 
-  const handleCopyClipBoard = () => {
+  const handleCopyClipBoard = () =>
     navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}/box/${boxdetail.boxId}`);
-  };
 
   const date = new Date(boxdetail.createdAt);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const formattedDate = `${year}.${month < 10 ? '0' + month : month}.${day < 10 ? '0' + day : day}`;
-  const joined = user?.joinedBoxes.includes(boxdetail.boxId);
+  const joinedType = user?.joinedBoxes.includes(boxdetail.boxId) ? 'exit' : 'join';
 
   return (
     <div css={boxInfoCss.wrapper}>
@@ -58,7 +57,7 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
           </button>
         </Flex>
         <Flex css={boxInfoCss.subWrapper} alignItems="center">
-          <JoinOrExit type={joined ? 'join' : 'exit'} boxId={boxdetail.boxId} />
+          <JoinOrExit type={joinedType} boxId={boxdetail.boxId} />
           <button title="링크 복사" aria-label="링크 복사" onClick={handleCopyClipBoard}>
             <Link size={20} />
           </button>

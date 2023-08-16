@@ -3,7 +3,7 @@ import { modalCss } from '../../styles';
 import { BoxForm } from '../molecules';
 import { css } from '@emotion/react';
 import { useUpdateMyBoxMutation } from '../../hooks/mutation';
-import { FormElement } from '../../services/boxes';
+import { Box, FormElement } from '../../services/boxes';
 import { globalWidthState } from '../../jotai/atom';
 import { useAtomValue } from 'jotai';
 
@@ -29,23 +29,29 @@ const editBoxCss = {
 };
 
 interface EditBoxProps {
-  boxId: string;
-  boxInfo: FormElement;
+  boxInfo: Box;
   closeEdit: () => void;
 }
 
-const EditBox = ({ boxId, boxInfo, closeEdit }: EditBoxProps) => {
+const EditBox = ({ boxInfo, closeEdit }: EditBoxProps) => {
   const { mutate: update } = useUpdateMyBoxMutation();
   const globalWidth = useAtomValue(globalWidthState);
+  const defaultForm = () => {
+    const defaultVal: Partial<Box> = { ...boxInfo };
+    delete defaultVal.boxId;
+    delete defaultVal.createdAt;
+    return defaultVal as FormElement;
+  };
+  const editBox = (formData: FormElement) => update({ boxId: boxInfo.boxId, editFormData: formData });
 
   return (
     <Flex css={modalCss} justifyContent="center" alignItems="flex-end" onClick={closeEdit}>
       <Flex css={editBoxCss.wrapper(globalWidth)} justifyContent="center" onClick={e => e.stopPropagation()}>
         <BoxForm
-          defaultValues={boxInfo}
+          defaultValues={defaultForm()}
           btnOpt={{ text: '수정하기', color: 'var(--white)', bgColor: 'var(--black)' }}
           closeEdit={closeEdit}
-          submitFunc={formData => update({ boxId: boxId, editFormData: formData })}
+          submitFunc={editBox}
         />
       </Flex>
     </Flex>

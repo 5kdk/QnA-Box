@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAtomValue } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
 import { EditBox } from '.';
+import { userState } from '../../jotai/atom';
 import { useRemoveMyBoxMutation } from '../../hooks/mutation';
 import { Box } from '../../services/boxes';
 import { getProfile } from '../../services/profile';
@@ -24,9 +26,6 @@ const BoxListCss = {
   nameStyle: css`
     font-size: 13px;
   `,
-  menuWrapperStyle: css`
-    position: relative;
-  `,
   flexStyle: css`
     width: 100%;
   `,
@@ -39,6 +38,7 @@ interface BoxListItemProps {
 }
 
 const BoxItem = ({ boxInfo }: BoxListItemProps) => {
+  const user = useAtomValue(userState);
   const [editMode, setEditMode] = useState(false);
   const { mutate: remove } = useRemoveMyBoxMutation();
 
@@ -48,22 +48,12 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
     staleTime,
   });
 
-  const editPost = () => {
-    console.log('edit');
-    setEditMode(true);
-  };
-
-  const removePost = () => {
-    remove(boxInfo.boxId);
-  };
-
-  const closeEdit = () => {
-    setEditMode(false);
-  };
+  const handleEditMode = () => setEditMode(pre => !pre);
+  const removePost = () => remove(boxInfo.boxId);
 
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
-      {editMode && <EditBox boxInfo={boxInfo} closeEdit={closeEdit} />}
+      {editMode && <EditBox boxInfo={boxInfo} closeEdit={handleEditMode} />}
       <Avatar size="sm" src={userData?.photoURL} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Link css={BoxListCss.titleStyle} to={boxInfo.boxId}>
@@ -72,9 +62,7 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
         <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{userData?.displayName}</span>
         <Text>{boxInfo.description}</Text>
       </Flex>
-      <Flex css={BoxListCss.menuWrapperStyle}>
-        <Edit edit={editPost} remove={removePost} />
-      </Flex>
+      {user?.uid === boxInfo.ownerId && <Edit edit={handleEditMode} remove={removePost} />}
     </Flex>
   );
 };

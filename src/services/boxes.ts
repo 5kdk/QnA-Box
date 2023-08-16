@@ -16,6 +16,7 @@ import { getUid } from './auth';
 import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
 
 export interface FormElement {
+  [key: string]: string | boolean;
   ownerId: string;
   title: string;
   description: string;
@@ -37,7 +38,7 @@ const OWNER_ID = 'ownerId';
 
 export const createQnaBox = async (formData: FormElement) => {
   const uid = getUid();
-  if (!uid || uid !== formData.ownerId) return;
+  if (uid !== formData.ownerId) return;
 
   const qnaBoxesCollection = collection(db, BOXES_COLLECTION_NAME);
   const newDocRef = doc(qnaBoxesCollection);
@@ -53,7 +54,6 @@ export const createQnaBox = async (formData: FormElement) => {
 
 export const getMyQnaBoxes = async () => {
   const uid = getUid();
-  if (!uid) return;
 
   const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
   const ownerIdFilter = where(OWNER_ID, '==', uid);
@@ -92,34 +92,30 @@ export const getQnaBoxesById = async (boxIds: string[] | undefined): Promise<Box
   return boxesData as Box[] | undefined;
 };
 
+const getBoxRef = async (boxId: string) => {
+  const uid = getUid();
+
+  const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
+  const snapshot = await getDoc(qnaBoxDocRef);
+  const data = snapshot.data();
+  if (data?.ownerId !== uid) throw new Error('소유한 박스가 아닙니다');
+  return qnaBoxDocRef;
+};
+
 export const updateQnaBox = async (boxId: string, editFormData: FormElement): Promise<void> => {
-  if (!getUid()) return;
+  const qnaBoxDocRef = await getBoxRef(boxId);
 
-  const qnaBoxesCollectionRef = collection(db, BOXES_COLLECTION_NAME);
-  const qnaBoxDocRef = doc(qnaBoxesCollectionRef, boxId);
-
-  const updatedData = {
-    title: editFormData.title,
-    ownerId: editFormData.ownerId,
-    description: editFormData.description,
-    activation: editFormData.activation,
-    anonymous: editFormData.anonymous,
-  };
-
-  await updateDoc(qnaBoxDocRef, updatedData);
+  await updateDoc(qnaBoxDocRef, editFormData);
 };
 
 export const deleteQnaBox = async (boxId: string): Promise<void> => {
-  if (!getUid()) return;
+  const qnaBoxDocRef = await getBoxRef(boxId);
 
-  const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
   await deleteDoc(qnaBoxDocRef);
 };
 
 export const joinQnaBox = async (boxId: string) => {
   const uid = getUid();
-  if (!uid) return;
-
   const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
 
   await updateDoc(userDocRef, {
@@ -129,8 +125,6 @@ export const joinQnaBox = async (boxId: string) => {
 
 export const exitQnaBox = async (boxId: string) => {
   const uid = getUid();
-  if (!uid) return;
-
   const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
 
   await updateDoc(userDocRef, {

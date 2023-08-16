@@ -22,7 +22,7 @@ import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
 
 export interface ReplyData {
-  authorId: string | undefined;
+  authorId: string;
   isAnonymous: boolean;
   content: string;
   likes: number;
@@ -32,7 +32,7 @@ export interface ReplyData {
 export interface CommentData {
   boxId: string;
   commentId: string;
-  authorId: string | undefined;
+  authorId: string;
   isAnonymous: boolean;
   content: string;
   likes: number;

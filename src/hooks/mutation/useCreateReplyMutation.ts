@@ -8,7 +8,7 @@ import { QueryDocumentSnapshot } from 'firebase/firestore';
 interface mutationFnProps {
   commentId: string;
   newReply: {
-    authorId: string | undefined;
+    authorId: string;
     isAnonymous: boolean;
     content: string;
     likes: number;

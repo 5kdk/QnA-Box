@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 import { Avatar, Edit, Flex, Text } from '../atom';
-import EditCommentForm from './EditCommentForm';
+import { EditCommentForm, LinkToUser } from '.';
 import { userState } from '../../jotai/atom';
 import { displayTimeAgo } from '../../utils';
 import { useUserInfo } from '../../hooks/query';
@@ -30,18 +30,6 @@ const boxItemCss = {
   `,
   question: css`
     width: 100%;
-  `,
-  name: css`
-    margin-bottom: 5px;
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--deep_gray);
-  `,
-  ownerName: css`
-    color: var(--blue);
-  `,
-  menuWrapper: css`
-    position: relative;
   `,
   subText: css`
     margin-right: 5px;
@@ -77,7 +65,7 @@ const Reply = ({
 }: {
   commentId: string;
   ownerId: string;
-  authorId: string | undefined;
+  authorId: string;
   isAnonymous: boolean;
   content: string;
   createdAt: number;
@@ -100,44 +88,35 @@ const Reply = ({
   const displayName = `${isAnonymous ? '익명' : replyAuthor?.displayName} 's reply`;
 
   return (
-    <>
-      <Flex css={boxItemCss.wrapper(false)} justifyContent="space-between">
-        <Flex css={boxItemCss.avatarWrapper} alignItems="center" flexDirection="column">
-          <div css={boxItemCss.line}></div>
-          <Avatar size="sm" src={isAnonymous ? '' : replyAuthor?.photoURL} />
-        </Flex>
-        <Flex flexDirection="column" css={boxItemCss.question}>
-          <Flex justifyContent="space-between" alignItems="flex-start">
-            <Flex>
-              <span
-                css={!isAnonymous && ownerId === authorId ? [boxItemCss.name, boxItemCss.ownerName] : boxItemCss.name}>
-                {displayName}
-              </span>
-            </Flex>
-            <Flex alignItems="center" css={boxItemCss.menuWrapper}>
-              <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
-              {user?.uid === authorId && <Edit edit={handleModify} remove={removeReply} />}
-            </Flex>
-          </Flex>
-          {isEdit ? (
-            <EditCommentForm
-              text={content}
-              commentId={commentId}
-              handleForm={handleModify}
-              isReply={true}
-              createdAt={createdAt}
-            />
-          ) : (
-            <Text>{content}</Text>
-          )}
-          <Flex alignItems="center" css={boxItemCss.like}>
-            <button css={boxItemCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
-              <ReplyIcon size="20px" />
-            </button>
-          </Flex>
+    <Flex css={boxItemCss.wrapper(false)} justifyContent="space-between">
+      <Flex css={boxItemCss.avatarWrapper} alignItems="center" flexDirection="column">
+        <div css={boxItemCss.line}></div>
+        <Avatar size="sm" src={isAnonymous ? '' : replyAuthor?.photoURL} />
+      </Flex>
+      <Flex flexDirection="column" css={boxItemCss.question}>
+        <LinkToUser name={displayName} uid={authorId} color={!isAnonymous && ownerId === authorId && 'blue'} />
+        {isEdit ? (
+          <EditCommentForm
+            text={content}
+            commentId={commentId}
+            handleForm={handleModify}
+            isReply={true}
+            createdAt={createdAt}
+          />
+        ) : (
+          <Text>{content}</Text>
+        )}
+        <Flex alignItems="center" css={boxItemCss.like}>
+          <button css={boxItemCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
+            <ReplyIcon size="20px" />
+          </button>
         </Flex>
       </Flex>
-    </>
+      <Flex alignItems="baseline">
+        <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
+        {user?.uid === authorId && <Edit edit={handleModify} remove={removeReply} />}
+      </Flex>
+    </Flex>
   );
 };
 

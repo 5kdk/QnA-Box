@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { css } from '@emotion/react';
 import { Flex, Edit, Text, Avatar } from '../atom';
 import { EditBox } from '.';
+import { LinkToUser } from '../Box';
 import { userState } from '../../jotai/atom';
 import { useRemoveMyBoxMutation } from '../../hooks/mutation';
 import { Box } from '../../services/boxes';
@@ -22,9 +23,6 @@ const BoxListCss = {
     font-size: 16px;
     font-weight: 700;
     text-align: left;
-  `,
-  nameStyle: css`
-    font-size: 13px;
   `,
   flexStyle: css`
     width: 100%;
@@ -59,7 +57,7 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
         <Link css={BoxListCss.titleStyle} to={boxInfo.boxId}>
           {boxInfo.title}
         </Link>
-        <span css={[BoxListCss.titleStyle, BoxListCss.nameStyle]}>{userData?.displayName}</span>
+        <LinkToUser name={userData?.displayName} uid={boxInfo.ownerId} />
         <Text>{boxInfo.description}</Text>
       </Flex>
       {user?.uid === boxInfo.ownerId && <Edit edit={handleEditMode} remove={removePost} />}

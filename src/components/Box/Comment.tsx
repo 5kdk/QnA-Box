@@ -96,7 +96,7 @@ const Comment = ({
             <Text>{content}</Text>
           )}
           <Flex alignItems="center" css={commentCss.like}>
-            <button css={commentCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
+            <button title="답글 달기" css={commentCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
               <ReplyIcon size="20px" />
             </button>
             {replies.length !== 0 && <button onClick={toggleReply}>{!isOpenReply ? '답글 열기' : '답글 닫기'}</button>}

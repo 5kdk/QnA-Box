@@ -1,12 +1,14 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Avatar, Edit, Flex, Text } from '../atom';
+import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
-import EditCommentForm from './EditCommentForm';
-import { displayTimeAgo } from '../../utils';
-import { CommentData } from '../../services/comments';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
+import { Avatar, Edit, Flex, Text } from '../atom';
+import EditCommentForm from './EditCommentForm';
+import { userState } from '../../jotai/atom';
+import { displayTimeAgo } from '../../utils';
 import { useUserInfo } from '../../hooks/query';
 import { useRemoveReplyMutation } from '../../hooks/mutation';
+import { CommentData } from '../../services/comments';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -82,6 +84,7 @@ const Reply = ({
   activateReplyMode: (commentOwnerName: string, commentId: string) => void;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
+  const user = useAtomValue(userState);
   const { mutate: remove } = useRemoveReplyMutation();
 
   const replyAuthor = useUserInfo(authorId);
@@ -113,7 +116,7 @@ const Reply = ({
             </Flex>
             <Flex alignItems="center" css={boxItemCss.menuWrapper}>
               <span css={boxItemCss.subText}>{displayTimeAgo(createdAt)}</span>
-              {ownerId === authorId && <Edit edit={handleModify} remove={removeReply} />}
+              {user?.uid === authorId && <Edit edit={handleModify} remove={removeReply} />}
             </Flex>
           </Flex>
           {isEdit ? (

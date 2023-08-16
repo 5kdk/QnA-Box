@@ -83,5 +83,7 @@ export const updateUserPassword = async (password: string, newPassword: string) 
 };
 
 export const getUid = () => {
-  return auth.currentUser?.uid;
+  const uid = auth.currentUser?.uid;
+  if (uid) return uid;
+  else throw new Error('로그인 정보가 올바르지 않습니다.');
 };

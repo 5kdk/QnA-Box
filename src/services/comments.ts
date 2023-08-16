@@ -93,7 +93,6 @@ export const deleteComment = async (commentId: string) => {
 
 export const increaseCommentLikes = async (commentId: string) => {
   const uid = getUid();
-  if (!uid) return;
 
   await updateDoc(getUserRef(uid), { likedComments: arrayUnion(commentId) });
 
@@ -107,7 +106,6 @@ export const increaseCommentLikes = async (commentId: string) => {
 
 export const decreaseCommentLikes = async (commentId: string) => {
   const uid = getUid();
-  if (!uid) return;
 
   await updateDoc(getUserRef(uid), { likedComments: arrayRemove(commentId) });
 

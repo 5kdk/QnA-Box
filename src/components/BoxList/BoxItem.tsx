@@ -63,7 +63,7 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
 
   return (
     <Flex css={BoxListCss.wrapperStyle} justifyContent="space-between">
-      {editMode && <EditBox boxId={boxInfo.boxId} boxInfo={boxInfo} closeEdit={closeEdit} />}
+      {editMode && <EditBox boxInfo={boxInfo} closeEdit={closeEdit} />}
       <Avatar size="sm" src={userData?.photoURL} />
       <Flex flexDirection="column" css={BoxListCss.flexStyle}>
         <Link css={BoxListCss.titleStyle} to={boxInfo.boxId}>

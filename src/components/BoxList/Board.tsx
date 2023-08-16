@@ -52,7 +52,7 @@ const Board = () => {
         ) : (
           <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
             <Text>
-              {filter.mainFilter === 'joined' ? '아직 참여한 Box가 없습니다.' : '새로운 QnA Box를 만들어 보세요!'}
+              {filter.mainFilter === 'joined' ? '아직 참여한 Box가 없습니다' : '새로운 QnA Box를 만들어 보세요!'}
             </Text>
           </Flex>
         )}

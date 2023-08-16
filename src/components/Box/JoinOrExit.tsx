@@ -38,8 +38,8 @@ const JoinOrExit = ({ type, boxId }: JoinExitProps) => {
   });
 
   return (
-    <button aria-label={type} onClick={() => mutate()}>
-      {type === 'join' ? <Enter size={25} /> : <Exit size={25} />}
+    <button title={type === 'join' ? 'Box 담기' : 'Box 나가기'} aria-label={type} onClick={() => mutate()}>
+      {type === 'join' ? <Exit size={20} /> : <Enter size={20} />}
     </button>
   );
 };

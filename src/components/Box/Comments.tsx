@@ -2,12 +2,16 @@ import { Suspense } from 'react';
 import { css } from '@emotion/react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { ItemSkeleton, ItemWrapper } from '../molecules';
-import { Flex } from '../atom';
+import { Flex, Text } from '../atom';
 import { Comment } from '.';
 import { useInfinityCommentQuery } from '../../hooks/query';
 
 const commentCss = css`
   border-bottom: 1px solid var(--gray);
+`;
+
+const WrapperCss = css`
+  min-height: 6.25rem;
 `;
 
 const Comments = ({
@@ -31,13 +35,19 @@ const Comments = ({
 
   return (
     <ItemWrapper>
-      {boxcomments?.map(comment => (
-        <Flex css={commentCss} flexDirection="column" key={`${comment.commentId}`}>
-          <Suspense fallback={<ItemSkeleton num={comment.replies.length + 1} />}>
-            <Comment ownerId={ownerId} activateReplyMode={activateReplyMode} {...comment} />
-          </Suspense>
+      {boxcomments?.length !== 0 ? (
+        boxcomments?.map(comment => (
+          <Flex css={commentCss} flexDirection="column" key={`${comment.commentId}`}>
+            <Suspense fallback={<ItemSkeleton num={comment.replies.length + 1} />}>
+              <Comment ownerId={ownerId} activateReplyMode={activateReplyMode} {...comment} />
+            </Suspense>
+          </Flex>
+        ))
+      ) : (
+        <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
+          <Text>아직 작성된 질문이 없습니다</Text>
         </Flex>
-      ))}
+      )}
       {hasNextPage && <ItemSkeleton ref={sentryRef} num={1} />}
     </ItemWrapper>
   );

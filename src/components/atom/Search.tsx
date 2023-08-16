@@ -26,8 +26,10 @@ interface SearchType {
 const Search = ({ input, handleInput }: SearchType) => {
   return (
     <div css={SearchCss.wrapstyle}>
-      <SearchIcon size="20px" />
-      <input title="박스 검색창" css={SearchCss.inputstyle} onChange={handleInput} value={input}></input>
+      <label>
+        <SearchIcon size="20px" />
+        <input title="박스 검색창" css={SearchCss.inputstyle} onChange={handleInput} value={input}></input>
+      </label>
     </div>
   );
 };

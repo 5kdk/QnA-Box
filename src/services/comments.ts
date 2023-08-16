@@ -1,4 +1,5 @@
 import {
+  DocumentReference,
   arrayRemove,
   arrayUnion,
   collection,
@@ -19,8 +20,6 @@ import { getUserRef } from './profile';
 import { getUid } from './auth';
 import { COMMENTS_COLLECTION_NAME } from '../constants/collectionNames';
 
-export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
-
 export interface ReplyData {
   authorId: string;
   isAnonymous: boolean;
@@ -39,6 +38,14 @@ export interface CommentData {
   createdAt: number;
   replies: ReplyData[];
 }
+
+export const getCommentRef = (commentId: string) => doc(db, COMMENTS_COLLECTION_NAME, commentId);
+
+const getComment = async (commentRef: DocumentReference) => {
+  const snapshot = await getDoc(commentRef);
+  const comment = snapshot.data();
+  return comment;
+};
 
 export const createComment = async (boxId: string, content: string, isAnonymous: boolean) => {
   const uid = getUid();
@@ -83,12 +90,23 @@ export const fetchFilteredCommentsByPage = async (boxId: string, subfilter: stri
   return { data, nextPage: lastVisible };
 };
 
+const verifyCommentAuthor = async (commentRef: DocumentReference) => {
+  const uid = getUid();
+
+  const comment = await getComment(commentRef);
+  if (comment?.authorId !== uid) throw new Error('해당 글의 작성자가 아닙니다');
+};
+
 export const updateComment = async (commentId: string, updatedContent: string) => {
-  await updateDoc(getCommentRef(commentId), { content: updatedContent });
+  const commentRef = getCommentRef(commentId);
+  await verifyCommentAuthor(commentRef);
+  await updateDoc(commentRef, { content: updatedContent });
 };
 
 export const deleteComment = async (commentId: string) => {
-  await deleteDoc(getCommentRef(commentId));
+  const commentRef = getCommentRef(commentId);
+  await verifyCommentAuthor(commentRef);
+  await deleteDoc(commentRef);
 };
 
 export const increaseCommentLikes = async (commentId: string) => {
@@ -118,46 +136,48 @@ export const decreaseCommentLikes = async (commentId: string) => {
 };
 
 export const createReplyToComment = async (commentId: string, reply: ReplyData) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const uid = getUid();
+  if (reply.authorId !== uid) return;
 
+  const commentRef = getCommentRef(commentId);
   await updateDoc(commentRef, {
     replies: arrayUnion(reply),
   });
 };
 
+const getRepliesNTargetIdx = async (
+  commentRef: DocumentReference,
+  createdAt: number,
+): Promise<[ReplyData[], number] | undefined> => {
+  const uid = getUid();
+
+  const comment = await getComment(commentRef);
+  if (comment) {
+    const replyIndex = comment.replies.findIndex((reply: ReplyData) => reply.createdAt === createdAt);
+    if (replyIndex === -1) throw new Error('해당 글이 없습니다');
+    else if (uid !== comment.replies[replyIndex].authorId) throw new Error('해당 글의 작성자가 아닙니다');
+    return [[...comment.replies], replyIndex];
+  }
+};
+
 export const updateReplyToComment = async (commentId: string, newContent: string, createdAt: number) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const commentRef = getCommentRef(commentId);
+  const data = await getRepliesNTargetIdx(commentRef, createdAt);
 
-  const commentSnapshot = await getDoc(commentRef);
-  const commentData = commentSnapshot.data();
-
-  if (commentData && commentData.replies) {
-    const replyIndex = commentData.replies.findIndex((reply: ReplyData) => reply.createdAt === createdAt);
-    if (replyIndex > -1) {
-      const newReplies = [...commentData.replies];
-      newReplies[replyIndex] = { ...newReplies[replyIndex], content: newContent };
-
-      await updateDoc(commentRef, {
-        replies: newReplies,
-      });
-    }
+  if (data) {
+    const [replies, updateIdx] = data;
+    replies[updateIdx] = { ...replies[updateIdx], content: newContent };
+    await updateDoc(commentRef, { replies });
   }
 };
 
 export const removeReplyToComment = async (commentId: string, createdAt: number) => {
-  const commentRef = doc(db, COMMENTS_COLLECTION_NAME, commentId);
+  const commentRef = getCommentRef(commentId);
+  const data = await getRepliesNTargetIdx(commentRef, createdAt);
 
-  const commentSnapshot = await getDoc(commentRef);
-  const commentData = commentSnapshot.data();
-
-  if (commentData && commentData.replies) {
-    const replyIndex = commentData.replies.findIndex((reply: ReplyData) => reply.createdAt === createdAt);
-    if (replyIndex > -1) {
-      const newReplies = [...commentData.replies.slice(0, replyIndex), ...commentData.replies.slice(replyIndex + 1)];
-
-      await updateDoc(commentRef, {
-        replies: newReplies,
-      });
-    }
+  if (data) {
+    const [replies, deleteIdx] = data;
+    replies.splice(deleteIdx, 1);
+    await updateDoc(commentRef, { replies });
   }
 };

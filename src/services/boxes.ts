@@ -1,4 +1,5 @@
 import {
+  DocumentReference,
   arrayRemove,
   arrayUnion,
   collection,
@@ -13,7 +14,8 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { getUid } from './auth';
-import { BOXES_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../constants/collectionNames';
+import { getUserRef } from './profile';
+import { BOXES_COLLECTION_NAME } from '../constants/collectionNames';
 
 export interface FormElement {
   [key: string]: string | boolean;
@@ -35,6 +37,8 @@ export interface Box {
 }
 
 const OWNER_ID = 'ownerId';
+
+const getBoxRef = (boxId: string) => doc(db, BOXES_COLLECTION_NAME, boxId);
 
 export const createQnaBox = async (formData: FormElement) => {
   const uid = getUid();
@@ -66,9 +70,8 @@ export const getMyQnaBoxes = async () => {
 };
 
 export const getQnaBoxById = async (boxId: string): Promise<Box> => {
-  const boxesCollection = collection(db, BOXES_COLLECTION_NAME);
-  const boxDocRef = doc(boxesCollection, boxId);
-  const snapshot = await getDoc(boxDocRef);
+  const boxRef = getBoxRef(boxId);
+  const snapshot = await getDoc(boxRef);
 
   return snapshot.data() as Promise<Box>;
 };
@@ -76,11 +79,9 @@ export const getQnaBoxById = async (boxId: string): Promise<Box> => {
 export const getQnaBoxesById = async (boxIds: string[] | undefined): Promise<Box[] | undefined> => {
   if (boxIds === undefined) return;
 
-  const boxesCollection = collection(db, BOXES_COLLECTION_NAME);
-
   const boxDocsPromises = boxIds.map(boxId => {
-    const boxDocRef = doc(boxesCollection, boxId);
-    return getDoc(boxDocRef);
+    const boxRef = getBoxRef(boxId);
+    return getDoc(boxRef);
   });
 
   const snapshots = await Promise.all(boxDocsPromises);
@@ -92,31 +93,29 @@ export const getQnaBoxesById = async (boxIds: string[] | undefined): Promise<Box
   return boxesData as Box[] | undefined;
 };
 
-const getBoxRef = async (boxId: string) => {
+const verifyOwner = async (boxRef: DocumentReference) => {
   const uid = getUid();
 
-  const qnaBoxDocRef = doc(db, BOXES_COLLECTION_NAME, boxId);
-  const snapshot = await getDoc(qnaBoxDocRef);
-  const data = snapshot.data();
-  if (data?.ownerId !== uid) throw new Error('소유한 박스가 아닙니다');
-  return qnaBoxDocRef;
+  const snapshot = await getDoc(boxRef);
+  const box = snapshot.data();
+  if (box?.ownerId !== uid) throw new Error('소유한 박스가 아닙니다');
 };
 
 export const updateQnaBox = async (boxId: string, editFormData: FormElement): Promise<void> => {
-  const qnaBoxDocRef = await getBoxRef(boxId);
-
-  await updateDoc(qnaBoxDocRef, editFormData);
+  const boxRef = getBoxRef(boxId);
+  await verifyOwner(boxRef);
+  await updateDoc(boxRef, editFormData);
 };
 
 export const deleteQnaBox = async (boxId: string): Promise<void> => {
-  const qnaBoxDocRef = await getBoxRef(boxId);
-
-  await deleteDoc(qnaBoxDocRef);
+  const boxRef = getBoxRef(boxId);
+  await verifyOwner(boxRef);
+  await deleteDoc(boxRef);
 };
 
 export const joinQnaBox = async (boxId: string) => {
   const uid = getUid();
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
+  const userDocRef = getUserRef(uid);
 
   await updateDoc(userDocRef, {
     joinedBoxes: arrayUnion(boxId),
@@ -125,7 +124,7 @@ export const joinQnaBox = async (boxId: string) => {
 
 export const exitQnaBox = async (boxId: string) => {
   const uid = getUid();
-  const userDocRef = doc(db, USERS_COLLECTION_NAME, uid);
+  const userDocRef = getUserRef(uid);
 
   await updateDoc(userDocRef, {
     joinedBoxes: arrayRemove(boxId),

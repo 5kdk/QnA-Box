@@ -10,7 +10,7 @@ const Signin = () => {
   const reqSignin = (data: SigninSchemaType) => {
     reqTryCatch(async () => {
       await loginUser(data.email, data.password);
-      navigate('/box', { replace: true });
+      navigate(-1);
     });
   };
 

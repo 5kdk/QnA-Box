@@ -53,7 +53,11 @@ const SignForm = <T extends FieldValues>({
   const navigate = useNavigate();
   const toOtherPage = () => navigate(redirectTo);
   const reqTryCatch = useReqTryCatch();
-  const signinGoogle = () => reqTryCatch(loginWithGoogle);
+  const signinGoogle = () =>
+    reqTryCatch(async () => {
+      await loginWithGoogle();
+      navigate(-1);
+    });
 
   return (
     <Flex css={SignFormCss.container} flexDirection="column" alignItems="center">

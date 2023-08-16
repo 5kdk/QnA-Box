@@ -40,6 +40,7 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
   const handleCopyClipBoard = () => {
     navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}/box/${boxdetail.boxId}`);
   };
+
   const date = new Date(boxdetail.createdAt);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -52,14 +53,14 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
       <Flex justifyContent="space-between">
         <Flex css={boxInfoCss.subWrapper} alignItems="center">
           <Title text={boxdetail.title} css={boxInfoCss.title} />
-          <button aria-label="더 많은 Box 정보 보기">
+          <button title="Box 정보" aria-label="더 많은 Box 정보 보기">
             <InfoCircle size="18px" onClick={() => setMoreInfo(prev => !prev)} />
           </button>
         </Flex>
         <Flex css={boxInfoCss.subWrapper} alignItems="center">
           <JoinOrExit type={joined ? 'join' : 'exit'} boxId={boxdetail.boxId} />
-          <button aria-label="copyLink" onClick={handleCopyClipBoard}>
-            <Link size={27} />
+          <button title="링크 복사" aria-label="링크 복사" onClick={handleCopyClipBoard}>
+            <Link size={20} />
           </button>
         </Flex>
       </Flex>

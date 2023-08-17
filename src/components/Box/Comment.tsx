@@ -12,19 +12,18 @@ import { ReplyData } from '../../services/comments';
 
 const commentCss = {
   wrapper: (reply: boolean) => css`
-    min-height: 100px;
+    position: relative;
+    min-height: 80px;
     padding: 12px 24px;
     gap: 15px;
     background-color: ${reply ? 'var(--gray)' : 'white'};
   `,
-  avatarWrapper: css`
-    position: relative;
-  `,
   line: css`
     position: absolute;
-    top: -70px;
+    top: 47px;
+    left: 41.5px;
     width: 1.5px;
-    height: 50px;
+    height: 100%;
     margin: 10px 0;
     background-color: var(--gray);
   `,
@@ -51,12 +50,23 @@ interface CommentProps extends ReplyData {
   commentId: string;
   ownerId: string;
   replies?: ReplyData[];
+  connectLine?: boolean;
 }
 
-const Comment = ({ ownerId, authorId, commentId, content, createdAt, isAnonymous, replies }: CommentProps) => {
+const Comment = ({
+  ownerId,
+  authorId,
+  commentId,
+  content,
+  createdAt,
+  isAnonymous,
+  replies,
+  connectLine = false,
+}: CommentProps) => {
   const user = useAtomValue(userState);
   const [replyFor, setReplyFor] = useAtom(replyForState);
   const [editMode, setEditMode] = useState(false);
+  const [isOpenReply, setIsOpenReply] = useState(false);
   const { mutate: removeComment } = useRemoveCommentMutation();
   const { mutate: removeReply } = useRemoveReplyMutation();
 
@@ -68,17 +78,13 @@ const Comment = ({ ownerId, authorId, commentId, content, createdAt, isAnonymous
   const displayName = `${isAnonymous ? '익명' : authorInfo?.displayName}${replies ? '' : " 's reply"}`;
   const selectedComment = (replies && replyFor?.commentId === commentId) || false;
   const switchToCreateReply = () => setReplyFor({ commentAuthorName: displayName, commentId });
-
-  const [isOpenReply, setIsOpenReply] = useState(false);
   const toggleReply = () => setIsOpenReply(prev => !prev);
 
   return (
     <>
       <Flex css={commentCss.wrapper(selectedComment)} justifyContent="space-between">
-        <Flex css={commentCss.avatarWrapper} alignItems="center" flexDirection="column">
-          {!replies && <div css={commentCss.line} />}
-          <Avatar size="sm" src={isAnonymous ? '' : authorInfo?.photoURL} />
-        </Flex>
+        {(connectLine || (replies && isOpenReply)) && <div css={commentCss.line} />}
+        <Avatar size="sm" src={isAnonymous ? '' : authorInfo?.photoURL} />
         <Flex flexDirection="column" css={commentCss.question}>
           <LinkToUser name={displayName} uid={authorId} color={!isAnonymous && ownerId === authorId && 'blue'} />
           {editMode ? (
@@ -112,7 +118,13 @@ const Comment = ({ ownerId, authorId, commentId, content, createdAt, isAnonymous
       </Flex>
       {isOpenReply &&
         replies?.map((reply, i) => (
-          <Comment key={`${commentId} ${i}`} commentId={commentId} ownerId={ownerId} {...reply} />
+          <Comment
+            key={`${commentId} ${i}`}
+            commentId={commentId}
+            ownerId={ownerId}
+            {...reply}
+            connectLine={i !== replies.length - 1}
+          />
         ))}
     </>
   );

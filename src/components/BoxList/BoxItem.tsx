@@ -19,6 +19,7 @@ const BoxListCss = {
     border-bottom: 1px solid var(--gray);
   `,
   titleStyle: css`
+    width: fit-content;
     margin-bottom: 5px;
     font-size: 16px;
     font-weight: 700;

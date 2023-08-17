@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { BoxInfo, Comments, QuestionAnswerModal } from '.';
+import { BoxInfo, Comments, CreateContentBar } from '.';
 import { getQnaBoxById } from '../../services/boxes';
 
 const staleTime = 3000;
@@ -27,7 +27,7 @@ const BoxContents = () => {
     <>
       <BoxInfo boxdetail={boxdetail!} />
       <Comments ownerId={boxdetail!.ownerId} activateReplyMode={activateReplyMode} />
-      <QuestionAnswerModal replyFor={replyFor} deactivateReplyMode={deactivateReplyMode} />
+      <CreateContentBar replyFor={replyFor} deactivateReplyMode={deactivateReplyMode} />
     </>
   );
 };

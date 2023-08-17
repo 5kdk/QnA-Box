@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { BoxInfo, Comments, CreateContentBar } from '.';
@@ -14,20 +13,11 @@ const BoxContents = () => {
     staleTime,
   });
 
-  const [replyFor, setReplyFor] = useState<{ commentOwnerName: string; commentId: string } | null>(null);
-
-  const activateReplyMode = (commentOwnerName: string, commentId: string) => {
-    setReplyFor({ commentOwnerName, commentId });
-  };
-  const deactivateReplyMode = () => {
-    setReplyFor(null);
-  };
-
   return (
     <>
       <BoxInfo boxdetail={boxdetail!} />
-      <Comments ownerId={boxdetail!.ownerId} activateReplyMode={activateReplyMode} />
-      <CreateContentBar replyFor={replyFor} deactivateReplyMode={deactivateReplyMode} />
+      <Comments ownerId={boxdetail!.ownerId} />
+      <CreateContentBar />
     </>
   );
 };

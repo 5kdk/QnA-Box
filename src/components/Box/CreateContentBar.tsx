@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { css, keyframes } from '@emotion/react';
 import { Avatar, Button, Flex, Toggler, Note, Text } from '../atom';
-import { globalWidthState, userState } from '../../jotai/atom';
+import { globalWidthState, replyForState, userState } from '../../jotai/atom';
 import { useCreateCommentMutation, useCreateReplyMutation } from '../../hooks/mutation';
 import { makeNewComment, makeNewReply } from '../../services/comments';
 
@@ -58,23 +58,19 @@ const questionCss = {
   `,
 };
 
-interface CreateContentBarProps {
-  replyFor: { commentOwnerName: string; commentId: string } | null;
-  deactivateReplyMode: () => void;
-}
-
-const CreateContentBar = ({ replyFor, deactivateReplyMode }: CreateContentBarProps) => {
+const CreateContentBar = () => {
   const user = useAtomValue(userState);
-  const [isAnonymous, setIsAnonymous] = useState(!user);
+  const globalWidth = useAtomValue(globalWidthState);
+  const [replyFor, setReplyFor] = useAtom(replyForState);
 
+  const [isAnonymous, setIsAnonymous] = useState(!user);
   const [content, setContent] = useState('');
   const { mutate: addComment } = useCreateCommentMutation();
   const { mutate: addReply } = useCreateReplyMutation();
 
-  const globalWidth = useAtomValue(globalWidthState);
   const { id: boxId } = useParams();
   const navigate = useNavigate();
-
+  const switchToComment = () => setReplyFor(null);
   const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setContent(e.target.value);
   const toggleAnonymous = () => setIsAnonymous(pre => !pre);
 
@@ -96,8 +92,8 @@ const CreateContentBar = ({ replyFor, deactivateReplyMode }: CreateContentBarPro
     <Flex css={questionCss.wrapper(globalWidth)} flexDirection="column">
       {replyFor && (
         <Flex alignItems="center" justifyContent="space-between">
-          <Text>{`Reply to ${replyFor.commentOwnerName}`}</Text>
-          <button onClick={deactivateReplyMode}>취소</button>
+          <Text>{`Reply to ${replyFor.commentAuthorName}`}</Text>
+          <button onClick={switchToComment}>취소</button>
         </Flex>
       )}
       <div css={questionCss.inputBox}>

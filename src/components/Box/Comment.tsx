@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { EditCommentForm, LinkToUser } from '.';
-import { userState } from '../../jotai/atom';
+import { replyForState, userState } from '../../jotai/atom';
 import { useUserInfo } from '../../hooks/query';
 import { useRemoveCommentMutation, useRemoveReplyMutation } from '../../hooks/mutation';
 import { displayTimeAgo } from '../../utils';
@@ -51,20 +51,11 @@ interface CommentProps extends ReplyData {
   commentId: string;
   ownerId: string;
   replies?: ReplyData[];
-  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
 }
 
-const Comment = ({
-  ownerId,
-  authorId,
-  commentId,
-  content,
-  createdAt,
-  isAnonymous,
-  replies,
-  activateReplyMode,
-}: CommentProps) => {
+const Comment = ({ ownerId, authorId, commentId, content, createdAt, isAnonymous, replies }: CommentProps) => {
   const user = useAtomValue(userState);
+  const setReplyFor = useSetAtom(replyForState);
   const [editMode, setEditMode] = useState(false);
   const { mutate: removeComment } = useRemoveCommentMutation();
   const { mutate: removeReply } = useRemoveReplyMutation();
@@ -75,10 +66,11 @@ const Comment = ({
   const removeContent = () => (replies ? removeComment(commentId) : removeReply({ commentId, createdAt }));
 
   const displayName = `${isAnonymous ? '익명' : authorInfo?.displayName}${!replies ? " 's reply" : ''}`;
-  const setReplyMode = () => activateReplyMode(displayName!, commentId);
+  const switchToCreateReply = () => setReplyFor({ commentAuthorName: displayName, commentId });
 
   const [isOpenReply, setIsOpenReply] = useState(false);
   const toggleReply = () => setIsOpenReply(prev => !prev);
+
   return (
     <>
       <Flex css={commentCss.wrapper(false)} justifyContent="space-between">
@@ -100,7 +92,7 @@ const Comment = ({
             <Text>{content}</Text>
           )}
           <Flex alignItems="center" css={commentCss.like}>
-            <button title="답글 달기" css={commentCss.reply} onClick={setReplyMode}>
+            <button title="답글 달기" css={commentCss.reply} onClick={switchToCreateReply}>
               <ReplyIcon size="20px" />
             </button>
             {replies && replies.length !== 0 && (
@@ -115,13 +107,7 @@ const Comment = ({
       </Flex>
       {isOpenReply &&
         replies?.map((reply, i) => (
-          <Comment
-            key={`${commentId} ${i}`}
-            commentId={commentId}
-            ownerId={ownerId}
-            activateReplyMode={activateReplyMode}
-            {...reply}
-          />
+          <Comment key={`${commentId} ${i}`} commentId={commentId} ownerId={ownerId} {...reply} />
         ))}
     </>
   );

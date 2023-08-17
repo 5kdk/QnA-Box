@@ -7,4 +7,3 @@ export { default as EditCommentForm } from './EditCommentForm';
 export { default as JoinOrExit } from './JoinOrExit';
 export { default as LinkToUser } from './LinkToUser';
 export { default as QuestionAnswerModal } from './QuestionAnswerModal';
-export { default as Reply } from './Reply';

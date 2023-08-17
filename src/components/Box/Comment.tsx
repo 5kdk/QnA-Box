@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
-import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
+import { Reply as ReplyIcon } from '@emotion-icons/boxicons-regular';
+import { FolderOpen as FolderOpenIcon } from '@emotion-icons/fa-regular';
+import { Folder as FolderIcon } from '@emotion-icons/fa-solid';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { EditCommentForm, LinkToUser } from '.';
 import { replyForState, userState } from '../../jotai/atom';
@@ -42,7 +44,12 @@ const commentCss = {
   `,
   reply: css`
     rotate: 180deg;
-    padding-bottom: 3px;
+  `,
+  replyOpen: css`
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    font-size: 14px;
   `,
 };
 
@@ -101,11 +108,20 @@ const Comment = ({
           <Flex alignItems="center" css={commentCss.like}>
             {replies && (
               <>
-                <button title="답글 달기" css={commentCss.reply} onClick={switchToCreateReply}>
-                  <ReplyIcon size="20px" />
+                <button css={commentCss.reply} title="답글 달기" onClick={switchToCreateReply}>
+                  <ReplyIcon size="24px" color="var(--deep_gray)" />
                 </button>
                 {replies.length !== 0 && (
-                  <button onClick={toggleReply}>{!isOpenReply ? '답글 열기' : '답글 닫기'}</button>
+                  <span css={commentCss.replyOpen}>
+                    <button title={!isOpenReply ? '답글 열기' : '답글 닫기'} onClick={toggleReply}>
+                      {!isOpenReply ? (
+                        <FolderIcon size={18} color="var(--deep_gray)" />
+                      ) : (
+                        <FolderOpenIcon size={18} color="var(--deep_gray)" />
+                      )}
+                    </button>
+                    {replies.length}
+                  </span>
                 )}
               </>
             )}

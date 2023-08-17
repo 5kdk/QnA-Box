@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 import { Avatar, Edit, Flex, Text } from '../atom';
@@ -55,7 +55,7 @@ interface CommentProps extends ReplyData {
 
 const Comment = ({ ownerId, authorId, commentId, content, createdAt, isAnonymous, replies }: CommentProps) => {
   const user = useAtomValue(userState);
-  const setReplyFor = useSetAtom(replyForState);
+  const [replyFor, setReplyFor] = useAtom(replyForState);
   const [editMode, setEditMode] = useState(false);
   const { mutate: removeComment } = useRemoveCommentMutation();
   const { mutate: removeReply } = useRemoveReplyMutation();
@@ -65,7 +65,8 @@ const Comment = ({ ownerId, authorId, commentId, content, createdAt, isAnonymous
   const handleEditForm = () => setEditMode(prev => !prev);
   const removeContent = () => (replies ? removeComment(commentId) : removeReply({ commentId, createdAt }));
 
-  const displayName = `${isAnonymous ? '익명' : authorInfo?.displayName}${!replies ? " 's reply" : ''}`;
+  const displayName = `${isAnonymous ? '익명' : authorInfo?.displayName}${replies ? '' : " 's reply"}`;
+  const selectedComment = (replies && replyFor?.commentId === commentId) || false;
   const switchToCreateReply = () => setReplyFor({ commentAuthorName: displayName, commentId });
 
   const [isOpenReply, setIsOpenReply] = useState(false);
@@ -73,7 +74,7 @@ const Comment = ({ ownerId, authorId, commentId, content, createdAt, isAnonymous
 
   return (
     <>
-      <Flex css={commentCss.wrapper(false)} justifyContent="space-between">
+      <Flex css={commentCss.wrapper(selectedComment)} justifyContent="space-between">
         <Flex css={commentCss.avatarWrapper} alignItems="center" flexDirection="column">
           {!replies && <div css={commentCss.line} />}
           <Avatar size="sm" src={isAnonymous ? '' : authorInfo?.photoURL} />

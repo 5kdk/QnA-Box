@@ -1,14 +1,14 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
 import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
 import { Avatar, Edit, Flex, Text } from '../atom';
 import { EditCommentForm, LinkToUser } from '.';
 import { userState } from '../../jotai/atom';
-import { displayTimeAgo } from '../../utils';
 import { useUserInfo } from '../../hooks/query';
 import { useRemoveReplyMutation } from '../../hooks/mutation';
-import { CommentData } from '../../services/comments';
+import { displayTimeAgo } from '../../utils';
+import { ReplyData } from '../../services/comments';
 
 const boxItemCss = {
   wrapper: (reply: boolean) => css`
@@ -46,49 +46,26 @@ const boxItemCss = {
     padding-bottom: 3px;
   `,
 };
-
-export interface Comments extends CommentData {
-  owner: string;
-  setReplyComment: Dispatch<SetStateAction<string>>;
-  setReplyUser: Dispatch<SetStateAction<string>>;
-  replyComment: string;
+interface ReplyProps extends ReplyData {
+  ownerId: string;
+  commentId: string;
+  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
 }
 
-const Reply = ({
-  commentId,
-  ownerId,
-  authorId,
-  content,
-  createdAt,
-  isAnonymous,
-  activateReplyMode,
-}: {
-  commentId: string;
-  ownerId: string;
-  authorId: string;
-  isAnonymous: boolean;
-  content: string;
-  createdAt: number;
-  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
-}) => {
-  const [isEdit, setIsEdit] = useState(false);
+const Reply = ({ ownerId, commentId, authorId, isAnonymous, content, createdAt, activateReplyMode }: ReplyProps) => {
   const user = useAtomValue(userState);
+  const [isEdit, setIsEdit] = useState(false);
   const { mutate: remove } = useRemoveReplyMutation();
 
   const replyAuthor = useUserInfo(authorId);
 
-  const handleModify = () => {
-    setIsEdit(prev => !prev);
-  };
-
-  const removeReply = () => {
-    remove({ commentId, createdAt });
-  };
+  const handleModify = () => setIsEdit(prev => !prev);
+  const removeReply = () => remove({ commentId, createdAt });
 
   const displayName = `${isAnonymous ? '익명' : replyAuthor?.displayName} 's reply`;
 
   return (
-    <Flex css={boxItemCss.wrapper(false)} justifyContent="space-between">
+    <Flex css={boxItemCss.wrapper(isEdit)} justifyContent="space-between">
       <Flex css={boxItemCss.avatarWrapper} alignItems="center" flexDirection="column">
         <div css={boxItemCss.line}></div>
         <Avatar size="sm" src={isAnonymous ? '' : replyAuthor?.photoURL} />

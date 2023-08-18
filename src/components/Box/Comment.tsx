@@ -1,21 +1,34 @@
 import { useState } from 'react';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { css } from '@emotion/react';
-import { Reply as ReplyIcon } from 'emotion-icons/boxicons-regular';
+import { Reply as ReplyIcon } from '@emotion-icons/boxicons-regular';
+import { FolderOpen as FolderOpenIcon } from '@emotion-icons/fa-regular';
+import { Folder as FolderIcon } from '@emotion-icons/fa-solid';
 import { Avatar, Edit, Flex, Text } from '../atom';
-import { Reply, EditCommentForm, LinkToUser } from '.';
-import { userState } from '../../jotai/atom';
+import { InfoModal } from '../molecules';
+import { EditCommentForm, LinkToUser } from '.';
+import { replyForState, userState } from '../../jotai/atom';
 import { useUserInfo } from '../../hooks/query';
-import { useRemoveCommentMutation } from '../../hooks/mutation';
+import { useRemoveCommentMutation, useRemoveReplyMutation } from '../../hooks/mutation';
 import { displayTimeAgo } from '../../utils';
-import { CommentData } from '../../services/comments';
+import { ReplyData } from '../../services/comments';
 
 const commentCss = {
   wrapper: (reply: boolean) => css`
-    min-height: 100px;
+    position: relative;
+    min-height: 80px;
     padding: 12px 24px;
     gap: 15px;
     background-color: ${reply ? 'var(--gray)' : 'white'};
+  `,
+  line: css`
+    position: absolute;
+    top: 47px;
+    left: 41.5px;
+    width: 1.5px;
+    height: 100%;
+    margin: 10px 0;
+    background-color: var(--gray);
   `,
   question: css`
     width: 100%;
@@ -32,13 +45,20 @@ const commentCss = {
   `,
   reply: css`
     rotate: 180deg;
-    padding-bottom: 3px;
+  `,
+  replyOpen: css`
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    font-size: 14px;
   `,
 };
 
-interface CommentProps extends CommentData {
+interface CommentProps extends ReplyData {
+  commentId: string;
   ownerId: string;
-  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
+  replies?: ReplyData[];
+  connectLine?: boolean;
 }
 
 const Comment = ({
@@ -48,52 +68,89 @@ const Comment = ({
   content,
   createdAt,
   isAnonymous,
-  replies = [],
-  activateReplyMode,
+  replies,
+  connectLine = false,
 }: CommentProps) => {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isOpenReply, setIsOpenReply] = useState(false);
   const user = useAtomValue(userState);
-  const commentOwner = useUserInfo(authorId);
-  const { mutate: remove } = useRemoveCommentMutation();
+  const [replyFor, setReplyFor] = useAtom(replyForState);
+  const [editMode, setEditMode] = useState(false);
+  const [removeModal, setRemoveModal] = useState(false);
+  const [isOpenReply, setIsOpenReply] = useState(false);
+  const { mutate: removeComment } = useRemoveCommentMutation();
+  const { mutate: removeReply } = useRemoveReplyMutation();
 
-  const handleEditForm = () => setIsEditMode(prev => !prev);
-  const removeComment = () => remove(commentId);
+  const authorInfo = useUserInfo(authorId);
+
+  const handleEditForm = () => setEditMode(prev => !prev);
+  const handleRemoveModal = () => setRemoveModal(pre => !pre);
+  const removeContent = () => (replies ? removeComment(commentId) : removeReply({ commentId, createdAt }));
+
+  const displayName = `${isAnonymous ? '익명' : authorInfo?.displayName}${replies ? '' : " 's reply"}`;
+  const selectedComment = (replies && replyFor?.commentId === commentId) || false;
+  const switchToCreateReply = () => setReplyFor({ commentAuthorName: displayName, commentId });
   const toggleReply = () => setIsOpenReply(prev => !prev);
-
-  const displayName = isAnonymous ? '익명' : commentOwner?.displayName;
 
   return (
     <>
-      <Flex css={commentCss.wrapper(false)} justifyContent="space-between">
-        <Avatar size="sm" src={isAnonymous ? '' : commentOwner?.photoURL} />
+      <Flex css={commentCss.wrapper(selectedComment)} justifyContent="space-between">
+        {removeModal && (
+          <InfoModal
+            title={`${replies ? '질문' : '답글'}을 삭제하시겠습니까?`}
+            text="삭제 시 복구가 불가합니다."
+            normalBtn={{ text: '삭제', onClick: removeContent }}
+            importantBtn={{ text: '취소', onClick: handleRemoveModal }}
+          />
+        )}
+        {(connectLine || (replies && isOpenReply)) && <div css={commentCss.line} />}
+        <Avatar size="sm" src={isAnonymous ? '' : authorInfo?.photoURL} />
         <Flex flexDirection="column" css={commentCss.question}>
           <LinkToUser name={displayName} uid={authorId} color={!isAnonymous && ownerId === authorId && 'blue'} />
-          {isEditMode ? (
-            <EditCommentForm text={content} commentId={commentId} handleForm={handleEditForm} />
+          {editMode ? (
+            <EditCommentForm
+              text={content}
+              commentId={commentId}
+              handleForm={handleEditForm}
+              isReply={!replies}
+              createdAt={!replies ? createdAt : undefined}
+            />
           ) : (
             <Text>{content}</Text>
           )}
           <Flex alignItems="center" css={commentCss.like}>
-            <button title="답글 달기" css={commentCss.reply} onClick={() => activateReplyMode(displayName!, commentId)}>
-              <ReplyIcon size="20px" />
-            </button>
-            {replies.length !== 0 && <button onClick={toggleReply}>{!isOpenReply ? '답글 열기' : '답글 닫기'}</button>}
+            {replies && (
+              <>
+                <button css={commentCss.reply} title="답글 달기" onClick={switchToCreateReply}>
+                  <ReplyIcon size="24px" color="var(--deep_gray)" />
+                </button>
+                {replies.length !== 0 && (
+                  <span css={commentCss.replyOpen}>
+                    <button title={!isOpenReply ? '답글 열기' : '답글 닫기'} onClick={toggleReply}>
+                      {!isOpenReply ? (
+                        <FolderIcon size={18} color="var(--deep_gray)" />
+                      ) : (
+                        <FolderOpenIcon size={18} color="var(--deep_gray)" />
+                      )}
+                    </button>
+                    {replies.length}
+                  </span>
+                )}
+              </>
+            )}
           </Flex>
         </Flex>
         <Flex alignItems="baseline">
           <span css={commentCss.subText}>{displayTimeAgo(createdAt)}</span>
-          {user?.uid === authorId && <Edit edit={handleEditForm} remove={removeComment} />}
+          {user?.uid === authorId && <Edit edit={handleEditForm} remove={handleRemoveModal} />}
         </Flex>
       </Flex>
       {isOpenReply &&
-        replies.map((reply, i) => (
-          <Reply
+        replies?.map((reply, i) => (
+          <Comment
             key={`${commentId} ${i}`}
             commentId={commentId}
             ownerId={ownerId}
-            activateReplyMode={activateReplyMode}
             {...reply}
+            connectLine={i !== replies.length - 1}
           />
         ))}
     </>

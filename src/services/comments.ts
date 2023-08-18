@@ -47,13 +47,13 @@ const getComment = async (commentRef: DocumentReference) => {
   return comment;
 };
 
-export const createComment = async (boxId: string, content: string, isAnonymous: boolean) => {
+export const makeNewComment = (boxId: string, content: string, isAnonymous: boolean) => {
   const uid = getUid();
 
   const commentsCollectionRef = collection(db, COMMENTS_COLLECTION_NAME);
   const commentDocRef = doc(commentsCollectionRef);
 
-  const newComment: CommentData = {
+  return {
     commentId: commentDocRef.id,
     boxId,
     authorId: uid,
@@ -63,8 +63,11 @@ export const createComment = async (boxId: string, content: string, isAnonymous:
     createdAt: Date.now(),
     replies: [],
   };
+};
 
-  await setDoc(commentDocRef, newComment);
+export const createComment = async (newComment: CommentData) => {
+  const commentRef = getCommentRef(newComment.commentId);
+  await setDoc(commentRef, newComment);
 };
 
 export const fetchFilteredCommentsByPage = async (boxId: string, subfilter: string, pageParam?: number) => {
@@ -135,13 +138,22 @@ export const decreaseCommentLikes = async (commentId: string) => {
   }
 };
 
-export const createReplyToComment = async (commentId: string, reply: ReplyData) => {
+export const makeNewReply = (content: string, isAnonymous: boolean) => {
   const uid = getUid();
-  if (reply.authorId !== uid) return;
 
+  return {
+    authorId: uid,
+    isAnonymous,
+    content,
+    likes: 0,
+    createdAt: Date.now(),
+  };
+};
+
+export const createReplyToComment = async (commentId: string, newReply: ReplyData) => {
   const commentRef = getCommentRef(commentId);
   await updateDoc(commentRef, {
-    replies: arrayUnion(reply),
+    replies: arrayUnion(newReply),
   });
 };
 

@@ -5,14 +5,6 @@ import { useAtomValue } from 'jotai';
 import { useParams } from 'react-router-dom';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 
-interface Reply {
-  authorId: string | undefined;
-  isAnonymous: boolean;
-  content: string;
-  likes: number;
-  createdAt: number;
-}
-
 interface mutationFnProps {
   commentId: string;
   createdAt: number;
@@ -50,7 +42,7 @@ const useRemoveReplyMutation = () => {
               comment.commentId === variables.commentId
                 ? {
                     ...comment,
-                    replies: comment.replies.filter((reply: Reply) => reply.createdAt !== variables.createdAt),
+                    replies: comment.replies.filter(reply => reply.createdAt !== variables.createdAt),
                   }
                 : comment,
             ),

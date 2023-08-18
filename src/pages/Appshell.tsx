@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Notification } from '../components/atom';
@@ -16,9 +16,9 @@ const appShellCss = {
     padding-top: 56px;
     overflow: hidden;
   `,
-  main: css`
+  main: (bgBlack: boolean) => css`
     min-height: calc(100vh - 56px);
-    background-color: var(--white);
+    background-color: ${bgBlack ? 'var(--black)' : 'var(--white)'};
   `,
 };
 
@@ -28,7 +28,7 @@ const Appshell = () => {
   const appShellRef = useRef<HTMLDivElement>(null);
 
   const setUser = useSetAtom(userState);
-  const params = useParams();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (appShellRef.current) {
@@ -60,13 +60,13 @@ const Appshell = () => {
     return () => {
       unregisterAuthObserver();
     };
-  }, [setUser, params]);
+  }, [setUser, pathname]);
 
   return (
     <div ref={appShellRef} css={appShellCss.wrapper}>
       <Notification />
       <Header />
-      <main css={appShellCss.main}>{!isLoading && <Outlet />}</main>
+      <main css={appShellCss.main(pathname === '/')}>{!isLoading && <Outlet />}</main>
     </div>
   );
 };

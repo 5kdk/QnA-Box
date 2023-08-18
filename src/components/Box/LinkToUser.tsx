@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
 
 const linkToUserCss = (color?: 'blue' | false) => css`
+  width: fit-content;
   margin-bottom: 5px;
   font-size: 14px;
   font-weight: 700;

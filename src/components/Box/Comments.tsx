@@ -14,13 +14,7 @@ const WrapperCss = css`
   min-height: 6.25rem;
 `;
 
-const Comments = ({
-  ownerId,
-  activateReplyMode,
-}: {
-  ownerId: string;
-  activateReplyMode: (commentOwnerName: string, commentId: string) => void;
-}) => {
+const Comments = ({ ownerId }: { ownerId: string }) => {
   const { data, fetchNextPage, hasNextPage } = useInfinityCommentQuery();
 
   const [sentryRef] = useInfiniteScroll({
@@ -39,7 +33,7 @@ const Comments = ({
         boxcomments?.map(comment => (
           <Flex css={commentCss} flexDirection="column" key={`${comment.commentId}`}>
             <Suspense fallback={<ItemSkeleton num={comment.replies.length + 1} />}>
-              <Comment ownerId={ownerId} activateReplyMode={activateReplyMode} {...comment} />
+              <Comment ownerId={ownerId} {...comment} />
             </Suspense>
           </Flex>
         ))

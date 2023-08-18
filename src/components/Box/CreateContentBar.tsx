@@ -1,20 +1,19 @@
 import { ChangeEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAtomValue } from 'jotai';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAtom, useAtomValue } from 'jotai';
 import { css, keyframes } from '@emotion/react';
 import { Avatar, Button, Flex, Toggler, Note, Text } from '../atom';
-import { globalWidthState, userState } from '../../jotai/atom';
+import { globalWidthState, replyForState, userState } from '../../jotai/atom';
 import { useCreateCommentMutation, useCreateReplyMutation } from '../../hooks/mutation';
-import { getUid } from '../../services/auth';
+import { makeNewComment, makeNewReply } from '../../services/comments';
 
 const Slide = keyframes`
-    0%{
-        transform : translateX(-50%) translateY(100%);
-        
-    }
-    100%{
-        transform : translateX(-50%) translateY(0);
-    }
+  0% {
+    transform : translateX(-50%) translateY(100%);
+  }
+  100% {
+    transform : translateX(-50%) translateY(0);
+  }
 `;
 
 const questionCss = {
@@ -59,58 +58,42 @@ const questionCss = {
   `,
 };
 
-const QuestionAnswerModal = ({
-  replyFor,
-  deactivateReplyMode,
-}: {
-  replyFor: { commentOwnerName: string; commentId: string } | null;
-  deactivateReplyMode: () => void;
-}) => {
+const CreateContentBar = () => {
   const user = useAtomValue(userState);
-  const isDefaultEnabledForAnonymous = user ? false : true;
-  const [isAnonymous, setIsAnonymous] = useState(isDefaultEnabledForAnonymous);
+  const globalWidth = useAtomValue(globalWidthState);
+  const [replyFor, setReplyFor] = useAtom(replyForState);
 
-  const [input, setInput] = useState('');
-  const { mutate: addQuestion } = useCreateCommentMutation();
+  const [isAnonymous, setIsAnonymous] = useState(!user);
+  const [content, setContent] = useState('');
+  const { mutate: addComment } = useCreateCommentMutation();
   const { mutate: addReply } = useCreateReplyMutation();
 
-  const globalWidth = useAtomValue(globalWidthState);
+  const { id: boxId } = useParams();
   const navigate = useNavigate();
-
-  const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
-
+  const switchToComment = () => setReplyFor(null);
+  const handleQustionInput = (e: ChangeEvent<HTMLInputElement>) => setContent(e.target.value);
   const toggleAnonymous = () => setIsAnonymous(pre => !pre);
 
-  const createQuestion = () => {
-    if (!input) return;
+  const createContent = () => {
+    if (!content) return;
     if (!replyFor) {
-      addQuestion({ question: input, isAnonymous });
+      const newComment = makeNewComment(boxId!, content, isAnonymous);
+      addComment({ newComment });
     } else {
-      const uid = getUid();
-
-      const newReply = {
-        authorId: uid,
-        isAnonymous: isAnonymous,
-        content: input,
-        likes: 0,
-        createdAt: Date.now(),
-      };
-
+      const newReply = makeNewReply(content, isAnonymous);
       addReply({ commentId: replyFor.commentId, newReply });
     }
-    setInput('');
+    setContent('');
   };
 
-  const navigateToSignin = () => {
-    navigate('/signin');
-  };
+  const navigateToSignin = () => navigate('/signin');
 
   return (
     <Flex css={questionCss.wrapper(globalWidth)} flexDirection="column">
       {replyFor && (
         <Flex alignItems="center" justifyContent="space-between">
-          <Text>{`Reply to ${replyFor.commentOwnerName}`}</Text>
-          <button onClick={deactivateReplyMode}>취소</button>
+          <Text>{`Reply to ${replyFor.commentAuthorName}`}</Text>
+          <button onClick={switchToComment}>취소</button>
         </Flex>
       )}
       <div css={questionCss.inputBox}>
@@ -119,7 +102,7 @@ const QuestionAnswerModal = ({
           name="질문작성창"
           css={questionCss.input}
           placeholder={replyFor ? '답변을 작성해주세요!' : '무엇이 궁금한가요?'}
-          value={input}
+          value={content}
           onChange={handleQustionInput}
         />
       </div>
@@ -137,11 +120,11 @@ const QuestionAnswerModal = ({
           text={replyFor ? '답변 등록' : '질문 등록'}
           color="var(--white)"
           bgColor="var(--black)"
-          onClick={createQuestion}
+          onClick={createContent}
         />
       </Flex>
     </Flex>
   );
 };
 
-export default QuestionAnswerModal;
+export default CreateContentBar;

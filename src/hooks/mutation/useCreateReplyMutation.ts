@@ -1,19 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CommentData, createReplyToComment } from '../../services/comments';
-import { filterState } from '../../jotai/atom';
-import { useAtomValue } from 'jotai';
 import { useParams } from 'react-router-dom';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAtomValue } from 'jotai';
+import { filterState } from '../../jotai/atom';
+import { CommentData, ReplyData, createReplyToComment } from '../../services/comments';
 
 interface mutationFnProps {
   commentId: string;
-  newReply: {
-    authorId: string;
-    isAnonymous: boolean;
-    content: string;
-    likes: number;
-    createdAt: number;
-  };
+  newReply: ReplyData;
 }
 
 interface PageData {
@@ -21,7 +15,7 @@ interface PageData {
   nextPage: QueryDocumentSnapshot | undefined;
 }
 
-interface QueryData {
+export interface QueryData {
   pages: Array<PageData>;
   pageParams: Array<QueryDocumentSnapshot | undefined>;
 }

@@ -5,6 +5,7 @@ import { Reply as ReplyIcon } from '@emotion-icons/boxicons-regular';
 import { FolderOpen as FolderOpenIcon } from '@emotion-icons/fa-regular';
 import { Folder as FolderIcon } from '@emotion-icons/fa-solid';
 import { Avatar, Edit, Flex, Text } from '../atom';
+import { InfoModal } from '../molecules';
 import { EditCommentForm, LinkToUser } from '.';
 import { replyForState, userState } from '../../jotai/atom';
 import { useUserInfo } from '../../hooks/query';
@@ -73,6 +74,7 @@ const Comment = ({
   const user = useAtomValue(userState);
   const [replyFor, setReplyFor] = useAtom(replyForState);
   const [editMode, setEditMode] = useState(false);
+  const [removeModal, setRemoveModal] = useState(false);
   const [isOpenReply, setIsOpenReply] = useState(false);
   const { mutate: removeComment } = useRemoveCommentMutation();
   const { mutate: removeReply } = useRemoveReplyMutation();
@@ -80,6 +82,7 @@ const Comment = ({
   const authorInfo = useUserInfo(authorId);
 
   const handleEditForm = () => setEditMode(prev => !prev);
+  const handleRemoveModal = () => setRemoveModal(pre => !pre);
   const removeContent = () => (replies ? removeComment(commentId) : removeReply({ commentId, createdAt }));
 
   const displayName = `${isAnonymous ? '익명' : authorInfo?.displayName}${replies ? '' : " 's reply"}`;
@@ -90,6 +93,14 @@ const Comment = ({
   return (
     <>
       <Flex css={commentCss.wrapper(selectedComment)} justifyContent="space-between">
+        {removeModal && (
+          <InfoModal
+            title={`${replies ? '질문' : '답글'}을 삭제하시겠습니까?`}
+            text="삭제 시 복구가 불가합니다."
+            normalBtn={{ text: '삭제', onClick: removeContent }}
+            importantBtn={{ text: '취소', onClick: handleRemoveModal }}
+          />
+        )}
         {(connectLine || (replies && isOpenReply)) && <div css={commentCss.line} />}
         <Avatar size="sm" src={isAnonymous ? '' : authorInfo?.photoURL} />
         <Flex flexDirection="column" css={commentCss.question}>
@@ -129,7 +140,7 @@ const Comment = ({
         </Flex>
         <Flex alignItems="baseline">
           <span css={commentCss.subText}>{displayTimeAgo(createdAt)}</span>
-          {user?.uid === authorId && <Edit edit={handleEditForm} remove={removeContent} />}
+          {user?.uid === authorId && <Edit edit={handleEditForm} remove={handleRemoveModal} />}
         </Flex>
       </Flex>
       {isOpenReply &&

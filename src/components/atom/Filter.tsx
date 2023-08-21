@@ -8,7 +8,7 @@ const FilterCss = {
   boxstyle: (isShow: boolean) => {
     return css`
       position: relative;
-      width: 70px;
+      min-width: 70px;
       padding: 8px 0;
       border-radius: 8px;
       ::before {

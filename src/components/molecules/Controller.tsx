@@ -5,7 +5,7 @@ import { Filter, Flex, Search } from '../atom';
 import { searchInputState } from '../../jotai/atom';
 
 const controllerCss = css`
-  padding: 10px 20px;
+  padding: 10px 20px 10px 10px;
 `;
 
 const Controller = () => {

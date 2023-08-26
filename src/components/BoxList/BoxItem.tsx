@@ -70,7 +70,7 @@ const BoxItem = ({ boxInfo }: BoxListItemProps) => {
           {boxInfo.title}
         </Link>
         <LinkToUser name={userData?.displayName} uid={boxInfo.ownerId} />
-        <Text>{boxInfo.description}</Text>
+        <Text text={boxInfo.description} />
       </Flex>
       {user?.uid === boxInfo.ownerId && <Edit edit={handleEditModal} remove={handleRemoveModal} />}
     </Flex>

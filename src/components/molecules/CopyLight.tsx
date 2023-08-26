@@ -8,7 +8,7 @@ const textStyle = (black: boolean | undefined) => css`
 const CopyLight = ({ black }: { black?: boolean }) => {
   const year = new Date().getFullYear();
 
-  return <Text css={textStyle(black)}>{`Copyright © ${year} 쬬와규. Built with React TS ⚛️. `}</Text>;
+  return <Text css={textStyle(black)} text={`Copyright © ${year} 쬬와규. Built with React TS ⚛️. `} />;
 };
 
 export default CopyLight;

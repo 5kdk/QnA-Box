@@ -5,13 +5,13 @@ const textCss = css`
 `;
 
 interface TextProps {
-  children: React.ReactNode;
+  text: string | undefined;
 }
 
-const Text = ({ children, ...rest }: TextProps) => {
+const Text = ({ text, ...rest }: TextProps) => {
   return (
     <p css={textCss} {...rest}>
-      {children}
+      {text && text}
     </p>
   );
 };

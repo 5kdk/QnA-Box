@@ -114,7 +114,7 @@ const Comment = ({
               createdAt={!replies ? createdAt : undefined}
             />
           ) : (
-            <Text>{content}</Text>
+            <Text text={content} />
           )}
           <Flex alignItems="center" css={commentCss.like}>
             {replies && (

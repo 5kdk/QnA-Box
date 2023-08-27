@@ -1,3 +1,4 @@
+export { default as useBoxMutation } from './useBoxMutation';
 export { default as useCreateCommentMutation } from './useCreateCommentMutation';
 export { default as useCreateReplyMutation } from './useCreateReplyMutation';
 export { default as useRemoveMyBoxMutation } from './useRemoveMyBoxMutation';

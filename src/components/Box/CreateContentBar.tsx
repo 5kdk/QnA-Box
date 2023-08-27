@@ -92,7 +92,7 @@ const CreateContentBar = () => {
     <Flex css={questionCss.wrapper(globalWidth)} flexDirection="column">
       {replyFor && (
         <Flex alignItems="center" justifyContent="space-between">
-          <Text>{`Reply to ${replyFor.commentAuthorName}`}</Text>
+          <Text text={`Reply to ${replyFor.commentAuthorName}`} />
           <button onClick={switchToComment}>취소</button>
         </Flex>
       )}

@@ -1,36 +1,20 @@
-import { Box, FormElement, updateQnaBox } from '../../services/boxes';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useBoxMutation } from '.';
+import { FormElement, updateQnaBox } from '../../services/boxes';
 
-interface UpdateMyBoxMutationProps {
+interface MutationVariables {
   boxId: string;
   editFormData: FormElement;
 }
 
 const useUpdateMyBoxMutation = () => {
-  const queryClient = useQueryClient();
-  const queryKey = ['box', 'my'];
-
-  return useMutation({
-    mutationFn: ({ boxId, editFormData }: UpdateMyBoxMutationProps) => updateQnaBox(boxId, editFormData),
-    async onMutate(variables) {
-      await queryClient.cancelQueries({ queryKey });
-
-      const previousBoxList = queryClient.getQueryData<Box[]>(queryKey);
-
-      const expected = (prev: Box[] | undefined, { boxId, editFormData }: UpdateMyBoxMutationProps) => {
-        if (!prev) {
-          return [];
-        }
-        const updatedBoxList = prev.map(box => (box.boxId === boxId ? { ...box, ...editFormData } : box));
-        return updatedBoxList;
-      };
-
-      queryClient.setQueryData(queryKey, expected(previousBoxList, variables));
-
-      return { previousBoxList };
-    },
-    onError(_, __, context) {
-      queryClient.setQueryData(queryKey, context?.previousBoxList);
+  return useBoxMutation<MutationVariables>({
+    mutationFn: ({ boxId, editFormData }) => updateQnaBox(boxId, editFormData),
+    onMutate: (prev, { boxId, editFormData }) => {
+      if (!prev) {
+        return [];
+      }
+      const updatedBoxes = prev.map(box => (box.boxId === boxId ? { ...box, ...editFormData } : box));
+      return updatedBoxes;
     },
   });
 };

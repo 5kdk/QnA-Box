@@ -65,11 +65,11 @@ const BoxInfo = ({ boxdetail }: { boxdetail: Box }) => {
       </Flex>
       <Flex alignItems="flex-start" justifyContent="space-between" css={boxInfoCss.subWrapper}>
         <Flex flexDirection="column" css={[boxInfoCss.info]}>
-          <Text css={boxInfoCss.owner}>{boxOwner?.displayName}</Text>
+          <Text css={boxInfoCss.owner} text={boxOwner?.displayName} />
           {moreInfo && (
             <>
-              <Text>{boxdetail.description}</Text>
-              <Text>{`생성된 날짜: ${formattedDate}`}</Text>
+              <Text text={boxdetail.description} />
+              <Text text={`생성된 날짜: ${formattedDate}`} />
             </>
           )}
         </Flex>

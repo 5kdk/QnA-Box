@@ -46,14 +46,14 @@ const Board = () => {
             slicedBoxList.map(box => <BoxItem boxInfo={box} key={box.boxId} />)
           ) : (
             <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
-              <Text>검색 결과가 없습니다.</Text>
+              <Text text="검색 결과가 없습니다." />
             </Flex>
           )
         ) : (
           <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
-            <Text>
-              {filter.mainFilter === 'joined' ? '아직 참여한 Box가 없습니다' : '새로운 QnA Box를 만들어 보세요!'}
-            </Text>
+            <Text
+              text={filter.mainFilter === 'joined' ? '아직 참여한 Box가 없습니다' : '새로운 QnA Box를 만들어 보세요!'}
+            />
           </Flex>
         )}
       </ItemWrapper>

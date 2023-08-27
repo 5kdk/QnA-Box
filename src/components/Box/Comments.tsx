@@ -39,7 +39,7 @@ const Comments = ({ ownerId }: { ownerId: string }) => {
         ))
       ) : (
         <Flex justifyContent="center" alignItems="center" css={WrapperCss}>
-          <Text>아직 작성된 질문이 없습니다</Text>
+          <Text text="아직 작성된 질문이 없습니다" />
         </Flex>
       )}
       {hasNextPage && <ItemSkeleton ref={sentryRef} num={1} />}

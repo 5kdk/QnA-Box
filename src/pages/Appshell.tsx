@@ -37,6 +37,10 @@ const Appshell = () => {
   }, [setGlobalWidth]);
 
   useEffect(() => {
+    if (pathname === '/') {
+      setLoading(false);
+    }
+
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
       if (user) {
         const getUser = async () => {

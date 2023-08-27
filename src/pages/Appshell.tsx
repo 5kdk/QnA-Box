@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useSetAtom } from 'jotai';
 import { css } from '@emotion/react';
 import { Notification } from '../components/atom';
 import { Header } from '../components/molecules';
-import { globalWidthState } from '../jotai/atom';
+import { userState, globalWidthState } from '../jotai/atom';
+import { getProfile } from '../services/profile';
+import { auth } from '../services/firebase';
 
 const appShellCss = {
   wrapper: css`
@@ -21,8 +23,11 @@ const appShellCss = {
 };
 
 const Appshell = () => {
+  const [isLoading, setLoading] = useState(true);
   const setGlobalWidth = useSetAtom(globalWidthState);
   const appShellRef = useRef<HTMLDivElement>(null);
+
+  const setUser = useSetAtom(userState);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -31,11 +36,37 @@ const Appshell = () => {
     }
   }, [setGlobalWidth]);
 
+  useEffect(() => {
+    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
+      if (user) {
+        const getUser = async () => {
+          try {
+            const data = await getProfile(user.uid);
+            if (data) setUser(data);
+          } catch (err) {
+            console.log(err);
+            setUser(null);
+          } finally {
+            setLoading(false);
+          }
+        };
+        getUser();
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      unregisterAuthObserver();
+    };
+  }, [setUser, pathname]);
+
   return (
     <div ref={appShellRef} css={appShellCss.wrapper}>
       <Notification />
       <Header />
-      <main css={appShellCss.main(pathname === '/')}>{<Outlet />}</main>
+      <main css={appShellCss.main(pathname === '/')}>{!isLoading && <Outlet />}</main>
     </div>
   );
 };
